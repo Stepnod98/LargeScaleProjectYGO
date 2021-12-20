@@ -1,0 +1,38 @@
+Documentazione (parte1):
+
+Presentazione applicazione
+Elenco use cases funzionali e non funzionali
+Use case diagram completo
+Class Diagram completo
+Classi in Java
+Esempio di Graph
+Descrizione documenti di MongoDB
+
+Implementazione (Java):
+
+MongoDBManager (executeQuery, init, findcard, addcard, removecard, insertUser, insertDeck, checkCredentials); //Stefano
+Neo4jManager (executeQuery, follow, like, share, init, insertUser, insertDeck); //Fabiano
+LoginManager{ //Fabiano
+	checkLogin
+};
+User (username, arraylist deck)
+Deck (titolo, carte in arraylist) 
+Card //Stefano
+LoginLayout{ //Stefano
+	(label)
+	textfield1
+	textfield2
+	button1 (login)
+	button2(sign up)
+}
+DeckMakerLayout; //Stefano
+AppManager (la classe main che inizializza interfaccia, etc...)
+DeckManager(addCard, removeCard, createDeck, checkStatus, saveDeck, viewCardList) //semplificato, solo titolo
+
+| CREA DECK	| CERCA NUOVI DECK	|LOGOUT	|
+
+SocialLayout() //Stefano
+SocialManager
+Classe del thread che controlla lo stato dei deck per eventual consistency etc...
+
+-Siccome per garantire l'eventual consistency di un deck, che è l'entità principale dell'applicazione, è stato necessario introdurre un po' di ritardo nella visualizzazione della versione aggiornata da parte dell'utente
