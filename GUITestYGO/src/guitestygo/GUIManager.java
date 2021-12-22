@@ -25,6 +25,7 @@ public class GUIManager extends Application {
     private static AppLayout appLayout;
     private static DeckManagerLayout deckMLayout;
     private static DeckBuilderLayout deckBLayout;
+    private static DeckOpenerLayout deckOLayout;
     private static SocialLayout socialLayout;
     private static LoginLayout loginLayout;
     private static DeckLayout deckLayout;
@@ -67,7 +68,7 @@ public class GUIManager extends Application {
             root.getChildren().add(n);
         }
     }
-     public static void openDeckBuilder(){
+    public static void openDeckBuilder(){
         root.getChildren().clear();
         deckBLayout = new DeckBuilderLayout();
         deckLayout = new DeckLayout();
@@ -81,6 +82,37 @@ public class GUIManager extends Application {
         p.setLayoutY(120);
         root.getChildren().add(p);
     }
+    
+    public static void openDeckBuilder(Deck d){
+        root.getChildren().clear();
+        deckBLayout = new DeckBuilderLayout();
+        deckLayout = new DeckLayout();
+        Node[] tmp;
+        tmp = deckBLayout.getNodes();
+        for (Node n: tmp) {
+            root.getChildren().add(n);
+        }
+        p = (Pane)deckLayout.getGameParent();
+        p.setLayoutX(40);
+        p.setLayoutY(120);
+        root.getChildren().add(p);
+    }
+     
+     public static void openDeckOpener(){
+        root.getChildren().clear();
+        deckOLayout = new DeckOpenerLayout();
+        deckLayout = new DeckLayout();
+        Node[] tmp;
+        tmp = deckOLayout.getNodes();
+        for (Node n: tmp) {
+            root.getChildren().add(n);
+        }
+        p = (Pane)deckLayout.getGameParent();
+        p.setLayoutX(40);
+        p.setLayoutY(120);
+        root.getChildren().add(p);
+    }
+     
     public static void openDeckManager(){
         root.getChildren().clear();
         deckMLayout = new DeckManagerLayout();
@@ -98,6 +130,10 @@ public class GUIManager extends Application {
         for (Node n: tmp) {
             root.getChildren().add(n);
         }
+    }
+    
+    public static void openAdminPanel(){
+        
     }
     
     public static Group setUI() {

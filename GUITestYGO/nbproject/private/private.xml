@@ -3,17 +3,26 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
+            <file>file:/C:/prg/myapps/GUITestYGO/src/guitestygo/AppLayout.java</file>
+            <file>file:/C:/prg/myapps/GUITestYGO/src/guitestygo/Set.java</file>
+            <file>file:/C:/prg/myapps/GUITestYGO/src/guitestygo/Deck.java</file>
+            <file>file:/C:/prg/myapps/GUITestYGO/src/guitestygo/GUIManager.java</file>
+            <file>file:/C:/prg/myapps/GUITestYGO/src/guitestygo/DeckManager.java</file>
+            <file>file:/C:/prg/myapps/GUITestYGO/src/guitestygo/MongoDBManager.java</file>
+            <file>file:/C:/prg/myapps/GUITestYGO/src/guitestygo/AdminLayout.java</file>
+            <file>file:/C:/prg/myapps/GUITestYGO/src/guitestygo/DeckOpener.java</file>
+            <file>file:/C:/prg/myapps/GUITestYGO/src/guitestygo/LoginManager.java</file>
+            <file>file:/C:/prg/myapps/GUITestYGO/src/guitestygo/DeckManagerLayout.java</file>
             <file>file:/C:/prg/myapps/GUITestYGO/src/guitestygo/DeckBuilder.java</file>
             <file>file:/C:/prg/myapps/GUITestYGO/src/guitestygo/SocialManager.java</file>
-            <file>file:/C:/prg/myapps/GUITestYGO/src/guitestygo/AppLayout.java</file>
             <file>file:/C:/prg/myapps/GUITestYGO/src/guitestygo/CardTile.java</file>
             <file>file:/C:/prg/myapps/GUITestYGO/src/guitestygo/LoginLayout.java</file>
             <file>file:/C:/prg/myapps/GUITestYGO/src/guitestygo/SocialLayout.java</file>
             <file>file:/C:/prg/myapps/GUITestYGO/src/guitestygo/DeckLayout.java</file>
+            <file>file:/C:/prg/myapps/GUITestYGO/src/guitestygo/AdminPanel.java</file>
             <file>file:/C:/prg/myapps/GUITestYGO/src/guitestygo/DeckBuilderLayout.java</file>
-            <file>file:/C:/prg/myapps/GUITestYGO/src/guitestygo/GUITestYGO.java</file>
-            <file>file:/C:/prg/myapps/GUITestYGO/src/guitestygo/LoginManager.java</file>
-            <file>file:/C:/prg/myapps/GUITestYGO/src/guitestygo/DeckManagerLayout.java</file>
+            <file>file:/C:/prg/myapps/GUITestYGO/src/guitestygo/User.java</file>
+            <file>file:/C:/prg/myapps/GUITestYGO/src/guitestygo/DeckOpenerLayout.java</file>
             <file>file:/C:/prg/myapps/GUITestYGO/src/guitestygo/Card.java</file>
         </group>
     </open-files>

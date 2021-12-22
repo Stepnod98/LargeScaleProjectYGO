@@ -11,8 +11,10 @@ package guitestygo;
  */
 public class LoginManager {
     public static void login(){
-        
-        GUIManager.openLoginManager();
+        /*if(){
+            GUIManager.openAdminPanel();
+        }*/
+        GUIManager.openAppManager();
     }
     
     public static void logout(){

@@ -16,32 +16,35 @@ import javafx.scene.control.TextField;
  * @author Stefano
  */
 public class DeckManagerLayout {
-    private Label browse;
-    private TextField deckBrowse;
+    private Label find;
+    private static TextField deckToFind;
+    private Button findDeck;
     private Label remove;
-    private TextField deckToRemove;
+    private static TextField deckToRemove;
     private Button removeDeck;
     private Label topCards;
-    private TextField topCardNumber;
+    private static TextField topCardNumber;
     private Button findTopCards;
     private Label topECards;
-    private TextField topECardNumber;
+    private static TextField topECardNumber;
     private Button findTopECards;
     private Label findD;
-    private TextField deckToFind;
-    private Button findDeck;
     private Label viewD;
     private Button back;
-    
+    private static DeckManager dm;
     public DeckManagerLayout(){
-        browse = new Label("Browse Decks:");
-        browse.setLayoutX(50);
-        browse.setLayoutY(40);
-        deckBrowse = new TextField();
-        deckBrowse.setLayoutX(150);
-        deckBrowse.setLayoutY(40);
-        deckBrowse.setFocusTraversable(false);
-        deckBrowse.setMaxWidth(200);
+        find = new Label("Find a Deck:");
+        find.setLayoutX(50);
+        find.setLayoutY(40);
+        deckToFind = new TextField();
+        deckToFind.setLayoutX(150);
+        deckToFind.setLayoutY(40);
+        deckToFind.setFocusTraversable(false);
+        deckToFind.setMaxWidth(200);
+        findDeck = new Button("FIND");
+    	findDeck.setLayoutY(40);
+    	findDeck.setLayoutX(320);
+    	findDeck.setMaxWidth(300);
         remove = new Label("Remove a Deck:");
         remove.setLayoutX(50);
         remove.setLayoutY(80);
@@ -56,40 +59,59 @@ public class DeckManagerLayout {
     	removeDeck.setMaxWidth(300);
         topCards = new Label("Find top X Cards");
         topCards.setLayoutX(80);
-        topCards.setLayoutY(220);
+        topCards.setLayoutY(120);
         topCardNumber = new TextField("X");
         topCardNumber.setLayoutX(80);
-        topCardNumber.setLayoutY(260);
+        topCardNumber.setLayoutY(160);
         topCardNumber.setFocusTraversable(false);
         topCardNumber.setMaxWidth(50);
         findTopCards = new Button("FIND");
-    	findTopCards.setLayoutY(260);
+    	findTopCards.setLayoutY(160);
     	findTopCards.setLayoutX(140);
     	findTopCards.setMaxWidth(300);
         topECards = new Label("Find top X Extra Cards");
         topECards.setLayoutX(280);
-        topECards.setLayoutY(220);
+        topECards.setLayoutY(120);
         topECardNumber = new TextField("X");
         topECardNumber.setLayoutX(280);
-        topECardNumber.setLayoutY(260);
+        topECardNumber.setLayoutY(160);
         topECardNumber.setFocusTraversable(false);
         topECardNumber.setMaxWidth(50);
         findTopECards = new Button("FIND");
-    	findTopECards.setLayoutY(260);
+    	findTopECards.setLayoutY(160);
     	findTopECards.setLayoutX(340);
     	findTopECards.setMaxWidth(300);
         back = new Button("BACK");
     	back.setLayoutX(520);
         back.setLayoutY(450);
     	back.setMaxWidth(300);
-        findTopCards.setOnAction((ActionEvent ev)->{LoginManager.login();});	
-        findTopECards.setOnAction((ActionEvent ev)->{LoginManager.signup();}); 
+        findDeck.setOnAction((ActionEvent ev)->{DeckManager.findDeck();});
+        removeDeck.setOnAction((ActionEvent ev)->{DeckManager.removeDeck();});
+        findTopCards.setOnAction((ActionEvent ev)->{DeckManager.findTopXCard();});	
+        findTopECards.setOnAction((ActionEvent ev)->{DeckManager.findTopXECard();}); 
         back.setOnAction((ActionEvent ev)->{GUIManager.openAppManager();});
+        dm = new DeckManager();
     }
     
     public Node[] getNodes() {
-    	Node[] returnNode = { browse, deckBrowse, remove, deckToRemove, removeDeck, 
+    	Node[] returnNode = { find, deckToFind, findDeck, remove, deckToRemove, removeDeck, 
                             topCards, topCardNumber, findTopCards, topECards ,topECardNumber, findTopECards, back};
     	return returnNode;
+    }
+    
+    public static String getDeckToBrowse(){
+        return deckToFind.getText();
+    }
+    
+    public static String getDeckToRemove(){
+        return deckToRemove.getText();
+    }
+    
+    public static String getCardsRank(){
+        return topCardNumber.getText();
+    }
+    
+    public static String getECardsRank(){
+        return topECardNumber.getText();
     }
 }

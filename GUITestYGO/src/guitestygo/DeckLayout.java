@@ -33,6 +33,20 @@ public class DeckLayout {
             }
        }
     }
+    public DeckLayout(Deck d){
+       root.setPrefSize(width * tileSize, height * tileSize);
+       tileGroup.getChildren().clear();
+       root.getChildren().addAll(tileGroup); 
+       int cont = 0;
+       for (int x = 0; x < width; x++) {
+            for (int y = 0; y < height; y++) {
+                //controlla quando arrivi a 40, le ultime 10 sono extra cards!
+                CardTile tile = new CardTile(x, y);
+                area[x][y] = tile;
+                tileGroup.getChildren().add(tile);
+            }
+       }
+    }
     public Parent getGameParent() {
         return root;
     }

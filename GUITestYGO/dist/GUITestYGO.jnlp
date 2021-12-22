@@ -11,11 +11,11 @@
   </resources>
   <resources>
     <j2se version="1.6+" href="http://java.sun.com/products/autodl/j2se"/>
-    <jar href="GUITestYGO.jar" size="14834" download="eager" />
+    <jar href="GUITestYGO.jar" size="24641" download="eager" />
   </resources>
   <applet-desc  width="800" height="600" main-class="com.javafx.main.NoJavaFXFallback"  name="GUITestYGO" >
     <param name="requiredFXVersion" value="8.0+"/>
   </applet-desc>
-  <jfx:javafx-desc  width="800" height="600" main-class="guitestygo.GUITestYGO"  name="GUITestYGO" />
+  <jfx:javafx-desc  width="800" height="600" main-class="guitestygo.GUIManager"  name="GUITestYGO" />
   <update check="always"/>
 </jnlp>

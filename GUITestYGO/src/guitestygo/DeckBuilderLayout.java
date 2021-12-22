@@ -16,21 +16,32 @@ import javafx.scene.control.TextField;
  * @author Stefano
  */
 public class DeckBuilderLayout {
+    private Label title;
+    private static TextField deckTitle;
     private Label add;
-    private TextField cardToAdd;
+    private static TextField cardToAdd;
     private Button addCard;
     private Label remove;
-    private TextField cardToRemove;
+    private static TextField cardToRemove;
     private Button removeCard;
     private Label findCard;
-    private TextField setName;
+    private static TextField setName;
     private Label mostAtk;
     private Button findStrongest;
     private Label rarest;
     private Button findRarest;
     private Button save;
     private Button back;
+    private static DeckBuilder db;
     public DeckBuilderLayout(){
+        title = new Label("Insert Title");
+        title.setLayoutX(40);
+        title.setLayoutY(30);
+        deckTitle = new TextField();
+        deckTitle.setLayoutX(100);
+        deckTitle.setLayoutY(30);
+        deckTitle.setFocusTraversable(false);
+        deckTitle.setMaxWidth(200);
         add = new Label("Add Card:");
         add.setLayoutX(520);
         add.setLayoutY(40);
@@ -78,8 +89,8 @@ public class DeckBuilderLayout {
     	findRarest.setLayoutX(560);
     	findRarest.setMaxWidth(300);
         save = new Button("SAVE");
-    	save.setLayoutX(40);
-        save.setLayoutY(560);
+    	save.setLayoutX(50);
+        save.setLayoutY(400);
     	save.setMaxWidth(300);
         back = new Button("BACK");
     	back.setLayoutX(520);
@@ -88,9 +99,22 @@ public class DeckBuilderLayout {
         findStrongest.setOnAction((ActionEvent ev)->{LoginManager.login();});	
         addCard.setOnAction((ActionEvent ev)->{LoginManager.signup();});
         back.setOnAction((ActionEvent ev)->{GUIManager.openAppManager();});
+        db = new DeckBuilder();
     }
     public Node[] getNodes() {
-    	Node[] returnNode = { add, cardToAdd, addCard, remove, cardToRemove, removeCard, mostAtk, findStrongest, rarest, findRarest, findCard ,setName, save, back};
+    	Node[] returnNode = { title, deckTitle, add, cardToAdd, addCard, remove, cardToRemove, removeCard, mostAtk, findStrongest, rarest, findRarest, findCard ,setName, save, back};
     	return returnNode;
+    }
+    
+    public static String getCardToAdd(){
+        return cardToAdd.getText();
+    }
+    
+    public static String getCardToRemove(){
+        return cardToRemove.getText();
+    }
+    
+    public static String getSetName(){
+        return setName.getText();
     }
 }
