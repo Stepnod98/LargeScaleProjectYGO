@@ -31,7 +31,6 @@ public class DeckManagerLayout {
     private Label findD;
     private Label viewD;
     private Button back;
-    private static DeckManager dm;
     public DeckManagerLayout(){
         find = new Label("Find a Deck:");
         find.setLayoutX(50);
@@ -90,7 +89,6 @@ public class DeckManagerLayout {
         findTopCards.setOnAction((ActionEvent ev)->{DeckManager.findTopXCard();});	
         findTopECards.setOnAction((ActionEvent ev)->{DeckManager.findTopXECard();}); 
         back.setOnAction((ActionEvent ev)->{GUIManager.openAppManager();});
-        dm = new DeckManager();
     }
     
     public Node[] getNodes() {

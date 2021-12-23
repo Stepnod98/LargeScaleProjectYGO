@@ -14,26 +14,41 @@ import java.util.List;
  */
 public class DeckBuilder {
     private static Deck deck;
-    public DeckBuilder(){
+    private static DeckBuilderLayout deckBuilderLayout;
+    public DeckBuilder(DeckBuilderLayout deckBuilderLayout){
         deck = new Deck("");
+        this.deckBuilderLayout = deckBuilderLayout;
     }
     
     public static void addCard(){
         String t = DeckBuilderLayout.getCardToAdd();
         Card c = MongoDBManager.findCard(t);
-        deck.addCard(c);
+        if(MongoDBManager.checkCardType(t)){
+            deck.addCard(c);
+        }
+        else{
+            deck.addECard(c);
+        }
     }
     
     public static void removeCard(){
         String t = DeckBuilderLayout.getCardToRemove();
-        deck.removeCardByTitle(t);
+        if(MongoDBManager.checkCardType(t)){
+            deck.removeCardByTitle(t);
+        }
+        else{
+            deck.removeECardByTitle(t);
+        }
     }
     
     public static void viewCard(){
         
     }
     
-    public static void saveDeck(){
+    public static void saveDeck(DeckBuilderLayout db){
+        deck.setTitle(db.getDeckTitle());
+        deck.setCreator(GUIManager.getCurrentUser());
+        MongoDBManager.saveDeck(deck);
         
     }
     

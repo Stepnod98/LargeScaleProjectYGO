@@ -10,6 +10,10 @@ package guitestygo;
  * @author Stefano
  */
 public class LoginManager {
+    private static LoginLayout loginLayout;
+    public LoginManager(LoginLayout loginLayout){
+        this.loginLayout = loginLayout;
+    }
     public static void login(){
         /*if(){
             GUIManager.openAdminPanel();

@@ -29,7 +29,6 @@ public class AdminLayout {
     private TextField topECardNumber;
     private TextField deckToFind;
     private Button logout;
-    private static AdminPanel p;
     
     public AdminLayout(){
         adminLabel = new Label("Browse Decks:");
@@ -83,7 +82,6 @@ public class AdminLayout {
         removeCard.setOnAction((ActionEvent ev)->{DeckManager.removeDeck();});	
         addCard.setOnAction((ActionEvent ev)->{DeckManager.findTopXECard();}); 
         logout.setOnAction((ActionEvent ev)->{GUIManager.openAppManager();});
-        p = new AdminPanel();
     }
     
     public Node[] getNodes() {

@@ -29,6 +29,12 @@ public class GUIManager extends Application {
     private static SocialLayout socialLayout;
     private static LoginLayout loginLayout;
     private static DeckLayout deckLayout;
+    private static DeckManager deckManager;
+    private static DeckBuilder deckBuilder;
+    private static DeckOpener deckOpener;
+    private static SocialManager socialManager;
+    private static LoginManager loginManager;
+    private static User current_user;
     public static Scene scene;
     public static Group root;
     public static Pane p;
@@ -48,6 +54,7 @@ public class GUIManager extends Application {
                 } catch (IOException ie) {}
                 }
             );*/
+        loginManager = new LoginManager(loginLayout);
         stage.show();
     }
     public static void openAppManager(){
@@ -67,6 +74,8 @@ public class GUIManager extends Application {
         for (Node n: tmp) {
             root.getChildren().add(n);
         }
+        socialManager = new SocialManager(socialLayout, current_user);
+        
     }
     public static void openDeckBuilder(){
         root.getChildren().clear();
@@ -81,6 +90,7 @@ public class GUIManager extends Application {
         p.setLayoutX(40);
         p.setLayoutY(120);
         root.getChildren().add(p);
+        deckBuilder = new DeckBuilder(deckBLayout);
     }
     
     public static void openDeckBuilder(Deck d){
@@ -96,6 +106,7 @@ public class GUIManager extends Application {
         p.setLayoutX(40);
         p.setLayoutY(120);
         root.getChildren().add(p);
+        deckBuilder = new DeckBuilder(deckBLayout);
     }
      
      public static void openDeckOpener(){
@@ -111,6 +122,7 @@ public class GUIManager extends Application {
         p.setLayoutX(40);
         p.setLayoutY(120);
         root.getChildren().add(p);
+        deckOpener = new DeckOpener(deckOLayout);
     }
      
     public static void openDeckManager(){
@@ -121,6 +133,7 @@ public class GUIManager extends Application {
         for (Node n: tmp) {
             root.getChildren().add(n);
         }
+        deckManager = new DeckManager(deckMLayout);
     }
     public static void openLoginManager(){
         root.getChildren().clear();
@@ -130,6 +143,7 @@ public class GUIManager extends Application {
         for (Node n: tmp) {
             root.getChildren().add(n);
         }
+        loginManager = new LoginManager(loginLayout);
     }
     
     public static void openAdminPanel(){
@@ -147,6 +161,11 @@ public class GUIManager extends Application {
         }
         return root;
     } 
+    
+    public static String getCurrentUser(){
+        return current_user.getUsername();
+    }
+    
     public static void main(String args[]){
         Application.launch(args);
     }

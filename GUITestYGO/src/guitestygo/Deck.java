@@ -12,7 +12,8 @@ import java.util.*;
  * @author Stefano
  */
 public class Deck {
-    private String title;
+    private static String title;
+    private static String creator;
     private static List<Card> cards = new ArrayList<Card>();
     private static List<Card> extracards = new ArrayList<Card>();
     public Deck(String title){
@@ -21,6 +22,10 @@ public class Deck {
     
     public List<Card> getCards(){
         return cards;
+    }
+    
+    public List<Card> getECards(){
+        return extracards;
     }
     
     public void addCard(Card c){
@@ -71,7 +76,19 @@ public class Deck {
         }
     }
     
+    public static String getTitle(){
+        return title;
+    }
     public void setTitle(String t){
         title = t;
     }
+    
+    public static String getCreator(){
+        return creator;
+    }
+    
+    public static void setCreator(String user){
+        creator = user;
+    }
+    
 }

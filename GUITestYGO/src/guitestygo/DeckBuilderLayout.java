@@ -32,7 +32,6 @@ public class DeckBuilderLayout {
     private Button findRarest;
     private Button save;
     private Button back;
-    private static DeckBuilder db;
     public DeckBuilderLayout(){
         title = new Label("Insert Title");
         title.setLayoutX(40);
@@ -99,7 +98,6 @@ public class DeckBuilderLayout {
         findStrongest.setOnAction((ActionEvent ev)->{LoginManager.login();});	
         addCard.setOnAction((ActionEvent ev)->{LoginManager.signup();});
         back.setOnAction((ActionEvent ev)->{GUIManager.openAppManager();});
-        db = new DeckBuilder();
     }
     public Node[] getNodes() {
     	Node[] returnNode = { title, deckTitle, add, cardToAdd, addCard, remove, cardToRemove, removeCard, mostAtk, findStrongest, rarest, findRarest, findCard ,setName, save, back};
@@ -116,5 +114,9 @@ public class DeckBuilderLayout {
     
     public static String getSetName(){
         return setName.getText();
+    }
+    
+    public static String getDeckTitle(){
+        return deckTitle.getText();
     }
 }

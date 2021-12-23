@@ -32,7 +32,6 @@ public class SocialLayout {
     private Label mostPopular;
     private VBox visualize;
     private Button back;
-    private static SocialManager sm;
     public SocialLayout(){
         share = new Label("Share a Deck:");
         share.setLayoutX(20);
@@ -92,7 +91,6 @@ public class SocialLayout {
         findUser.setOnAction((ActionEvent ev)->{SocialManager.findUser();}); 
         findDeck.setOnAction((ActionEvent ev)->{SocialManager.findDeck();}); 
         back.setOnAction((ActionEvent ev)->{GUIManager.openAppManager();});
-        sm = new SocialManager();
     }
     
     public Node[] getNodes() {

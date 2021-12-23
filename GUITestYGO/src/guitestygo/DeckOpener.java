@@ -10,6 +10,10 @@ package guitestygo;
  * @author Stefano
  */
 public class DeckOpener {
+    private static DeckOpenerLayout deckOpenerkLayout;
+    public DeckOpener(DeckOpenerLayout deckOpenerLayout){
+        this.deckOpenerkLayout = deckOpenerLayout;
+    }
     public static void openDeck(){
         String t = DeckOpenerLayout.getTitle();
         if(MongoDBManager.existsDeck(t)){
