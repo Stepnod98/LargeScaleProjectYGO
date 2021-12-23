@@ -16,13 +16,13 @@ import javafx.scene.layout.*;
  */
 public class SocialLayout {
     private Label share;
-    private TextField toShare;
+    private static TextField toShare;
     private Button shareDeck;
     private Label findU;
-    private TextField userToFind;
+    private static TextField userToFind;
     private Button findUser;
     private Label findD;
-    private TextField deckToFind;
+    private static TextField deckToFind;
     private Button findDeck;
     private Label viewD;
     private Button viewRecDeck;
@@ -32,6 +32,7 @@ public class SocialLayout {
     private Label mostPopular;
     private VBox visualize;
     private Button back;
+    private static SocialManager sm;
     public SocialLayout(){
         share = new Label("Share a Deck:");
         share.setLayoutX(20);
@@ -91,11 +92,24 @@ public class SocialLayout {
         findUser.setOnAction((ActionEvent ev)->{SocialManager.findUser();}); 
         findDeck.setOnAction((ActionEvent ev)->{SocialManager.findDeck();}); 
         back.setOnAction((ActionEvent ev)->{GUIManager.openAppManager();});
+        sm = new SocialManager();
     }
     
     public Node[] getNodes() {
     	Node[] returnNode = {share, toShare, shareDeck, findU, userToFind, findUser, findD, deckToFind, 
             findDeck, viewD, viewRecDeck, viewU, viewRecUser, back};
     	return returnNode;
+    }
+    
+    public static String getDeckToShare(){
+        return toShare.getText();
+    }
+    
+    public static String getUserToFind(){
+        return userToFind.getText();
+    }
+    
+    public static String getDeckToFind(){
+        return deckToFind.getText();
     }
 }

@@ -20,6 +20,7 @@ public class LoginLayout {
     private TextField password;
     private Button login;
     private Button signUp;
+    private static LoginManager lm;
     public LoginLayout(){
         user = new Label("Insert Username");
         user.setLayoutX(280);
@@ -45,8 +46,10 @@ public class LoginLayout {
     	signUp.setLayoutY(250);
     	signUp.setLayoutX(380);
     	signUp.setMaxWidth(300);
+       // login.setOnAction((ActionEvent ev)->{LoginManager.login();});
         login.setOnAction((ActionEvent ev)->{LoginManager.login();});	
         signUp.setOnAction((ActionEvent ev)->{LoginManager.signup();}); 
+        lm = new LoginManager();
     }
     
      public Node[] getNodes() {
