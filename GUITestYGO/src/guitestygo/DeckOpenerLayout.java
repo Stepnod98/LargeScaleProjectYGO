@@ -20,7 +20,6 @@ public class DeckOpenerLayout {
     private static TextField deckTitle;
     private Button open;
     private Button back;
-    private static DeckOpener dop;
     public DeckOpenerLayout(){
         title = new Label("Insert Title");
         title.setLayoutX(40);
@@ -38,7 +37,6 @@ public class DeckOpenerLayout {
     	back.setLayoutX(520);
         back.setLayoutY(560);
     	back.setMaxWidth(300);
-        dop = new DeckOpener();
         open.setOnAction((ActionEvent ev)->{DeckOpener.openDeck();});
         back.setOnAction((ActionEvent ev)->{GUIManager.openAppManager();});
     }

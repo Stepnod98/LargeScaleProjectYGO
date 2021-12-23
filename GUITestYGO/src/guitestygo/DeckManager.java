@@ -12,10 +12,19 @@ import java.util.*;
  * @author Stefano
  */
 public class DeckManager {
+    private static DeckManagerLayout deckManagerLayout;
+    public DeckManager(DeckManagerLayout deckManagerLayout){
+        this.deckManagerLayout = deckManagerLayout;
+        
+    }
     public static void findDeck(){
         String title = DeckManagerLayout.getDeckToBrowse();
-        MongoDBManager.findDeck(title);
+        Deck d = MongoDBManager.findDeck(title);
         //decidere se stampare a schermo da MongoDBManager o se farmi passare i valori e farlo da qui
+        int i;
+        for(i = 0; i < d.getCards().size(); i++){
+            
+        }
     }
     
     public static void removeDeck(){

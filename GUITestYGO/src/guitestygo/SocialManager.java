@@ -10,6 +10,13 @@ package guitestygo;
  * @author Stefano
  */
 public class SocialManager {
+    private static User user;
+    private static SocialLayout socialLayout;
+    public SocialManager(SocialLayout socialLayout, User user){
+        this.socialLayout = socialLayout;
+        this.user = user;
+    }
+    
     public static void openSocial(){
         
     }

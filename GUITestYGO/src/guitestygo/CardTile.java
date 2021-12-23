@@ -22,7 +22,7 @@ import javafx.scene.shape.*;
  */
 public class CardTile extends StackPane {
     private static Image image = null;
-    private static String imgLocation = "file:./../img/backCard.png";;
+    private String imgLocation = "file:./../img/backCard.png";
     public CardTile(int x, int y){
         relocate(x * 1.0* DeckLayout.tileSize, y * 1.1* DeckLayout.tileSize);
         ImageView cardImg = new ImageView(imgLocation);

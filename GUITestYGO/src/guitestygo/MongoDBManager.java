@@ -72,6 +72,10 @@ public class MongoDBManager {
         return false;
     }
     
+    public static boolean checkCardType(String t){
+        return false;
+    }
+    
     public static void add(String t, ArrayList<Card> cards){
         
     }
@@ -117,6 +121,14 @@ public class MongoDBManager {
     public static List<String> findMagicTrapDeck(){
         List<String> decklist = new ArrayList<String>();
         return decklist;
+    }
+    
+    public static void saveDeck(Deck d){
+        String title = d.getTitle();
+        List<Card> cardlist = new ArrayList<Card>();
+        List<Card> ecardlist = new ArrayList<Card>();
+        cardlist = d.getCards();
+        ecardlist = d.getECards();
     }
     
    /* public void executeQuery(){
