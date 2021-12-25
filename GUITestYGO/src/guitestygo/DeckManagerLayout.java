@@ -18,19 +18,23 @@ import javafx.scene.control.TextField;
 public class DeckManagerLayout {
     private Label find;
     private static TextField deckToFind;
-    private Button findDeck;
+    protected Button findDeck;
     private Label remove;
     private static TextField deckToRemove;
-    private Button removeDeck;
+    protected Button removeDeck;
     private Label topCards;
     private static TextField topCardNumber;
-    private Button findTopCards;
+    protected Button findTopCards;
     private Label topECards;
     private static TextField topECardNumber;
-    private Button findTopECards;
+    protected Button findTopECards;
+    private Label magicTrapDecks;
+    protected Button findMagicTrapDecks;
+    private Label archetypeDecks;
+    protected Button findArchetypeDecks;
     private Label findD;
     private Label viewD;
-    private Button back;
+    protected Button back;
     public DeckManagerLayout(){
         find = new Label("Find a Deck:");
         find.setLayoutX(50);
@@ -80,20 +84,35 @@ public class DeckManagerLayout {
     	findTopECards.setLayoutY(160);
     	findTopECards.setLayoutX(340);
     	findTopECards.setMaxWidth(300);
+        magicTrapDecks = new Label("Find magic and trap cards oriented Decks");
+        magicTrapDecks.setLayoutX(460);
+        magicTrapDecks.setLayoutY(120);
+        findMagicTrapDecks = new Button("FIND");
+    	findMagicTrapDecks.setLayoutY(120);
+    	findMagicTrapDecks.setLayoutX(700);
+    	findMagicTrapDecks.setMaxWidth(300);
+        archetypeDecks =  new Label("Find archetype oriented Decks");
+        archetypeDecks.setLayoutX(460);
+        archetypeDecks.setLayoutY(160);
+        findArchetypeDecks = new Button("FIND");
+    	findArchetypeDecks.setLayoutY(160);
+    	findArchetypeDecks.setLayoutX(700);
+    	findArchetypeDecks.setMaxWidth(300);
         back = new Button("BACK");
     	back.setLayoutX(520);
         back.setLayoutY(450);
     	back.setMaxWidth(300);
-        findDeck.setOnAction((ActionEvent ev)->{DeckManager.findDeck();});
+        /*findDeck.setOnAction((ActionEvent ev)->{DeckManager.findDeck();});
         removeDeck.setOnAction((ActionEvent ev)->{DeckManager.removeDeck();});
         findTopCards.setOnAction((ActionEvent ev)->{DeckManager.findTopXCard();});	
         findTopECards.setOnAction((ActionEvent ev)->{DeckManager.findTopXECard();}); 
-        back.setOnAction((ActionEvent ev)->{GUIManager.openAppManager();});
+        back.setOnAction((ActionEvent ev)->{GUIManager.openAppManager();});*/
     }
     
     public Node[] getNodes() {
     	Node[] returnNode = { find, deckToFind, findDeck, remove, deckToRemove, removeDeck, 
-                            topCards, topCardNumber, findTopCards, topECards ,topECardNumber, findTopECards, back};
+                            topCards, topCardNumber, findTopCards, topECards ,topECardNumber, findTopECards, 
+                            magicTrapDecks, findMagicTrapDecks, archetypeDecks, findArchetypeDecks, back};
     	return returnNode;
     }
     

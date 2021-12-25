@@ -20,18 +20,20 @@ public class DeckBuilderLayout {
     private static TextField deckTitle;
     private Label add;
     private static TextField cardToAdd;
-    private Button addCard;
+    protected Button addCardByTitle;
+    protected Button addCardByAtk;
+    protected Button addCardByDef;
     private Label remove;
     private static TextField cardToRemove;
-    private Button removeCard;
+    protected Button removeCard;
     private Label findCard;
     private static TextField setName;
     private Label mostAtk;
-    private Button findStrongest;
+    protected Button findStrongest;
     private Label rarest;
-    private Button findRarest;
-    private Button save;
-    private Button back;
+    protected Button findRarest;
+    protected Button save;
+    protected Button back;
     public DeckBuilderLayout(){
         title = new Label("Insert Title");
         title.setLayoutX(40);
@@ -49,42 +51,50 @@ public class DeckBuilderLayout {
         cardToAdd.setLayoutY(80);
         cardToAdd.setFocusTraversable(false);
         cardToAdd.setMaxWidth(200);
-        addCard = new Button("ADD");
-    	addCard.setLayoutY(120);
-    	addCard.setLayoutX(520);
-    	addCard.setMaxWidth(100);
+        addCardByTitle = new Button("ADD BY TITLE");
+    	addCardByTitle.setLayoutY(120);
+    	addCardByTitle.setLayoutX(520);
+    	addCardByTitle.setMaxWidth(100);
+        addCardByAtk = new Button("ADD BY ATK");
+    	addCardByAtk.setLayoutY(160);
+    	addCardByAtk.setLayoutX(520);
+    	addCardByAtk.setMaxWidth(100);
+        addCardByDef = new Button("ADD BY DEF");
+    	addCardByDef.setLayoutY(200);
+    	addCardByDef.setLayoutX(520);
+    	addCardByDef.setMaxWidth(100);
         remove = new Label("Remove Card:");
         remove.setLayoutX(520);
-        remove.setLayoutY(160);
+        remove.setLayoutY(240);
         cardToRemove = new TextField();
         cardToRemove.setLayoutX(520);
-        cardToRemove.setLayoutY(200);
+        cardToRemove.setLayoutY(280);
         cardToRemove.setFocusTraversable(false);
         cardToRemove.setMaxWidth(200);
-        removeCard = new Button("REMOVE");
-    	removeCard.setLayoutY(240);
+        removeCard = new Button("REMOVE BY TITLE");
+    	removeCard.setLayoutY(320);
     	removeCard.setLayoutX(520);
     	removeCard.setMaxWidth(300);
-        findCard = new Label("Find Card in");
+        findCard = new Label("Find Card in set:");
         findCard.setLayoutX(480);
-        findCard.setLayoutY(320);
+        findCard.setLayoutY(400);
         setName = new TextField();
         setName.setLayoutX(480);
-        setName.setLayoutY(340);
+        setName.setLayoutY(440);
         setName.setFocusTraversable(false);
         setName.setMaxWidth(300);
         mostAtk = new Label("Most ATK");
         mostAtk.setLayoutX(500);
-        mostAtk.setLayoutY(380);
+        mostAtk.setLayoutY(480);
         findStrongest = new Button("FIND");
-    	findStrongest.setLayoutY(380);
+    	findStrongest.setLayoutY(480);
     	findStrongest.setLayoutX(560);
     	findStrongest.setMaxWidth(300);
         rarest = new Label("Rarest");
         rarest.setLayoutX(500);
-        rarest.setLayoutY(440);
+        rarest.setLayoutY(520);
         findRarest = new Button("FIND");
-    	findRarest.setLayoutY(440);
+    	findRarest.setLayoutY(520);
     	findRarest.setLayoutX(560);
     	findRarest.setMaxWidth(300);
         save = new Button("SAVE");
@@ -92,15 +102,17 @@ public class DeckBuilderLayout {
         save.setLayoutY(400);
     	save.setMaxWidth(300);
         back = new Button("BACK");
-    	back.setLayoutX(520);
+    	back.setLayoutX(640);
         back.setLayoutY(560);
     	back.setMaxWidth(300);
-        findStrongest.setOnAction((ActionEvent ev)->{LoginManager.login();});	
+        /*findStrongest.setOnAction((ActionEvent ev)->{LoginManager.login();});	
         addCard.setOnAction((ActionEvent ev)->{LoginManager.signup();});
-        back.setOnAction((ActionEvent ev)->{GUIManager.openAppManager();});
+        back.setOnAction((ActionEvent ev)->{GUIManager.openAppManager();});*/
     }
     public Node[] getNodes() {
-    	Node[] returnNode = { title, deckTitle, add, cardToAdd, addCard, remove, cardToRemove, removeCard, mostAtk, findStrongest, rarest, findRarest, findCard ,setName, save, back};
+    	Node[] returnNode = { title, deckTitle, add, cardToAdd, addCardByTitle, addCardByAtk, addCardByDef,
+                            remove, cardToRemove, removeCard, mostAtk, findStrongest, rarest, findRarest,
+                            findCard ,setName, save, back};
     	return returnNode;
     }
     

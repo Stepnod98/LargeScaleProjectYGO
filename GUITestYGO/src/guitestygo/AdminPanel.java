@@ -10,5 +10,8 @@ package guitestygo;
  * @author Stefano
  */
 public class AdminPanel {
-    
+    private static AdminLayout adminLayout;
+    public AdminPanel(AdminLayout adminLayout){
+        this.adminLayout = adminLayout;
+    }
 }

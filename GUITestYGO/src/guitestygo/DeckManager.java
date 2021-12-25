@@ -5,7 +5,9 @@
  */
 package guitestygo;
 
+import static java.lang.Integer.parseInt;
 import java.util.*;
+import javafx.event.ActionEvent;
 
 /**
  *
@@ -23,7 +25,7 @@ public class DeckManager {
         //decidere se stampare a schermo da MongoDBManager o se farmi passare i valori e farlo da qui
         int i;
         for(i = 0; i < d.getCards().size(); i++){
-            
+            //stampa a schermo le carte
         }
     }
     
@@ -33,12 +35,35 @@ public class DeckManager {
     }
     
     public static void findTopXCard(){
+        int x = parseInt(deckManagerLayout.getCardsRank());
         List<String> topList = new ArrayList<>();
-        int x;
+        topList = MongoDBManager.findTopXCards(x);
     }
     
     public static void findTopXECard(){
+        int x = parseInt(deckManagerLayout.getECardsRank());
         List<String> topList = new ArrayList<>();
+        topList = MongoDBManager.findTopXECards(x);
+    }
+    
+    public static void findMagicTrapDeck(){
+        List<String> topList = new ArrayList<>();
+        topList = MongoDBManager.findMagicTrapDeck();
+    }
+     
+    public static void findArchetypeDeck(){
+        List<String> topList = new ArrayList<>();
+        topList = MongoDBManager.findArchetypeDeck();
+    }
+    
+    public static void setEvents(){
+        deckManagerLayout.findDeck.setOnAction((ActionEvent ev)->{findDeck();});
+        deckManagerLayout.removeDeck.setOnAction((ActionEvent ev)->{removeDeck();});
+        deckManagerLayout.findTopCards.setOnAction((ActionEvent ev)->{findTopXCard();});	
+        deckManagerLayout.findTopECards.setOnAction((ActionEvent ev)->{findTopXECard();});
+        deckManagerLayout.findMagicTrapDecks.setOnAction((ActionEvent ev)->{findMagicTrapDeck();}); 
+        deckManagerLayout.findArchetypeDecks.setOnAction((ActionEvent ev)->{findArchetypeDeck();}); 
+        deckManagerLayout.back.setOnAction((ActionEvent ev)->{GUIManager.openAppManager();});
     }
      
     
