@@ -91,6 +91,7 @@ public class GUIManager extends Application {
         p.setLayoutY(120);
         root.getChildren().add(p);
         deckBuilder = new DeckBuilder(deckBLayout);
+        deckBuilder.setEvents();
     }
     
     public static void openDeckBuilder(Deck d){
@@ -107,6 +108,7 @@ public class GUIManager extends Application {
         p.setLayoutY(120);
         root.getChildren().add(p);
         deckBuilder = new DeckBuilder(deckBLayout);
+        deckBuilder.setEvents();
     }
      
      public static void openDeckOpener(){
@@ -123,6 +125,7 @@ public class GUIManager extends Application {
         p.setLayoutY(120);
         root.getChildren().add(p);
         deckOpener = new DeckOpener(deckOLayout);
+        deckOpener.setEvents();
     }
      
     public static void openDeckManager(){
@@ -134,6 +137,7 @@ public class GUIManager extends Application {
             root.getChildren().add(n);
         }
         deckManager = new DeckManager(deckMLayout);
+        deckManager.setEvents();
     }
     public static void openLoginManager(){
         root.getChildren().clear();
@@ -144,6 +148,7 @@ public class GUIManager extends Application {
             root.getChildren().add(n);
         }
         loginManager = new LoginManager(loginLayout);
+        loginManager.setEvents();
     }
     
     public static void openAdminPanel(){
@@ -159,6 +164,8 @@ public class GUIManager extends Application {
         for (Node n: tmp) {
             root.getChildren().add(n);
         }
+        loginManager = new LoginManager(loginLayout);
+        loginManager.setEvents();
         return root;
     } 
     

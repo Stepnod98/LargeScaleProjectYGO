@@ -18,8 +18,8 @@ public class LoginLayout {
     private TextField username;
     private Label pwd;
     private TextField password;
-    private Button login;
-    private Button signUp;
+    protected Button login;
+    protected Button signUp;
     public LoginLayout(){
         user = new Label("Insert Username");
         user.setLayoutX(280);
@@ -46,8 +46,8 @@ public class LoginLayout {
     	signUp.setLayoutX(380);
     	signUp.setMaxWidth(300);
        // login.setOnAction((ActionEvent ev)->{LoginManager.login();});
-        login.setOnAction((ActionEvent ev)->{LoginManager.login();});	
-        signUp.setOnAction((ActionEvent ev)->{LoginManager.signup();}); 
+       // login.setOnAction((ActionEvent ev)->{LoginManager.login();});	
+       // signUp.setOnAction((ActionEvent ev)->{LoginManager.signup();}); 
     }
     
      public Node[] getNodes() {

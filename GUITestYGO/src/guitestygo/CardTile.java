@@ -9,6 +9,9 @@ import java.awt.image.BufferedImage;
 import java.io.*;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javafx.embed.swing.SwingFXUtils;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.StackPane;
@@ -21,7 +24,6 @@ import javafx.scene.shape.*;
  * @author Stefano
  */
 public class CardTile extends StackPane {
-    private static Image image = null;
     private String imgLocation = "file:./../img/backCard.png";
     public CardTile(int x, int y){
         relocate(x * 1.0* DeckLayout.tileSize, y * 1.1* DeckLayout.tileSize);
@@ -35,55 +37,32 @@ public class CardTile extends StackPane {
         cardImg.setTranslateX(decrementation/2);
         cardImg.setTranslateY(decrementation/2);
 
-        getChildren().addAll(cardImg);     
+        getChildren().addAll(cardImg);  
     }
-    public CardTile(int x, int y, String img){
-        relocate(x * 1.0* DeckLayout.tileSize, y * 1.1* DeckLayout.tileSize);
-        ImageView cardImg = new ImageView(imgLocation);
-
-        double decrementation = 1.5;
-
-        cardImg.setFitWidth(DeckLayout.tileSize);
-        cardImg.setFitHeight(DeckLayout.tileSize);
-
-        cardImg.setTranslateX(decrementation/2);
-        cardImg.setTranslateY(decrementation/2);
-
-        getChildren().addAll(cardImg);     
+    public CardTile(int x, int y, String imgUrl){
+        BufferedImage image;
+        try {
+            URL imageUrl = new URL(imgUrl);
+            try {
+                image = ImageIO.read(imageUrl);
+                Image img = SwingFXUtils.toFXImage(image, null);
+                ImageView cardImg = new ImageView();
+                cardImg.setImage(img);
+                cardImg.setFitWidth(DeckLayout.tileSize);
+                cardImg.setFitHeight(DeckLayout.tileSize);
+                relocate(x * 1.0* DeckLayout.tileSize, y * 1.1* DeckLayout.tileSize);
+                double decrementation = 1.5;
+                cardImg.setTranslateX(decrementation/2);
+                cardImg.setTranslateY(decrementation/2);
+                getChildren().addAll(cardImg);
+            } catch (IOException e) {
+                throw new RuntimeException("Failed to read image from URL: " + imageUrl, e);
+            }
+        } catch (MalformedURLException ex) {
+            Logger.getLogger(CardTile.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
     public void setImage(String newImg){
         imgLocation = newImg;
     }
-   /* public static void saveImage(String imageUrl, String destinationFile){
-       BufferedImage image = null;  
-       try {
-              URL url = new URL(imageUrl);
-              image = ImageIO.read(url);
-              File file = new File("C:\\firefox.jpg"); // just an object
-              //FileWriter fw = new FileWriter(file); // create an actual file
-              ImageIO.write(image,"jpg", file);
-              //If successful, process the message
-          } catch (IOException e) {
-              System.out.println("Unable to retrieve Image!!!");
-              e.printStackTrace();
-          }
-      }*/
-       /*URL url = new URL(imageUrl);
-       InputStream is = url.openStream();
-       OutputStream os = new FileOutputStream(destinationFile);
-
-       byte[] b = new byte[2048];
-       int length;
-
-       while ((length = is.read(b)) != -1) {
-           os.write(b, 0, length);
-       }
-       is.close();
-       os.close();*/
-       /*
-       Image image = null;
-        URL url = new URL("http://bks6.books.google.ca/books?id=5VTBuvfZDyoC&printsec=frontcover&img=1& zoom=5&edge=curl&source=gbs_api");
-        image = ImageIO.read(url);
-        jXImageView1.setImage(image);
-       */
 }

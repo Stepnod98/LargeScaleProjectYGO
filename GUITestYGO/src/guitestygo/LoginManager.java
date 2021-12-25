@@ -5,6 +5,8 @@
  */
 package guitestygo;
 
+import javafx.event.ActionEvent;
+
 /**
  *
  * @author Stefano
@@ -27,5 +29,10 @@ public class LoginManager {
     
     public static void signup(){
         
+    }
+    
+    public static void setEvents(){
+        loginLayout.login.setOnAction((ActionEvent ev)->{login();});	
+        loginLayout.signUp.setOnAction((ActionEvent ev)->{signup();}); 
     }
 }

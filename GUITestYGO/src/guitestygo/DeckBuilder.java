@@ -5,8 +5,10 @@
  */
 package guitestygo;
 
+import static java.lang.Integer.parseInt;
 import java.util.ArrayList;
 import java.util.List;
+import javafx.event.ActionEvent;
 
 /**
  *
@@ -31,6 +33,28 @@ public class DeckBuilder {
         }
     }
     
+    public static void addCardByAtk(){
+        int atk = parseInt(DeckBuilderLayout.getCardToAdd());
+        Card c = MongoDBManager.findCard(atk, true);
+        if(MongoDBManager.checkCardType(c.getTitle())){
+            deck.addCard(c);
+        }
+        else{
+            deck.addECard(c);
+        }
+    }
+    
+    public static void addCardByDef(){
+        int def = parseInt(DeckBuilderLayout.getCardToAdd());
+        Card c = MongoDBManager.findCard(def, false);
+        if(MongoDBManager.checkCardType(c.getTitle())){
+            deck.addCard(c);
+        }
+        else{
+            deck.addECard(c);
+        }
+    }
+    
     public static void removeCard(){
         String t = DeckBuilderLayout.getCardToRemove();
         if(MongoDBManager.checkCardType(t)){
@@ -45,8 +69,8 @@ public class DeckBuilder {
         
     }
     
-    public static void saveDeck(DeckBuilderLayout db){
-        deck.setTitle(db.getDeckTitle());
+    public static void saveDeck(){
+        deck.setTitle(deckBuilderLayout.getDeckTitle());
         deck.setCreator(GUIManager.getCurrentUser());
         MongoDBManager.saveDeck(deck);
         
@@ -60,5 +84,16 @@ public class DeckBuilder {
     public static void findRarestCard(){
         String setName = DeckBuilderLayout.getSetName();
         String t = MongoDBManager.findRarest(setName);
+    }
+    
+    public static void setEvents(){
+        deckBuilderLayout.findStrongest.setOnAction((ActionEvent ev)->{findStrongestCard();});
+        deckBuilderLayout.findRarest.setOnAction((ActionEvent ev)->{findRarestCard();});	
+        deckBuilderLayout.addCardByTitle.setOnAction((ActionEvent ev)->{addCard();});
+        deckBuilderLayout.addCardByAtk.setOnAction((ActionEvent ev)->{addCardByAtk();});
+        deckBuilderLayout.addCardByDef.setOnAction((ActionEvent ev)->{addCardByDef();});
+        deckBuilderLayout.removeCard.setOnAction((ActionEvent ev)->{removeCard();});
+        deckBuilderLayout.save.setOnAction((ActionEvent ev)->{saveDeck();});	
+        deckBuilderLayout.back.setOnAction((ActionEvent ev)->{GUIManager.openAppManager();});
     }
 }

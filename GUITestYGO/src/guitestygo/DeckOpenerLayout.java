@@ -18,8 +18,8 @@ import javafx.scene.control.TextField;
 public class DeckOpenerLayout {
     private Label title;
     private static TextField deckTitle;
-    private Button open;
-    private Button back;
+    protected Button open;
+    protected Button back;
     public DeckOpenerLayout(){
         title = new Label("Insert Title");
         title.setLayoutX(40);
@@ -37,8 +37,8 @@ public class DeckOpenerLayout {
     	back.setLayoutX(520);
         back.setLayoutY(560);
     	back.setMaxWidth(300);
-        open.setOnAction((ActionEvent ev)->{DeckOpener.openDeck();});
-        back.setOnAction((ActionEvent ev)->{GUIManager.openAppManager();});
+        //open.setOnAction((ActionEvent ev)->{DeckOpener.openDeck();});
+        //back.setOnAction((ActionEvent ev)->{GUIManager.openAppManager();});
     }
     public Node[] getNodes() {
     	Node[] returnNode = { title, deckTitle, open, back};
