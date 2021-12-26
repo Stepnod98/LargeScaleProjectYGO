@@ -35,6 +35,7 @@ public class MongoDBManager {
         mongoClient=MongoClients.create("mongodb://localhost:27017");
         database = mongoClient.getDatabase("mydb");
         collection = database.getCollection("cards");
+        loginCollection = database.getCollection("login");
     }*/
     /*public void connectMongo(){
         System.out.println(collection.countDocuments());
@@ -140,7 +141,133 @@ public class MongoDBManager {
         cardlist = d.getCards();
         ecardlist = d.getECards();
     }
-    
+
+    /*
+    Card Mongo operations
+     */
+
+    public static JSONArray findCardByTitle(String inTitle) {
+        JSONArray itemsMatched = new JSONArray();
+        try (MongoCursor<Document> cursor = collection.find({title:inTitle}).iterator())
+        {
+            while (cursor.hasNext())
+            {
+                itemsMatched.put(cursor.next().toJson());
+            }
+        }
+
+        return itemsMatched;
+    }
+
+    public static JSONArray findCardByStats(int valueAtk, int valueDef) {
+        JSONArray itemsMatched = new JSONArray();
+        try (MongoCursor<Document> cursor = collection.find({$and: [{atk: valueAtk},{def: valueDef}]}).iterator())
+        {
+            while (cursor.hasNext())
+            {
+                itemsMatched.put(cursor.next().toJson());
+            }
+        }
+
+        return itemsMatched;
+    }
+
+    public static JSONArray findCardBySetName(String inSetName) {
+        JSONArray itemsMatched = new JSONArray();
+        try (MongoCursor<Document> cursor = collection.find({"sets.setName":inSetName}).iterator())
+        {
+            while (cursor.hasNext())
+            {
+                itemsMatched.put(cursor.next().toJson());
+            }
+        }
+
+        return itemsMatched;
+    }
+
+    public static boolean RemoveCardByTitle(String inCardTitle) {
+        try (MongoCursor<Document> cursor = collection.deleteMany({"cards.title": inCardTitle) }))
+        {
+            collection.remove({title: inCardTitle) })
+            return true;
+        }
+        catch(Exception e)
+        {
+            return false;
+        }
+    }
+
+    /*
+    Deck Mongo operations
+     */
+
+    public JSONArray findDeckByCard(String inCardTitle) {
+        JSONArray itemsMatched = new JSONArray();
+        try (MongoCursor<Document> cursor = collection.find({"cards.title": inCardTitle}).iterator())
+        {
+            while (cursor.hasNext())
+            {
+                itemsMatched.put(cursor.next().toJson());
+            }
+        }
+
+        return itemsMatched;
+    }
+
+    public static JSONArray findDeckByTitle(String inDeckTitle) {
+        JSONArray itemsMatched = new JSONArray();
+        try (MongoCursor<Document> cursor = collection.find({creator:inDeckTitle}).iterator())
+        {
+            while (cursor.hasNext())
+            {
+                itemsMatched.put(cursor.next().toJson());
+            }
+        }
+
+        return itemsMatched;
+    }
+
+    public static JSONArray findDeckByCreator(String inCreatorName) {
+        JSONArray itemsMatched = new JSONArray();
+        try (MongoCursor<Document> cursor = collection.find({creator:inCreatorName}).iterator())
+        {
+            while (cursor.hasNext())
+            {
+                itemsMatched.put(cursor.next().toJson());
+            }
+        }
+
+        return itemsMatched;
+    }
+
+    public static int RemoveDeckByTitle(String inDeckTitle) {
+        try (MongoCursor<Document> removeRes= collection.remove({title: inDeckTitle})
+        {
+            return remoteRes.nRemoved;
+        }
+        catch(Exception e)
+        {
+            return -1;
+        }
+    }
+
+    /*
+    User Mongo operations
+     */
+
+    public static JSONArray findUserByUsername(String inUsername) {
+        JSONArray itemsMatched = new JSONArray();
+        try (MongoCursor<Document> cursor = loginCollection.find({"login.username": "inUserName"}).iterator())
+        {
+            while (cursor.hasNext())
+            {
+                itemsMatched.put(cursor.next().toJson());
+            }
+        }
+
+        return itemsMatched;
+    }
+
     /*
     Bson projectionFields = Projections.fields(Projections.excludeId(),Projections.include("login.username"));
         Bson projectionFields2 = Projections.fields(Projections.excludeId(),Projections.include("title"));
