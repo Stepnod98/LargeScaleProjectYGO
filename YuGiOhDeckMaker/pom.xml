@@ -123,7 +123,7 @@
                         <id>default-cli</id>
                         <configuration>
                             <mainClass>
-                                it.unipi.lsmsdb.yugiohdeckmaker/it.unipi.lsmsdb.yugiohdeckmaker.HelloApplication
+                                it.unipi.lsmsdb.yugiohdeckmaker/it.unipi.lsmsdb.yugiohdeckmaker.GUIManager
                             </mainClass>
                         </configuration>
                     </execution>
