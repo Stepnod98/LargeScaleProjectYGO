@@ -77,10 +77,22 @@ var deckTitle: "redlion769's deck"
 db.yugiOh.remove({title: deckTitle})
 
 
+Analytics and Agregation
 
+Query 1. Find the most popular card in saved decks
+Ex. // trovare cuante volte compare una carta in tutti i deck salvati e i primi 3 record
+db.yugiOh.aggregate([{ $unwind: "$cards" },  { $sortByCount: "$cards.title" }, {$limit : 3} ] ) 
 
+Query 2. Find card with highest atk statistic / rarest card for each set 
 
+db.yugiOh.aggregate([{$unwind:"$sets"}, {$match: {$and: [{"atk": {$exists:true}},{"atk": {$ne: ["null", "?", "X000"]}}]}} ,{$group:{_id:{ set: "$sets.setName"},cards:{$push: {card_Name:"$title", atk_Value:"$atk"}},max: { $max : "$atk" }}}])
+db.yugiOh.aggregate([{$match:{"atk":{"$exists":1},"atk":{$ne:'?'}}},{$unwind:"$sets"},  {$group:{_id:{ set: "$sets.setName"},cards:{$push: {card_Name:"$title", atk_Value:"$atk"}},max: { $max : "$atk" }}}])
 
+Query 3. Find decks with less number of archetypes
 
+Query 4. Find deck with and average atk statistics > X decided by the User
 
+Query 5. Find deck in which the sum of magic and trap cards is greater than the sum of monster cards or viceversa
 
+Query 6. Find most popular extracards for each type in each deck
+db.yugiOh.aggregate([{ $unwind: "$extra_deck" },  { $sortByCount: "$extra_deck.title" }, {$limit : 3} ] )
