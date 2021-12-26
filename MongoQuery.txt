@@ -1,0 +1,86 @@
+Query 1.Create Deck ????
+java: 
+Non è lo stesso che ha già fatto fabiano???
+
+Mongo: 
+var deck = [
+"title": "deckTitle"; 
+"creator": "username"; 
+"cards": [{},{}...]; 
+"extCards": [{},{}...]
+]; 
+db.yugiOh.insert({deck})
+
+
+Query 2.Find card by title
+
+Mongo: 
+var title="TestTitle" 
+db.yougioh.find({title:title})
+
+Query 3.Find cards by statistics  
+Mongo: 
+
+var valueAtk: 500
+var valueDef: 1500
+db.yugiOh.find({$and: [{atk:valueAtk},{def:valueDef}]})
+
+
+Query 4. Find cards by set
+Mongo: 
+var set = "TestSet"
+db.yugiOh.find({"sets.setName":set})
+
+Query 5. Find Deck by card
+Mongo: 
+var cardTitle = "TestFindDeckbyCard"
+db.yugiOh.find({"cards.title": cardTitle})
+
+
+Query 6. Find Deck by User 
+Mongo: 
+var userCreator = "Test"
+db.yugiOh.find({creator:userCreator})
+
+Query 7. Find Deck by Title
+Mongo: 
+var decktitle = "TestFindDeckbytitle"
+db.yugiOh.find({title:deckTitle})
+
+Query 8. Find user by username
+
+Java: 
+Mongo: 
+
+var userLogin: "TestFindByUserName"
+db.login.find({"login.username":userLogin})
+
+
+Query 9. Replace card in a deck 
+java: 
+Mongo: 
+Non funziona ancora 
+ db.yugiOh.updateOne({"cards.title":"Aurora Paragon","cards.title": {$exists: true}}, {$set: {"cards.title": "YuliTest"}})
+
+
+Query 10. remove card by title
+Mongo: 
+var removeCard = "Aurora Paragon"
+db.yugiOh.deleteMany({"cards.title": removeCard})
+db.yugiOh.remove({title: removeCard})
+
+
+Query 11. remove deck by title
+
+Mongo: 
+var deckTitle: "redlion769's deck"
+db.yugiOh.remove({title: deckTitle})
+
+
+
+
+
+
+
+
+
