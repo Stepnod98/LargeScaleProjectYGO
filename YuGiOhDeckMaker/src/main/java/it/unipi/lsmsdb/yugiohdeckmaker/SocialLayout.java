@@ -22,7 +22,7 @@ public class SocialLayout {
     protected TextField userToFind;
     private Button findUser;
     private Label findD;
-    private TextField deckToFind;
+    protected TextField deckToFind;
     private Button findDeck;
     private Label viewD;
     private Button viewRecDeck;

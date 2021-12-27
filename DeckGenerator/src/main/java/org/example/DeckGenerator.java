@@ -22,7 +22,7 @@ public class DeckGenerator
         MongoCollection<Document> yugioh = database.getCollection("yugioh");
 
         Bson projectionFields = Projections.fields(Projections.excludeId(),Projections.include("login.username"));
-        Bson projectionFields2 = Projections.fields(Projections.excludeId(),Projections.include("title"));
+        Bson projectionFields2 = Projections.fields(Projections.excludeId(),Projections.include("title","imageUrl","atk","def","types","archetypes"));
 
         List<Document> people = collection.find(Filters.exists("name")).projection(projectionFields).into(new ArrayList<Document>());
 

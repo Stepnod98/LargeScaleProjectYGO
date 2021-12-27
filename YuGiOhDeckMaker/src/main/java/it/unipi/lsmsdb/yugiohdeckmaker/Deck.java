@@ -7,12 +7,16 @@ import java.util.*;
  * @author Stefano
  */
 public class Deck {
-    private static String title;
-    private static String creator;
-    private static List<Card> cards = new ArrayList<Card>();
-    private static List<Card> extracards = new ArrayList<Card>();
+    private String title;
+    private String creator;
+    private List<Card> cards = new ArrayList<Card>();
+    private List<Card> extracards = new ArrayList<Card>();
     public Deck(String title){
         this.title = title;
+    }
+    public Deck(String title, String creator){
+        this.title = title;
+        this.creator = creator;
     }
 
     public List<Card> getCards(){
@@ -71,18 +75,18 @@ public class Deck {
         }
     }
 
-    public static String getTitle(){
+    public String getTitle(){
         return title;
     }
     public void setTitle(String t){
         title = t;
     }
 
-    public static String getCreator(){
+    public String getCreator(){
         return creator;
     }
 
-    public static void setCreator(String user){
+    public void setCreator(String user){
         creator = user;
     }
 
