@@ -24,8 +24,14 @@ import javafx.scene.shape.*;
  * @author Stefano
  */
 public class CardTile extends StackPane {
+    private int x;
+    private int y;
+    private String cardName;
     private String imgLocation = "file:./../img/backCard.png";
     public CardTile(int x, int y){
+        this.x = x;
+        this.y = y;
+        cardName = "";
         relocate(x * 1.0* DeckLayout.tileSize, y * 1.1* DeckLayout.tileSize);
         ImageView cardImg = new ImageView(imgLocation);
 
@@ -39,7 +45,10 @@ public class CardTile extends StackPane {
 
         getChildren().addAll(cardImg);  
     }
-    public CardTile(int x, int y, String imgUrl){
+    public CardTile(int x, int y, String imgUrl, String name){
+        this.x = x;
+        this.y = y;
+        cardName = name;
         BufferedImage image;
         try {
             URL imageUrl = new URL(imgUrl);
@@ -64,5 +73,29 @@ public class CardTile extends StackPane {
     }
     public void setImage(String newImg){
         imgLocation = newImg;
+    }
+    
+    public int getX(){
+        return x;
+    }
+    
+    public int getY(){
+        return y;
+    }
+    
+    public void setX(int newX){
+        x = newX;
+    }
+    
+    public void setY(int newY){
+        y = newY;
+    }
+    
+    public String getCard(){
+        return cardName;
+    }
+    
+    public void setCard(String name){
+        cardName = name;
     }
 }

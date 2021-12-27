@@ -18,7 +18,7 @@ public class DeckLayout {
     public static final int tileSize = 40;
     public static final int height = 5;
     public static final int width = 10;
-    private static CardTile[][] area = new CardTile[width][height];
+    private static CardTile[][] cardBoard = new CardTile[width][height];
     private static Group tileGroup = new Group();
     private Pane root = new Pane();
     public DeckLayout(){
@@ -28,7 +28,7 @@ public class DeckLayout {
        for (int x = 0; x < width; x++) {
             for (int y = 0; y < height; y++) {
                 CardTile tile = new CardTile(x, y);
-                area[x][y] = tile;
+                cardBoard[x][y] = tile;
                 tileGroup.getChildren().add(tile);
             }
        }
@@ -42,7 +42,7 @@ public class DeckLayout {
             for (int y = 0; y < height; y++) {
                 //controlla quando arrivi a 40, le ultime 10 sono extra cards!
                 CardTile tile = new CardTile(x, y);
-                area[x][y] = tile;
+                cardBoard[x][y] = tile;
                 tileGroup.getChildren().add(tile);
             }
        }
@@ -51,7 +51,7 @@ public class DeckLayout {
         return root;
     }
     
-    public static CardTile[][] getArea(){
-        return area;
+    public static CardTile[][] getBoard(){
+        return cardBoard;
     }
 }

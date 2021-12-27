@@ -34,6 +34,8 @@ public class GUIManager extends Application {
     private static DeckOpener deckOpener;
     private static SocialManager socialManager;
     private static LoginManager loginManager;
+    private static AdminLayout adminLayout;
+    private static AdminPanel adminPanel;
     private static User current_user;
     public static Scene scene;
     public static Group root;
@@ -90,7 +92,7 @@ public class GUIManager extends Application {
         p.setLayoutX(40);
         p.setLayoutY(120);
         root.getChildren().add(p);
-        deckBuilder = new DeckBuilder(deckBLayout);
+        deckBuilder = new DeckBuilder(deckBLayout, deckLayout);
         deckBuilder.setEvents();
     }
     
@@ -107,7 +109,7 @@ public class GUIManager extends Application {
         p.setLayoutX(40);
         p.setLayoutY(120);
         root.getChildren().add(p);
-        deckBuilder = new DeckBuilder(deckBLayout);
+        deckBuilder = new DeckBuilder(deckBLayout, deckLayout);
         deckBuilder.setEvents();
     }
      
@@ -152,7 +154,15 @@ public class GUIManager extends Application {
     }
     
     public static void openAdminPanel(){
-        
+        root.getChildren().clear();
+        adminLayout = new AdminLayout();
+        Node[] tmp;
+        tmp = adminLayout.getNodes();
+        for (Node n: tmp) {
+            root.getChildren().add(n);
+        }
+        adminPanel = new AdminPanel(adminLayout);
+        adminPanel.setEvents();
     }
     
     public static Group setUI() {

@@ -34,7 +34,7 @@ public class DeckOpenerLayout {
         open.setLayoutY(120);
     	open.setMaxWidth(300);
         back = new Button("BACK");
-    	back.setLayoutX(520);
+    	back.setLayoutX(640);
         back.setLayoutY(560);
     	back.setMaxWidth(300);
         //open.setOnAction((ActionEvent ev)->{DeckOpener.openDeck();});

@@ -17,19 +17,41 @@ import javafx.event.ActionEvent;
 public class DeckBuilder {
     private static Deck deck;
     private static DeckBuilderLayout deckBuilderLayout;
-    public DeckBuilder(DeckBuilderLayout deckBuilderLayout){
+    private static DeckLayout deckLayout;
+    public DeckBuilder(DeckBuilderLayout deckBuilderLayout, DeckLayout deckLayout){
         deck = new Deck("");
         this.deckBuilderLayout = deckBuilderLayout;
+        this.deckLayout = deckLayout;
     }
     
     public static void addCard(){
         String t = DeckBuilderLayout.getCardToAdd();
         Card c = MongoDBManager.findCard(t);
         if(MongoDBManager.checkCardType(t)){
+            if(deck.getCards().size() == 40){
+                return;
+            }
             deck.addCard(c);
+            for(int i = 0; i < DeckLayout.width; i++){
+                for(int j = 0; j < DeckLayout.height; j++){
+                    if(deckLayout.getBoard()[i][j].getCard() == ""){
+                        deckLayout.getBoard()[i][j] = new CardTile(i,j,c.getImgURL(), c.getTitle());
+                        return;
+                    }
+                }
+            }
         }
         else{
+            if(deck.getECards().size() == 10){
+                return;
+            }
             deck.addECard(c);
+            for(int i = 0; i < DeckLayout.width; i++){
+                if(deckLayout.getBoard()[i][4].getCard() == ""){
+                    deckLayout.getBoard()[i][4] = new CardTile(i,4,c.getImgURL(), c.getTitle());
+                    return;
+                }
+            }
         }
     }
     
@@ -37,10 +59,30 @@ public class DeckBuilder {
         int atk = parseInt(DeckBuilderLayout.getCardToAdd());
         Card c = MongoDBManager.findCard(atk, true);
         if(MongoDBManager.checkCardType(c.getTitle())){
+            if(deck.getCards().size() == 40){
+                return;
+            }
             deck.addCard(c);
+            for(int i = 0; i < DeckLayout.width; i++){
+                for(int j = 0; j < DeckLayout.height; j++){
+                    if(deckLayout.getBoard()[i][j].getCard() == ""){
+                        deckLayout.getBoard()[i][j] = new CardTile(i,j,c.getImgURL(), c.getTitle());
+                        return;
+                    }
+                }
+            }
         }
         else{
+            if(deck.getECards().size() == 10){
+                return;
+            }
             deck.addECard(c);
+            for(int i = 0; i < DeckLayout.width; i++){
+                if(deckLayout.getBoard()[i][4].getCard() == ""){
+                    deckLayout.getBoard()[i][4] = new CardTile(i,4,c.getImgURL(), c.getTitle());
+                    return;
+                }
+            }
         }
     }
     
@@ -48,10 +90,30 @@ public class DeckBuilder {
         int def = parseInt(DeckBuilderLayout.getCardToAdd());
         Card c = MongoDBManager.findCard(def, false);
         if(MongoDBManager.checkCardType(c.getTitle())){
-            deck.addCard(c);
+            if(deck.getCards().size() == 40){
+                return;
+            }
+           deck.addCard(c);
+            for(int i = 0; i < DeckLayout.width; i++){
+                for(int j = 0; j < DeckLayout.height; j++){
+                    if(deckLayout.getBoard()[i][j].getCard() == ""){
+                        deckLayout.getBoard()[i][j] = new CardTile(i,j,c.getImgURL(), c.getTitle());
+                        return;
+                    }
+                }
+            }
         }
         else{
+            if(deck.getECards().size() == 10){
+                return;
+            }
             deck.addECard(c);
+            for(int i = 0; i < DeckLayout.width; i++){
+                if(deckLayout.getBoard()[i][4].getCard() == ""){
+                    deckLayout.getBoard()[i][4] = new CardTile(i,4,c.getImgURL(), c.getTitle());
+                    return;
+                }
+            }
         }
     }
     
@@ -62,6 +124,14 @@ public class DeckBuilder {
         }
         else{
             deck.removeECardByTitle(t);
+        }
+        for(int i = 0; i < DeckLayout.width; i++){
+            for(int j = 0; j < DeckLayout.height; j++){
+                if(deckLayout.getBoard()[i][j].getCard() == t){
+                    deckLayout.getBoard()[i][j] = new CardTile(i, j);
+                    return;
+                }
+            }
         }
     }
     
@@ -79,11 +149,13 @@ public class DeckBuilder {
     public static void findStrongestCard(){
         String setName = DeckBuilderLayout.getSetName();
         String t = MongoDBManager.findMostAtk(setName);
+        deckBuilderLayout.showCard(t);
     }
     
     public static void findRarestCard(){
         String setName = DeckBuilderLayout.getSetName();
         String t = MongoDBManager.findRarest(setName);
+        deckBuilderLayout.showCard(t);
     }
     
     public static void setEvents(){

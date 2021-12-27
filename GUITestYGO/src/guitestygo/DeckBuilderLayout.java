@@ -27,6 +27,7 @@ public class DeckBuilderLayout {
     private static TextField cardToRemove;
     protected Button removeCard;
     private Label findCard;
+    private Label cardfound;
     private static TextField setName;
     private Label mostAtk;
     protected Button findStrongest;
@@ -130,5 +131,11 @@ public class DeckBuilderLayout {
     
     public static String getDeckTitle(){
         return deckTitle.getText();
+    }
+    
+    public void showCard(String c){
+        cardfound = new Label(c);
+        cardfound.setLayoutX(580);
+        cardfound.setLayoutY(400);
     }
 }

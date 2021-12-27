@@ -21,6 +21,7 @@ public class LoginManager {
             GUIManager.openAdminPanel();
         }*/
         GUIManager.openAppManager();
+        //GUIManager.openAdminPanel();
     }
     
     public static void logout(){

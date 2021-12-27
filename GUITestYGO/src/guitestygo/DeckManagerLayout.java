@@ -32,6 +32,7 @@ public class DeckManagerLayout {
     protected Button findMagicTrapDecks;
     private Label archetypeDecks;
     protected Button findArchetypeDecks;
+    private Label result;
     private Label findD;
     private Label viewD;
     protected Button back;
@@ -99,8 +100,8 @@ public class DeckManagerLayout {
     	findArchetypeDecks.setLayoutX(700);
     	findArchetypeDecks.setMaxWidth(300);
         back = new Button("BACK");
-    	back.setLayoutX(520);
-        back.setLayoutY(450);
+    	back.setLayoutX(640);
+        back.setLayoutY(560);
     	back.setMaxWidth(300);
         /*findDeck.setOnAction((ActionEvent ev)->{DeckManager.findDeck();});
         removeDeck.setOnAction((ActionEvent ev)->{DeckManager.removeDeck();});

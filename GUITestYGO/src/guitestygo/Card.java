@@ -33,4 +33,7 @@ public class Card {
     public String getTitle(){
         return title;
     }
+    public String getImgURL(){
+        return imageUrl;
+    }
 }
