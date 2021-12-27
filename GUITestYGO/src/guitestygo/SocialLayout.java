@@ -84,8 +84,8 @@ public class SocialLayout {
     	viewRecUser.setLayoutX(520);
     	viewRecUser.setMaxWidth(100);
         back = new Button("BACK");
-    	back.setLayoutX(520);
-        back.setLayoutY(450);
+    	back.setLayoutX(640);
+        back.setLayoutY(560);
     	back.setMaxWidth(300);
         shareDeck.setOnAction((ActionEvent ev)->{SocialManager.share();});	
         findUser.setOnAction((ActionEvent ev)->{SocialManager.findUser();}); 

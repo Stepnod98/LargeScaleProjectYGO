@@ -38,22 +38,26 @@ public class DeckManager {
         int x = parseInt(deckManagerLayout.getCardsRank());
         List<String> topList = new ArrayList<>();
         topList = MongoDBManager.findTopXCards(x);
+        //add elements to gui
     }
     
     public static void findTopXECard(){
         int x = parseInt(deckManagerLayout.getECardsRank());
         List<String> topList = new ArrayList<>();
         topList = MongoDBManager.findTopXECards(x);
+        //add elements to gui
     }
     
     public static void findMagicTrapDeck(){
         List<String> topList = new ArrayList<>();
         topList = MongoDBManager.findMagicTrapDeck();
+        //add elements to gui
     }
      
     public static void findArchetypeDeck(){
         List<String> topList = new ArrayList<>();
         topList = MongoDBManager.findArchetypeDeck();
+        //add elements to gui
     }
     
     public static void setEvents(){
