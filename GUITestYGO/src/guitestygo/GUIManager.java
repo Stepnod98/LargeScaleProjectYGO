@@ -141,6 +141,21 @@ public class GUIManager extends Application {
         deckManager = new DeckManager(deckMLayout);
         deckManager.setEvents();
     }
+    
+    public static void openDeckManagerResults(DeckManagerLayout dm){
+        root.getChildren().clear();
+        deckMLayout = new DeckManagerLayout();
+        Node[] tmp;
+        tmp = deckMLayout.getNodes();
+        for (Node n: tmp) {
+            root.getChildren().add(n);
+        }
+        root.getChildren().add(dm.getTableNodes());
+       
+        deckManager = new DeckManager(deckMLayout);
+        deckManager.setEvents();
+    }
+    
     public static void openLoginManager(){
         root.getChildren().clear();
         loginLayout = new LoginLayout();
