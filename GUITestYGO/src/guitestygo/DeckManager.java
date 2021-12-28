@@ -22,11 +22,16 @@ public class DeckManager {
     public static void findDeck(){
         String title = DeckManagerLayout.getDeckToBrowse();
         Deck d = MongoDBManager.findDeck(title);
-        //decidere se stampare a schermo da MongoDBManager o se farmi passare i valori e farlo da qui
         int i;
+        List<String> result = new ArrayList<String>();
         for(i = 0; i < d.getCards().size(); i++){
-            //stampa a schermo le carte
+            result.add(d.getCards().get(i).getTitle());
         }
+        for(i = 0; i < d.getECards().size(); i++){
+            result.add(d.getECards().get(i).getTitle());
+        }
+        deckManagerLayout.showDeckResults(result);
+        GUIManager.openDeckManagerResults(deckManagerLayout);
     }
     
     public static void removeDeck(){
@@ -39,6 +44,15 @@ public class DeckManager {
         List<String> topList = new ArrayList<>();
         topList = MongoDBManager.findTopXCards(x);
         //add elements to gui
+        deckManagerLayout.showCardResults(topList);
+        /*List<String> list = new ArrayList<>();
+        list.add("g1");
+        list.add("g2");
+        list.add("g3");
+        list.add("g4");
+        list.add("g5");
+        deckManagerLayout.showCardResults(list);*/
+        GUIManager.openDeckManagerResults(deckManagerLayout);
     }
     
     public static void findTopXECard(){
@@ -46,18 +60,52 @@ public class DeckManager {
         List<String> topList = new ArrayList<>();
         topList = MongoDBManager.findTopXECards(x);
         //add elements to gui
+        deckManagerLayout.showCardResults(topList);
+        //test:
+        /*List<String> list = new ArrayList<>();
+        list.add("s1");
+        list.add("s2");
+        list.add("s3");
+        list.add("s4");
+        list.add("s5");
+        list.add("s6");
+        list.add("s7");
+        deckManagerLayout.showCardResults(list);*/
+        GUIManager.openDeckManagerResults(deckManagerLayout);
+        
     }
     
     public static void findMagicTrapDeck(){
         List<String> topList = new ArrayList<>();
         topList = MongoDBManager.findMagicTrapDeck();
         //add elements to gui
+        deckManagerLayout.showDeckResults(topList);
+        //test:
+        /*List<String> list = new ArrayList<>();
+        list.add("g1");
+        list.add("g2");
+        list.add("g3");
+        list.add("g4");
+        list.add("g5");
+        deckManagerLayout.showDeckResults(list);*/
+        GUIManager.openDeckManagerResults(deckManagerLayout);
+        
     }
      
     public static void findArchetypeDeck(){
         List<String> topList = new ArrayList<>();
         topList = MongoDBManager.findArchetypeDeck();
         //add elements to gui
+        deckManagerLayout.showDeckResults(topList);
+        //test:
+        /*List<String> list = new ArrayList<>();
+        list.add("gg1");
+        list.add("g2");
+        list.add("g3");
+        list.add("g4");
+        list.add("g5");
+        deckManagerLayout.showDeckResults(list);*/
+        GUIManager.openDeckManagerResults(deckManagerLayout);
     }
     
     public static void setEvents(){

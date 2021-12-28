@@ -5,11 +5,20 @@
  */
 package guitestygo;
 
+import java.util.List;
+import javafx.beans.property.ReadOnlyStringWrapper;
+import javafx.beans.property.SimpleListProperty;
+import javafx.beans.property.SimpleStringProperty;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.*;
 import javafx.scene.control.TextField;
+import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.layout.VBox;
 
 /**
  *
@@ -32,6 +41,9 @@ public class DeckManagerLayout {
     protected Button findMagicTrapDecks;
     private Label archetypeDecks;
     protected Button findArchetypeDecks;
+    private TableView<String> table = new TableView<String>();
+    private ObservableList<String> observableList;
+    private VBox vbox;
     private Label result;
     private Label findD;
     private Label viewD;
@@ -64,7 +76,7 @@ public class DeckManagerLayout {
         topCards = new Label("Find top X Cards");
         topCards.setLayoutX(80);
         topCards.setLayoutY(120);
-        topCardNumber = new TextField("X");
+        topCardNumber = new TextField("5");
         topCardNumber.setLayoutX(80);
         topCardNumber.setLayoutY(160);
         topCardNumber.setFocusTraversable(false);
@@ -76,7 +88,7 @@ public class DeckManagerLayout {
         topECards = new Label("Find top X Extra Cards");
         topECards.setLayoutX(280);
         topECards.setLayoutY(120);
-        topECardNumber = new TextField("X");
+        topECardNumber = new TextField("5");
         topECardNumber.setLayoutX(280);
         topECardNumber.setLayoutY(160);
         topECardNumber.setFocusTraversable(false);
@@ -131,5 +143,39 @@ public class DeckManagerLayout {
     
     public static String getECardsRank(){
         return topECardNumber.getText();
+    }
+    
+    public void showCardResults(List<String> list){
+        TableColumn<String, String> column = new TableColumn("Card Title");
+        column.setCellValueFactory(cellData -> 
+            new ReadOnlyStringWrapper(cellData.getValue()));
+        table.getColumns().add(column);
+        observableList = FXCollections.observableArrayList(list);	
+        table.setItems(observableList);
+        table.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
+        vbox = new VBox();
+        vbox.setLayoutY(240);
+        vbox.setLayoutX(60);
+        vbox.setMaxHeight(148);
+        vbox.getChildren().addAll(table);
+    }
+    
+    public void showDeckResults(List<String> list){
+        TableColumn<String, String> column = new TableColumn("Deck Title");
+        column.setCellValueFactory(cellData -> 
+            new ReadOnlyStringWrapper(cellData.getValue()));
+        table.getColumns().add(column);
+        observableList = FXCollections.observableArrayList(list);	
+        table.setItems(observableList);
+        table.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
+        vbox = new VBox();
+        vbox.setLayoutY(240);
+        vbox.setLayoutX(440);
+        vbox.setMaxHeight(180);
+        vbox.getChildren().addAll(table);
+    }
+    
+    public Node getTableNodes() {
+    	return vbox;
     }
 }
