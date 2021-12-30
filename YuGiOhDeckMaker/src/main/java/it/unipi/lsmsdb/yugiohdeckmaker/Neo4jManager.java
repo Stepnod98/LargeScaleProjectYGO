@@ -156,7 +156,6 @@ public class Neo4jManager {
     }
 
 
-    //Parameter has to be changed to Deck deck
     //This method is used tho share a deck given a user and its deck
     public static void shareDeck(User user,Deck deck) throws DeckPresentException, DeckNotExistsException{
 
@@ -171,10 +170,6 @@ public class Neo4jManager {
         "CREATE (u)-[:HAS_SHARED]->(d:Deck {title: \""+deck.getTitle()+"\", creator: \""+user.username+"\"}) ";
 
         runQuery(query);
-        System.out.println("Deck: " + deck.getTitle() + " shared!");
-
-        // TODO: 25/12/2021 Add socialLayout.showSharedComplete()
-        // socialLayout.showSharedComplete();
 
     }
 
@@ -193,10 +188,6 @@ public class Neo4jManager {
                 "CREATE (u)-[:LIKES]->(d) ";
 
         runQuery(query);
-        System.out.println("Deck: " + deck.getTitle() + " liked!");
-
-        // TODO: 25/12/2021 Add socialLayout.showLikeComplete()
-        // socialLayout.showLikedComplete();
 
     }
 
@@ -212,14 +203,11 @@ public class Neo4jManager {
                 "DELETE l";
 
         runQuery(query);
-        System.out.println("Deck: " + deck.getTitle() + " like removed!");
 
-        // TODO: 27/12/2021 Add socialLayout.showUnlikeComplete()
-        // socialLayout.showLikedComplete();
     }
 
     public static void follow(User user,User userToFollow) throws UserPresentException, UserNotExistsException{
-        // TODO: 26/12/2021 Implement checkFriend
+
         if(!findUser(userToFollow)){
             throw new UserNotExistsException();
         }
@@ -233,10 +221,6 @@ public class Neo4jManager {
                 "CREATE (u)-[:FOLLOWS]->(utf)";
 
         runQuery(query);
-        System.out.println("Friend: " + userToFollow.username + " added!");
-
-        // TODO: 26/12/2021 Implement socialLayout.showFollowComplete()
-        // socialLayout.showFollowComplete();
 
     }
 
@@ -250,14 +234,11 @@ public class Neo4jManager {
 
         String query = "MATCH (u:User {username: \""+user.username+"\"})\n" +
                 "MATCH (utu:User {username: \""+userToUnfollow.username+"\"})" +
-                "MATCH (u)-[f:FOLLOWS]->(utf)\n"+
+                "MATCH (u)-[f:FOLLOWS]->(utu)\n"+
                 "DELETE f";
 
         runQuery(query);
-        System.out.println("Friend: " + userToUnfollow.username + " unfollowed!");
 
-        // TODO: 27/12/2021 Implement socialLayout.showUnfollowComplete()
-        // socialLayout.showFollowComplete();
     }
 
     // TODO: 27/12/2021 Move this method on MongoDBManager
@@ -295,7 +276,7 @@ public class Neo4jManager {
 
 
     //This method is used to check if the user that we want to add is already our friend
-    private static boolean checkFriendship(User user, User possibleFriend){
+    public static boolean checkFriendship(User user, User possibleFriend){
         Session session = driver.session();
         List<String> friendship = new ArrayList<>();
         session.readTransaction((TransactionWork<List<String>>) tx ->{
@@ -329,7 +310,7 @@ public class Neo4jManager {
 
 
     //This method is used to check if the user that we want to add is already our friend
-    private static boolean checkLikedDeck(User user, Deck deck){
+    public static boolean checkLikedDeck(User user, Deck deck){
         Session session = driver.session();
         List<String> deckLiked = new ArrayList<>();
         session.readTransaction((TransactionWork<List<String>>) tx ->{

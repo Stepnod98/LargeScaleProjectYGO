@@ -20,6 +20,9 @@ public class LoginLayout {
     private TextField password;
     private Button login;
     private Button signUp;
+    private Label log;
+    private TextField logText;
+
     public LoginLayout(){
         user = new Label("Insert Username");
         user.setLayoutX(280);
@@ -45,10 +48,18 @@ public class LoginLayout {
     	signUp.setLayoutY(250);
     	signUp.setLayoutX(380);
     	signUp.setMaxWidth(300);
+        logText = new TextField();
+        logText.setLayoutX(280);
+        logText.setLayoutY(310);
+        logText.setMaxWidth(300);
+        logText.setEditable(false);
+        log = new Label("Log:");
+        log.setLayoutX(280);
+        log.setLayoutY(290);
     }
     
      public Node[] getNodes() {
-    	Node[] returnNode = {user, username, pwd, password, login, signUp};
+    	Node[] returnNode = {user, username, pwd, password, login, signUp, log, logText};
     	return returnNode;
     }
      
@@ -59,6 +70,12 @@ public class LoginLayout {
     public String getPassword(){
         return password.getText();
     }
+
+    public void printError(String err){
+        logText.setText(err);
+        logText.setStyle("-fx-text-inner-color: red;");
+    }
+
 
     public Button getLogin(){ return login;};
     public Button getSignUp(){ return signUp;};

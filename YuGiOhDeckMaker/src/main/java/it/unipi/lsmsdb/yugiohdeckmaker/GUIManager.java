@@ -126,6 +126,11 @@ public class GUIManager extends Application {
         return root;
     }
 
+    // TODO: 29/12/2021 Added this on this day
+    public static void addNode(Node node){
+        root.getChildren().add(node);
+    }
+
     public static void main(String args[]){
         Application.launch(args);
     }

@@ -40,8 +40,10 @@ public class LoginManager {
 
         String username = loginLayout.getUsername();
         String password = encrypt(loginLayout.getPassword());
+
+        // TODO: 28/12/2021 Add admin control 
         if(!checkUser(username,password)){
-            //LoginLayout.showLoginError();
+            loginLayout.printError("User\\pass not correct");
         }else{
             //GUIManager.openAppManager();
             //Currently I switch directly to SocialManager!
@@ -74,6 +76,7 @@ public class LoginManager {
         return new String(d.digest());
     }
 
+    // TODO: 28/12/2021 Add to mongoDBManager
     private static boolean checkUser(String username, String pwd){
 
         MongoClient myClient = MongoClients.create("mongodb://localhost:27017");
@@ -92,7 +95,7 @@ public class LoginManager {
         }
     }
 
-
+    // TODO: 28/12/2021 spostare su mongodb 
     public static List<String> getDecks(String username) {
 
         MongoClient myClient = MongoClients.create("mongodb://localhost:27017");

@@ -5,15 +5,18 @@
  */
 package it.unipi.lsmsdb.yugiohdeckmaker;
 
-import javafx.event.ActionEvent;
+
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.control.*;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.*;
 
-/**
- *
- * @author Stefano
- */
+import java.util.ArrayList;
+import java.util.List;
+
 public class SocialLayout {
     private Label share;
     protected TextField toShare;
@@ -25,15 +28,31 @@ public class SocialLayout {
     protected TextField deckToFind;
     private Button findDeck;
     private Label viewD;
-    private Button viewRecDeck;
+    protected Button viewRecDeck;
     private Label viewU;
-    private Button viewRecUser;
+    protected Button viewRecUser;
     private Label mostLiked;
     private Label mostPopular;
     private VBox visualize;
     private Button back;
+    public ObservableList<Row> observableList;
+    protected TableView findDeckTable;
+    protected TableView findUserTable;
+    protected TableView findDeckRecTable;
+    protected TableView findUserRecTable;
+    private Label log;
+    private TextField logText;
 
     public SocialLayout(){
+
+        logText = new TextField();
+        logText.setLayoutX(520);
+        logText.setLayoutY(120);
+        logText.setMinWidth(240);
+        logText.setEditable(false);
+        log = new Label("Log:");
+        log.setLayoutX(520);
+        log.setLayoutY(100);
         share = new Label("Share a Deck:");
         share.setLayoutX(20);
         share.setLayoutY(20);
@@ -78,21 +97,21 @@ public class SocialLayout {
     	viewRecDeck.setLayoutX(180);
     	viewRecDeck.setMaxWidth(100);
         viewU = new Label("View Recommended Users:");
-        viewU.setLayoutX(360);
+        viewU.setLayoutX(260);
         viewU.setLayoutY(120);
         viewRecUser = new Button("VIEW");
     	viewRecUser.setLayoutY(120);
-    	viewRecUser.setLayoutX(520);
+    	viewRecUser.setLayoutX(420);
     	viewRecUser.setMaxWidth(100);
         back = new Button("BACK");
     	back.setLayoutX(520);
-        back.setLayoutY(450);
+        back.setLayoutY(550);
     	back.setMaxWidth(300);
     }
     
     public Node[] getNodes() {
     	Node[] returnNode = {share, toShare, shareDeck, findU, userToFind, findUser, findD, deckToFind, 
-            findDeck, viewD, viewRecDeck, viewU, viewRecUser, back};
+            findDeck, viewD, viewRecDeck, viewU, viewRecUser, back, log, logText};
     	return returnNode;
     }
 
@@ -111,4 +130,186 @@ public class SocialLayout {
     public Button getShareDeck() {
         return shareDeck;
     }
+
+    /*public void showDeckRecResults(List<String> list){
+        TableColumn<String, String> column = new TableColumn("Recommended decks");
+        TableColumn<String, String> columnLike = new TableColumn("Like");
+        column.setCellValueFactory(cellData ->
+                new ReadOnlyStringWrapper(cellData.getValue()));
+        TableView<String> table = new TableView<>();
+        table.getColumns().add(column);
+        table.getColumns().add(columnLike);
+        observableList = FXCollections.observableArrayList(list);
+        table.setItems(observableList);
+        table.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
+        visualize = new VBox();
+        visualize.setLayoutY(240);
+        visualize.setLayoutX(20);
+        visualize.setMaxHeight(148);
+        visualize.getChildren().addAll(table);
+    }*/
+
+    public void showDeckRecResults(List<String> list){
+        findDeckRecTable = new TableView();
+
+        TableColumn column = new TableColumn("Deck title");
+        TableColumn columnLike = new TableColumn("Action");
+
+        findDeckRecTable.getColumns().addAll(column, columnLike);
+
+        List<Row> recResult = new ArrayList<>();
+        for (int i = 0; i < list.size(); i++){
+            recResult.add(new Row(list.get(i)));
+        }
+
+        observableList = FXCollections.observableArrayList(recResult);
+
+        column.setCellValueFactory(
+                new PropertyValueFactory<Row,String>("info")
+        );
+
+        columnLike.setCellValueFactory(
+                new PropertyValueFactory<Row,String>("button")
+        );
+
+
+        findDeckRecTable.setItems(observableList);
+        findDeckRecTable.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
+
+
+
+        visualize = new VBox();
+        visualize.setLayoutY(300);
+        visualize.setLayoutX(20);
+        visualize.setFillWidth(true);
+        visualize.setMaxHeight(182);
+        visualize.getChildren().addAll(findDeckRecTable);
+
+    }
+
+
+    public void showUserRecResults(List<String> list){
+        findUserRecTable = new TableView();
+
+        TableColumn column = new TableColumn("Username");
+        TableColumn columnLike = new TableColumn("Action");
+
+        findUserRecTable.getColumns().addAll(column, columnLike);
+
+        List<Row> recResult = new ArrayList<>();
+        for (int i = 0; i < list.size(); i++){
+            recResult.add(new Row(list.get(i)));
+        }
+
+        observableList = FXCollections.observableArrayList(recResult);
+
+
+        column.setCellValueFactory(
+                new PropertyValueFactory<Row,String>("info")
+        );
+
+        columnLike.setCellValueFactory(
+                new PropertyValueFactory<Row,String>("button")
+        );
+
+
+        findUserRecTable.setItems(observableList);
+        findUserRecTable.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
+
+        visualize = new VBox();
+        visualize.setLayoutY(300);
+        visualize.setLayoutX(440);
+        visualize.setMaxHeight(182);
+        visualize.getChildren().addAll(findUserRecTable);
+    }
+
+    public void showDeckFindResults(String deck){
+        findDeckTable = new TableView();
+
+        TableColumn column = new TableColumn("Deck title");
+        TableColumn columnLike = new TableColumn("Action");
+
+        findDeckTable.getColumns().addAll(column, columnLike);
+
+        Row findResult = new Row(deck);
+
+        findResult.getButton().setAlignment(Pos.CENTER);
+
+
+        observableList = FXCollections.observableArrayList(findResult);
+
+        column.setCellValueFactory(
+                new PropertyValueFactory<Row,String>("info")
+        );
+
+        columnLike.setCellValueFactory(
+                new PropertyValueFactory<Row,String>("button")
+        );
+
+
+        findDeckTable.setItems(observableList);
+        findDeckTable.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
+
+
+
+        visualize = new VBox();
+        visualize.setLayoutY(240);
+        visualize.setLayoutX(20);
+        visualize.setFillWidth(true);
+        visualize.setMaxHeight(58);
+        visualize.getChildren().addAll(findDeckTable);
+
+    }
+
+    public void showUserFindResults(String username){
+        findUserTable = new TableView();
+
+        TableColumn column = new TableColumn("Username");
+        TableColumn columnLike = new TableColumn("Action");
+
+        findUserTable.getColumns().addAll(column, columnLike);
+
+        Row findResult = new Row(username);
+
+        findResult.getButton().setAlignment(Pos.CENTER);
+
+
+        observableList = FXCollections.observableArrayList(findResult);
+
+        column.setCellValueFactory(
+                new PropertyValueFactory<Row,String>("info")
+        );
+
+        columnLike.setCellValueFactory(
+                new PropertyValueFactory<Row,String>("button")
+        );
+
+
+        findUserTable.setItems(observableList);
+        findUserTable.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
+
+
+        visualize = new VBox();
+        visualize.setLayoutY(240);
+        visualize.setLayoutX(440);
+        visualize.setMaxHeight(58);
+        visualize.getChildren().addAll(findUserTable);
+
+    }
+
+
+    public void printError(String err){
+        logText.setText(err);
+        logText.setStyle("-fx-text-inner-color: red;");
+    }
+
+    public void printLog(String log){
+        logText.setText(log);
+        logText.setStyle("-fx-text-inner-color: green;");
+    }
+
+    public Node getTableNodes() {
+        return visualize;
+    }
+
 }
