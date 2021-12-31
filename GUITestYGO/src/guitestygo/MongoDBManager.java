@@ -100,36 +100,48 @@ public class MongoDBManager {
     
     public static String findRarest(String setName){
         String t = "";
+        
         return t;
     }
     
-    public static String findMostAtk(int x){
+    public static String findMostAtk(int th){
         String t = "";
+        
         return t;
     }
     
-    public static String findMostAvgAtk(int x){
+    public static String findMostAvgAtk(int th){
         String t = "";
+        
         return t;
     }
     
     public static List<String> findTopXCards(int x){
-        List<String> cardlist = new ArrayList<String>();
+        List<String> cardlist = new ArrayList<String>();     
+        /*
+        if (itemsMatched != null) { 
+           for (int i=0;i<jArray.length();i++){ 
+            cardlist.add(jArray.getString(i));
+           } 
+        } */
         return cardlist;
     }
     
     public static List<String> findTopXECards(int x){
         List<String> cardlist = new ArrayList<String>();
+        
         return cardlist;
     }
     
     public static List<String> findMagicTrapDeck(){
         List<String> decklist = new ArrayList<String>();
+        
         return decklist;
     }
     
     public static List<String> findArchetypeDeck(){
         List<String> decklist = new ArrayList<String>();
+        
         return decklist;
     }
     
@@ -139,7 +151,134 @@ public class MongoDBManager {
         List<Card> ecardlist = new ArrayList<Card>();
         cardlist = d.getCards();
         ecardlist = d.getECards();
+        String creator = d.getCreator();
     }
+    
+     /*
+    Card Mongo operations
+     */
+
+   /* public static JSONArray findCardByTitle(String inTitle) {
+        JSONArray itemsMatched = new JSONArray();
+        try (MongoCursor<Document> cursor = collection.find({title:inTitle}).iterator())
+        {
+            while (cursor.hasNext())
+            {
+                itemsMatched.put(cursor.next().toJson());
+            }
+        }
+
+        return itemsMatched;
+    }
+
+    public static JSONArray findCardByStats(int valueAtk, int valueDef) {
+        JSONArray itemsMatched = new JSONArray();
+        try (MongoCursor<Document> cursor = collection.find({$and: [{atk: valueAtk},{def: valueDef}]}).iterator())
+        {
+            while (cursor.hasNext())
+            {
+                itemsMatched.put(cursor.next().toJson());
+            }
+        }
+
+        return itemsMatched;
+    }
+
+    public static JSONArray findCardBySetName(String inSetName) {
+        JSONArray itemsMatched = new JSONArray();
+        try (MongoCursor<Document> cursor = collection.find({"sets.setName":inSetName}).iterator())
+        {
+            while (cursor.hasNext())
+            {
+                itemsMatched.put(cursor.next().toJson());
+            }
+        }
+
+        return itemsMatched;
+    }
+
+    public static boolean RemoveCardByTitle(String inCardTitle) {
+        try (MongoCursor<Document> cursor = collection.deleteMany({"cards.title": inCardTitle) }))
+        {
+            collection.remove({title: inCardTitle) })
+            return true;
+        }
+        catch(Exception e)
+        {
+            return false;
+        }
+    }*/
+
+    /*
+    Deck Mongo operations
+     */
+
+   /* public JSONArray findDeckByCard(String inCardTitle) {
+        JSONArray itemsMatched = new JSONArray();
+        try (MongoCursor<Document> cursor = collection.find({"cards.title": inCardTitle}).iterator())
+        {
+            while (cursor.hasNext())
+            {
+                itemsMatched.put(cursor.next().toJson());
+            }
+        }
+
+        return itemsMatched;
+    }
+
+    public static JSONArray findDeckByTitle(String inDeckTitle) {
+        JSONArray itemsMatched = new JSONArray();
+        try (MongoCursor<Document> cursor = collection.find({creator:inDeckTitle}).iterator())
+        {
+            while (cursor.hasNext())
+            {
+                itemsMatched.put(cursor.next().toJson());
+            }
+        }
+
+        return itemsMatched;
+    }
+
+    public static JSONArray findDeckByCreator(String inCreatorName) {
+        JSONArray itemsMatched = new JSONArray();
+        try (MongoCursor<Document> cursor = collection.find({creator:inCreatorName}).iterator())
+        {
+            while (cursor.hasNext())
+            {
+                itemsMatched.put(cursor.next().toJson());
+            }
+        }
+
+        return itemsMatched;
+    }
+
+    public static int RemoveDeckByTitle(String inDeckTitle) {
+        try (MongoCursor<Document> removeRes= collection.remove({title: inDeckTitle})
+        {
+            return remoteRes.nRemoved;
+        }
+        catch(Exception e)
+        {
+            return -1;
+        }
+    }
+
+    /*
+    User Mongo operations
+     */
+
+   /* public static JSONArray findUserByUsername(String inUsername) {
+        JSONArray itemsMatched = new JSONArray();
+        try (MongoCursor<Document> cursor = loginCollection.find({"login.username": "inUserName"}).iterator())
+        {
+            while (cursor.hasNext())
+            {
+                itemsMatched.put(cursor.next().toJson());
+            }
+        }
+
+        return itemsMatched;
+    }*/
     
     /*
     Bson projectionFields = Projections.fields(Projections.excludeId(),Projections.include("login.username"));

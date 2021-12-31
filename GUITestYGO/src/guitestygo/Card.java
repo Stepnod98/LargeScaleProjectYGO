@@ -7,6 +7,7 @@ package guitestygo;
 
 import java.util.*;
 import javafx.scene.image.*;
+import javax.swing.text.Document;
 
 /**
  *
@@ -30,6 +31,12 @@ public class Card {
     private String level;
     private int atk;
     private int def;
+    public Card(){ //non serve
+        
+    }
+    public Card(Document d){
+        
+    }
     public String getTitle(){
         return title;
     }
