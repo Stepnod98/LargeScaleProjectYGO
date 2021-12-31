@@ -28,8 +28,13 @@ public class LoginManager {
         GUIManager.openLoginManager();
     }
     
-    public static void signup(){
+    public static void checkCredentials(){
         
+    }
+    
+    public static void signup(){
+        GUIManager.openSignUpManager();
+        loginLayout.sign.setOnAction((ActionEvent ev)->{checkCredentials();}); 
     }
     
     public static void setEvents(){

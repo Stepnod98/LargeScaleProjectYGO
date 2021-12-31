@@ -76,18 +76,18 @@ public class Deck {
         }
     }
     
-    public static String getTitle(){
+    public String getTitle(){
         return title;
     }
     public void setTitle(String t){
         title = t;
     }
     
-    public static String getCreator(){
+    public String getCreator(){
         return creator;
     }
     
-    public static void setCreator(String user){
+    public void setCreator(String user){
         creator = user;
     }
     

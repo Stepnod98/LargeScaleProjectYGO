@@ -168,6 +168,18 @@ public class GUIManager extends Application {
         loginManager.setEvents();
     }
     
+    public static void openSignUpManager(){
+        root.getChildren().clear();
+        loginLayout = new LoginLayout(true);
+        Node[] tmp;
+        tmp = loginLayout.getSignUpNodes();
+        for (Node n: tmp) {
+            root.getChildren().add(n);
+        }
+        loginManager = new LoginManager(loginLayout);
+        loginManager.setEvents();
+    }
+    
     public static void openAdminPanel(){
         root.getChildren().clear();
         adminLayout = new AdminLayout();

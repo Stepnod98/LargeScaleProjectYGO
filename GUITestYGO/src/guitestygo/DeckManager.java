@@ -20,7 +20,7 @@ public class DeckManager {
         
     }
     public static void findDeck(){
-        String title = DeckManagerLayout.getDeckToBrowse();
+        String title = deckManagerLayout.getDeckToBrowse();
         Deck d = MongoDBManager.findDeck(title);
         int i;
         List<String> result = new ArrayList<String>();
@@ -35,7 +35,7 @@ public class DeckManager {
     }
     
     public static void removeDeck(){
-        String title = DeckManagerLayout.getDeckToRemove();
+        String title = deckManagerLayout.getDeckToRemove();
         MongoDBManager.remove(title);
     }
     
