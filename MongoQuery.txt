@@ -9,90 +9,107 @@ var deck = [
 "cards": [{},{}...]; 
 "extCards": [{},{}...]
 ]; 
-db.yugiOh.insert({deck})
+db.yugioh.insert({deck})
 
 
 Query 2.Find card by title
-
 Mongo: 
 var title="TestTitle" 
-db.yougioh.find({title:title})
+db.yugioh.find({title:title})
 
 Query 3.Find cards by statistics  
 Mongo: 
-
 var valueAtk: 500
 var valueDef: 1500
-db.yugiOh.find({$and: [{atk:valueAtk},{def:valueDef}]})
+db.yugioh.find({$and: [{atk:valueAtk},{def:valueDef}]})
 
 
 Query 4. Find cards by set
 Mongo: 
 var set = "TestSet"
-db.yugiOh.find({"sets.setName":set})
+db.yugioh.find({"sets.setName":set})
 
 Query 5. Find Deck by card
 Mongo: 
 var cardTitle = "TestFindDeckbyCard"
-db.yugiOh.find({"cards.title": cardTitle})
+db.yugioh.find({"cards.title": cardTitle})
 
 
-Query 6. Find Deck by User 
+Query 6. Find Deck by Usercreator 
 Mongo: 
-var userCreator = "Test"
-db.yugiOh.find({creator:userCreator})
+var userCreator = "tinybutterfly563"
+db.yugioh.find({creator:userCreator})
 
 Query 7. Find Deck by Title
 Mongo: 
-var decktitle = "TestFindDeckbytitle"
-db.yugiOh.find({title:deckTitle})
+var deckTitle = "tinybutterfly563's deck4"
+db.yugioh.find({title:deckTitle})
 
 Query 8. Find user by username
-
-Java: 
 Mongo: 
-
 var userLogin: "TestFindByUserName"
 db.login.find({"login.username":userLogin})
 
 
-Query 9. Replace card in a deck 
-java: 
-Mongo: 
-Non funziona ancora 
- db.yugiOh.updateOne({"cards.title":"Aurora Paragon","cards.title": {$exists: true}}, {$set: {"cards.title": "YuliTest"}})
-
+Query 9. Replace card in a deck  
+Mongo:  
+var cardInDeck: "Aurora Paragon"
+var cardToReplace: "YuliTest"
+db.yugioh.updateMany({"cards.title" : cardInDeck},{$set:{"cards.$.title": cardToReplace}})
 
 Query 10. remove card by title
 Mongo: 
 var removeCard = "Aurora Paragon"
 db.yugiOh.deleteMany({"cards.title": removeCard})
-db.yugiOh.remove({title: removeCard})
+db.yugioh.remove({title: removeCard})
 
 
 Query 11. remove deck by title
-
 Mongo: 
 var deckTitle: "redlion769's deck"
-db.yugiOh.remove({title: deckTitle})
+db.yugioh.remove({title: deckTitle})
 
 
 Analytics and Agregation
-
 Query 1. Find the most popular card in saved decks
 Ex. // trovare cuante volte compare una carta in tutti i deck salvati e i primi 3 record
-db.yugiOh.aggregate([{ $unwind: "$cards" },  { $sortByCount: "$cards.title" }, {$limit : 3} ] ) 
+db.yugioh.aggregate([{ $unwind: "$cards" },  { $sortByCount: "$cards.title" }, {$limit :3} ] ) 
 
 Query 2. Find card with highest atk statistic / rarest card for each set 
-
-db.yugiOh.aggregate([{$unwind:"$sets"}, {$match: {$and: [{"atk": {$exists:true}},{"atk": {$ne: ["null", "?", "X000"]}}]}} ,{$group:{_id:{ set: "$sets.setName"},cards:{$push: {card_Name:"$title", atk_Value:"$atk"}},max: { $max : "$atk" }}}])
-db.yugiOh.aggregate([{$match:{"atk":{"$exists":1},"atk":{$ne:'?'}}},{$unwind:"$sets"},  {$group:{_id:{ set: "$sets.setName"},cards:{$push: {card_Name:"$title", atk_Value:"$atk"}},max: { $max : "$atk" }}}])
+db.yugioh.aggregate([{$unwind:"$sets"}, {$match: {$and: [{"atk": {$exists:true}},{"atk": {$ne:"?"}},{"atk": {$ne:"X000"}},{"atk": {$ne:null}}]}} ,{$group:{_id:{ set: "$sets.setName"},cards:{$push: {card_Name:"$title", atk_Value:"$atk"}},max: { $max : "$atk" }}}])
+db.yugioh.aggregate([{$unwind:"$sets"}, {$match: {$and: [{"atk": {$exists:true}},{"atk": {$ne:"?"}},{"atk": {$ne:"X000"}},{"atk": {$ne:null}}]}} ,{$group:{_id:{ set: "$sets.setName"},cards:{$push: {card_Name:"$title", atk_Value:"$atk"}},max: { $max : "$atk" }}}, {$project: {_id: 0, set: "$_id.set", card: "$cards.title", highestAtk : "$max"}}])
 
 Query 3. Find decks with less number of archetypes
 
+db.yugioh.aggregate([{ $match: { "cards.archetypes": { $exists: 1}, "extra_deck.archetypes": {$exists: 1}}},{$unwind: "$cards"},{$unwind: "$extra_deck"},{$unwind:"$cards.archetypes"},{$unwind: "$extra_deck.archetypes"},{$group :{_id :{deck: "$title"},cards:{$push:{card_Name:"$cards.title", archetypes: "$cards.archetypes",extra_card: "$extra_deck.title",earchetypes: "$extra_deck.archetypes"}},total_count : {$sum : 1}}},{$sort: {total_count:1}},{$limit :5}])
+
+db.yugioh.aggregate([{ $match: { "cards.archetypes": { $exists: 1}}},{$unwind: "$cards"},{$unwind:"$cards.archetypes"},{$group :{_id :{deck: "$title"},cards:{$push: {card_Name:"$cards.title", archetypes: "$cards.archetypes"}} ,total_count : {$sum : 1}}},{$sort: {total_count: 1}}])
+{$project: {_id:{title: "$title", cards: "$cards.title", archetype: "$cards.archetype"}}})
+
 Query 4. Find deck with and average atk statistics > X decided by the User
+
+cards avg: 
+db.yugioh.aggregate([{$unwind: "$cards"},{$match: {$or: [{"cards.atk": {$exists:1}},{"cards.atk": {$ne:"?"}},{"cards.atk": {$ne:"X000"}},{"cards.atk": {$ne:null}}, {"cards.atk": 0}]}},{$group:{_id:{deck: "$title"},cards:{$push: {deck:"$title", card:"$cards.title" , atk_Value:"$cards.atk"}},avgAtk: { $avg : "$cards.atk" }}}])
+extra_deck avg: 
+db.yugioh.aggregate([{$unwind: "$extra_deck"},{$match: {$or: [{"extra_deck.atk": {$exists:1}},{"extra_deck.atk": {$ne:"?"}},{"extra_deck.atk": {$ne:"X000"}},{"extra_deck.atk": {$ne:null}}, {"extra_deck.atk": 0}]}},{$group:{_id:{deck: "$title"},cards:{$push: {deck:"$title", card:"$extra_deck.title" , atk_Value:"$extra_deck.atk"}},avgAtk: { $avg : "$extra_deck.atk" }}}])
 
 Query 5. Find deck in which the sum of magic and trap cards is greater than the sum of monster cards or viceversa
 
+Monsters sum: 
+db.yugioh.aggregate([{$unwind: "$cards"},{$unwind: "$extra_deck"},{$match:{"cards.types":{$exists:1},"extra_deck.types": {$exists: 1}}},{ $group: { _id:{deck: "$title"}, count: { $sum: 1 } } }, {$sort:{count: 1}}])
+
+Magic and Trap sum: 
+db.yugioh.aggregate([{$unwind: "$cards"},{$match:{"cards.types":{$exists:0}}},{ $group: { _id:{deck: "$title"}, count: { $sum: 1 } } }, {$sort:{count: 1}}])
+
+
+db.yugioh.aggregate([{ $match: { "cards.types": { $exists: 1}, "extra_deck.types": {$exists: 1}}},{$unwind: "$cards"},{$unwind: "$extra_deck"},{$group :{_id :{deck: "$title"},cards:{$push:{card_Name:"$cards.title", type: "$cards.types"}},total_count : {$sum : 1}}},{$sort: {total_count:1}}, {$limit: 5}])
+db.yugioh.aggregate([{$unwind: "$cards"},{$match:{"cards.types":{"$exists":1}}},{ $group: { _id:{deck: "$title"}, count: { $sum: 1 } } }, {$sort: {count:1}}])
+
 Query 6. Find most popular extracards for each type in each deck
-db.yugiOh.aggregate([{ $unwind: "$extra_deck" },  { $sortByCount: "$extra_deck.title" }, {$limit : 3} ] )
+db.yugioh.aggregate([{ $unwind: "$extra_deck" },  { $sortByCount: "$extra_deck.title" }, {$limit : 3} ] )
+
+
+
+
+
+
