@@ -28,7 +28,10 @@ public class Deck {
         return extracards;
     }
     
-    public void addCard(Card c){
+    public boolean addCard(Card c){
+        if(cards.size() == 40){
+            return false;
+        }
         int cont = 0;
         for(int i = 0; i < cards.size() -1; i++){
             if(cards.get(i).getTitle().equals(c.getTitle())){
@@ -36,14 +39,19 @@ public class Deck {
             }
             if(cont < 3){
                 cards.add(c);
+                return true;
             }
             else{
                 System.out.println("WRN: You have already three copies of that card in your deck!");
             }
         }
+        return false;
     }
     
-    public void addECard(Card c){
+    public boolean addECard(Card c){
+        if(extracards.size() == 10){
+            return false;
+        }
         int cont = 0;
         for(int i = 0; i < extracards.size() -1; i++){
             if(extracards.get(i).getTitle().equals(c.getTitle())){
@@ -51,29 +59,33 @@ public class Deck {
             }
             if(cont < 3){
                 extracards.add(c);
+                return true;
             }
             else{
                 System.out.println("WRN: You have already three copies of that card in your deck!");
             }
         }
+        return false;
     }
     
-    public void removeCardByTitle(String t){
+    public boolean removeCardByTitle(String t){
         for(int i = 0; i < cards.size() -1; i++){
             if(cards.get(i).getTitle().equals(t)){
                 cards.remove(i);
-                return;
+                return true;
             }
         }
+        return false;
     }
     
-    public void removeECardByTitle(String t){
+    public boolean removeECardByTitle(String t){
         for(int i = 0; i < extracards.size() -1; i++){
             if(extracards.get(i).getTitle().equals(t)){
                 extracards.remove(i);
-                return;
+                return true;
             }
         }
+        return false;
     }
     
     public String getTitle(){

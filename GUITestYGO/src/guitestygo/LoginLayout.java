@@ -29,6 +29,7 @@ public class LoginLayout {
     protected Button login;
     protected Button signUp;
     protected Button sign;
+    protected Button back;
     public LoginLayout(){
         user = new Label("Insert Username");
         user.setLayoutX(280);
@@ -54,6 +55,7 @@ public class LoginLayout {
     	signUp.setLayoutY(250);
     	signUp.setLayoutX(380);
     	signUp.setMaxWidth(300);
+        back = new Button("BACK");
        // login.setOnAction((ActionEvent ev)->{LoginManager.login();});
        // login.setOnAction((ActionEvent ev)->{LoginManager.login();});	
        // signUp.setOnAction((ActionEvent ev)->{LoginManager.signup();}); 
@@ -112,9 +114,10 @@ public class LoginLayout {
     	sign.setLayoutY(280);
     	sign.setLayoutX(80);
     	sign.setMaxWidth(300);
-       // login.setOnAction((ActionEvent ev)->{LoginManager.login();});
-       // login.setOnAction((ActionEvent ev)->{LoginManager.login();});	
-       // signUp.setOnAction((ActionEvent ev)->{LoginManager.signup();}); 
+        back = new Button("BACK");
+    	back.setLayoutX(640);
+        back.setLayoutY(560);
+    	back.setMaxWidth(300);
     }
     
     public Node[] getNodes() {
@@ -124,7 +127,7 @@ public class LoginLayout {
     
     public Node[] getSignUpNodes() {
     	Node[] returnNode = {user, username, pwd, password, fName, firstName, lName, lastName,
-                                email, emailAddress,confPwd, confirmPassword, sign};
+                                email, emailAddress,confPwd, confirmPassword, sign, back};
     	return returnNode;
     }
      

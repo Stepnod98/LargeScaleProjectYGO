@@ -54,13 +54,53 @@ public class MongoDBManager {
         List list = new ArrayList<String>();
         return list;
     }
-    public static boolean existsDeck(String t){
+    public static boolean existsDeck(String inTitle){
+       /* JSONArray itemsMatched = new JSONArray();
+        try (MongoCursor<Document> cursor = collection.find({title:inTitle}).iterator())
+        {
+            while (cursor.hasNext())
+            {
+                itemsMatched.put(cursor.next().toJson());
+            }
+        }
+        if(itemsMatched != null){
+            return true;
+        }
+        */
         return false;
     }
     
     public static Deck findDeck(String t){
         Deck d = new Deck("");
-        return d;
+        /*JSONArray itemsMatched = new JSONArray();
+        try (MongoCursor<Document> cursor = collection.find({title:inTitle}).iterator())
+        {
+            while (cursor.hasNext())
+            {
+                itemsMatched.put(cursor.next().toJson());
+            }
+        }
+        if (itemsMatched != null) { 
+           for (int i=0;i<jArray.length();i++){ 
+                JsonObject decks = (JsonObject) jArray.get(i); 
+                 String issues_key = (String) issues.get("key").toString();
+                String project_name = (String) issues.get("name").toString(); 
+                d.add(jArray.getString(i));
+           } 
+        }
+        */
+        /*
+        Bson projectionFields = Projections.fields(Projections.excludeId(),Projections.include("title"));
+        Bson filterNotFusion = Filters.not(filterFusion);
+        Bson filterNotLink = Filters.not(filterLink);
+        Bson filterNotSynchro = Filters.not(filterSynchro);
+        Bson filterNotXyz = Filters.not(filterXyz);
+        Bson filterExistingTitle = Filters.exists("title");
+
+        //Merge all the filters
+        //Bson filterForNormal = Filters.and(filterExistingTitle,filterNotFusion,filterNotLink,filterNotXyz,filterNotSynchro);
+        List<Document> deckList = collection.find(filterExistingTitle).projection(projectionFields).into(new ArrayList<Document>());
+        */return d;
     }
     
     public static Card findCard(String t){
@@ -89,8 +129,15 @@ public class MongoDBManager {
         
     }
     
-    public static void remove(String t){
-        
+    public static void remove(String inTitle){
+        /*try (MongoCursor<Document> removeRes= collection.remove({title: inTitle})
+        {
+            return remoteRes.nRemoved;
+        }
+        catch(Exception e)
+        {
+            return -1;
+        }*/
     }
     
     public static String findMostAtk(String setName){
@@ -98,11 +145,11 @@ public class MongoDBManager {
         return t;
     }
     
-    public static String findRarest(String setName){
+    /*public static String findRarest(String setName){
         String t = "";
         
         return t;
-    }
+    }*/
     
     public static String findMostAtk(int th){
         String t = "";
@@ -110,14 +157,21 @@ public class MongoDBManager {
         return t;
     }
     
-    public static String findMostAvgAtk(int th){
-        String t = "";
+    public static List findMostAvgAtk(int th){
+        List<String> cardlist = new ArrayList<String>();
         
-        return t;
+        /*
+        if (itemsMatched != null) { 
+           for (int i=0;i<jArray.length();i++){ 
+            cardlist.add(jArray.getString(i));
+           } 
+        } */
+        return cardlist;
     }
     
     public static List<String> findTopXCards(int x){
-        List<String> cardlist = new ArrayList<String>();     
+        List<String> cardlist = new ArrayList<String>();
+        
         /*
         if (itemsMatched != null) { 
            for (int i=0;i<jArray.length();i++){ 

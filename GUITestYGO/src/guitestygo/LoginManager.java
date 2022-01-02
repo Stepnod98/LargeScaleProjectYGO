@@ -39,6 +39,10 @@ public class LoginManager {
     
     public static void setEvents(){
         loginLayout.login.setOnAction((ActionEvent ev)->{login();});	
-        loginLayout.signUp.setOnAction((ActionEvent ev)->{signup();}); 
+        loginLayout.signUp.setOnAction((ActionEvent ev)->{signup();});
+    }
+    
+    public static void setSignUpEvents(){
+         loginLayout.back.setOnAction((ActionEvent ev)->{GUIManager.openLoginManager();});
     }
 }

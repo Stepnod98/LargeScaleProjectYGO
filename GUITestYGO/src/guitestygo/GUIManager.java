@@ -112,8 +112,8 @@ public class GUIManager extends Application {
         deckBuilder = new DeckBuilder(deckBLayout, deckLayout);
         deckBuilder.setEvents();
     }
-     
-     public static void openDeckOpener(){
+    
+    public static void openDeckOpener(){
         root.getChildren().clear();
         deckOLayout = new DeckOpenerLayout();
         deckLayout = new DeckLayout();
@@ -177,7 +177,7 @@ public class GUIManager extends Application {
             root.getChildren().add(n);
         }
         loginManager = new LoginManager(loginLayout);
-        loginManager.setEvents();
+        loginManager.setSignUpEvents();
     }
     
     public static void openAdminPanel(){

@@ -108,13 +108,30 @@ public class DeckManager {
         GUIManager.openDeckManagerResults(deckManagerLayout);
     }
     
+    public static void findAvgAtkDecks(){
+        List<String> topList = new ArrayList<>();
+        topList = MongoDBManager.findArchetypeDeck();
+        //add elements to gui
+        deckManagerLayout.showDeckResults(topList);
+        //test:
+        /*List<String> list = new ArrayList<>();
+        list.add("gg1");
+        list.add("g2");
+        list.add("g3");
+        list.add("g4");
+        list.add("g5");
+        deckManagerLayout.showDeckResults(list);*/
+        GUIManager.openDeckManagerResults(deckManagerLayout);
+    }
+    
     public static void setEvents(){
         deckManagerLayout.findDeck.setOnAction((ActionEvent ev)->{findDeck();});
         deckManagerLayout.removeDeck.setOnAction((ActionEvent ev)->{removeDeck();});
         deckManagerLayout.findTopCards.setOnAction((ActionEvent ev)->{findTopXCard();});	
         deckManagerLayout.findTopECards.setOnAction((ActionEvent ev)->{findTopXECard();});
         deckManagerLayout.findMagicTrapDecks.setOnAction((ActionEvent ev)->{findMagicTrapDeck();}); 
-        deckManagerLayout.findArchetypeDecks.setOnAction((ActionEvent ev)->{findArchetypeDeck();}); 
+        deckManagerLayout.findArchetypeDecks.setOnAction((ActionEvent ev)->{findArchetypeDeck();});
+        deckManagerLayout.mostAvgAtkDecks.setOnAction((ActionEvent ev)->{findAvgAtkDecks();}); 
         deckManagerLayout.back.setOnAction((ActionEvent ev)->{GUIManager.openAppManager();});
     }
      
