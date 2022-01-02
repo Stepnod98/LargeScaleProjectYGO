@@ -5,11 +5,6 @@
  */
 package guitestygo;
 
-import static guitestygo.DeckBuilder.addCard;
-import static guitestygo.DeckBuilder.findRarestCard;
-import static guitestygo.DeckBuilder.findStrongestCard;
-import static guitestygo.DeckBuilder.removeCard;
-import static guitestygo.DeckBuilder.saveDeck;
 import javafx.event.ActionEvent;
 
 /**

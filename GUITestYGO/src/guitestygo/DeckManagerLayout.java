@@ -41,6 +41,11 @@ public class DeckManagerLayout {
     protected Button findMagicTrapDecks;
     private Label archetypeDecks;
     protected Button findArchetypeDecks;
+    private Label atkDecks;
+    protected Button mostAtkDecks;
+    private Label avgAtkDecks;
+    private static TextField avgAtk;
+    protected Button mostAvgAtkDecks;
     private TableView<String> table = new TableView<String>();
     private ObservableList<String> observableList;
     private VBox vbox;
@@ -111,6 +116,18 @@ public class DeckManagerLayout {
     	findArchetypeDecks.setLayoutY(160);
     	findArchetypeDecks.setLayoutX(700);
     	findArchetypeDecks.setMaxWidth(300);
+        avgAtkDecks =  new Label("Find Decks with Average ATK more than");
+        avgAtkDecks.setLayoutX(460);
+        avgAtkDecks.setLayoutY(200);
+        avgAtk = new TextField("5");
+        avgAtk.setLayoutX(460);
+        avgAtk.setLayoutY(240);
+        avgAtk.setFocusTraversable(false);
+        avgAtk.setMaxWidth(50);
+        mostAvgAtkDecks = new Button("FIND");
+    	mostAvgAtkDecks.setLayoutY(240);
+    	mostAvgAtkDecks.setLayoutX(600);
+    	mostAvgAtkDecks.setMaxWidth(300);
         back = new Button("BACK");
     	back.setLayoutX(640);
         back.setLayoutY(560);
@@ -125,7 +142,8 @@ public class DeckManagerLayout {
     public Node[] getNodes() {
     	Node[] returnNode = { find, deckToFind, findDeck, remove, deckToRemove, removeDeck, 
                             topCards, topCardNumber, findTopCards, topECards ,topECardNumber, findTopECards, 
-                            magicTrapDecks, findMagicTrapDecks, archetypeDecks, findArchetypeDecks, back};
+                            magicTrapDecks, findMagicTrapDecks, archetypeDecks, findArchetypeDecks,avgAtkDecks, 
+                            avgAtk, mostAvgAtkDecks, back};
     	return returnNode;
     }
     
@@ -145,6 +163,10 @@ public class DeckManagerLayout {
         return topECardNumber.getText();
     }
     
+    public static String getAvgAtk(){
+        return avgAtk.getText();
+    }
+    
     public void showCardResults(List<String> list){
         TableColumn<String, String> column = new TableColumn("Card Title");
         column.setCellValueFactory(cellData -> 
@@ -154,7 +176,7 @@ public class DeckManagerLayout {
         table.setItems(observableList);
         table.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
         vbox = new VBox();
-        vbox.setLayoutY(240);
+        vbox.setLayoutY(280);
         vbox.setLayoutX(60);
         vbox.setMaxHeight(148);
         vbox.getChildren().addAll(table);
@@ -169,7 +191,7 @@ public class DeckManagerLayout {
         table.setItems(observableList);
         table.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
         vbox = new VBox();
-        vbox.setLayoutY(240);
+        vbox.setLayoutY(280);
         vbox.setLayoutX(440);
         vbox.setMaxHeight(180);
         vbox.getChildren().addAll(table);

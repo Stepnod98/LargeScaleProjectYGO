@@ -31,10 +31,11 @@ public class DeckBuilderLayout {
     private static TextField setName;
     private Label mostAtk;
     protected Button findStrongest;
-    private Label rarest;
-    protected Button findRarest;
+    /*private Label rarest;
+    protected Button findRarest;*/
     protected Button save;
     protected Button back;
+    private Label err;
     public DeckBuilderLayout(){
         title = new Label("Insert Title");
         title.setLayoutX(40);
@@ -91,17 +92,20 @@ public class DeckBuilderLayout {
     	findStrongest.setLayoutY(480);
     	findStrongest.setLayoutX(560);
     	findStrongest.setMaxWidth(300);
-        rarest = new Label("Rarest");
+        /*rarest = new Label("Rarest");
         rarest.setLayoutX(500);
         rarest.setLayoutY(520);
         findRarest = new Button("FIND");
     	findRarest.setLayoutY(520);
     	findRarest.setLayoutX(560);
-    	findRarest.setMaxWidth(300);
+    	findRarest.setMaxWidth(300);*/
         save = new Button("SAVE");
     	save.setLayoutX(50);
         save.setLayoutY(400);
     	save.setMaxWidth(300);
+        err = new Label();
+        err.setLayoutX(40);
+        err.setLayoutY(500);
         back = new Button("BACK");
     	back.setLayoutX(640);
         back.setLayoutY(560);
@@ -112,8 +116,8 @@ public class DeckBuilderLayout {
     }
     public Node[] getNodes() {
     	Node[] returnNode = { title, deckTitle, add, cardToAdd, addCardByTitle, addCardByAtk, addCardByDef,
-                            remove, cardToRemove, removeCard, mostAtk, findStrongest, rarest, findRarest,
-                            findCard ,setName, save, back};
+                            remove, cardToRemove, removeCard, mostAtk, findStrongest, /*rarest, findRarest,*/
+                            findCard ,setName, save, back, err};
     	return returnNode;
     }
     
@@ -131,6 +135,14 @@ public class DeckBuilderLayout {
     
     public static String getDeckTitle(){
         return deckTitle.getText();
+    }
+    
+    public void showErrors(String text){
+        err.setText(text);
+    }
+    
+    public void clearErrors(){
+        err.setText("");
     }
     
     public void showCard(String c){
