@@ -12,7 +12,18 @@ module it.unipi.lsmsdb.yugiohdeckmaker {
     requires org.mongodb.driver.core;
     requires org.mongodb.driver.sync.client;
     requires org.mongodb.bson;
+    requires java.logging;
+    requires javafx.swing;
 
-    opens it.unipi.lsmsdb.yugiohdeckmaker to javafx.fxml;
-    exports it.unipi.lsmsdb.yugiohdeckmaker;
+    //opens it.unipi.lsmsdb.yugiohdeckmaker to javafx.fxml;
+    exports it.unipi.lsmsdb.yugiohdeckmaker.DBManagers;
+    opens it.unipi.lsmsdb.yugiohdeckmaker.DBManagers to javafx.fxml;
+    exports it.unipi.lsmsdb.yugiohdeckmaker.Exceptions;
+    opens it.unipi.lsmsdb.yugiohdeckmaker.Exceptions to javafx.fxml;
+    exports it.unipi.lsmsdb.yugiohdeckmaker.Layouts;
+    opens it.unipi.lsmsdb.yugiohdeckmaker.Layouts to javafx.fxml;
+    exports it.unipi.lsmsdb.yugiohdeckmaker.Controller;
+    opens it.unipi.lsmsdb.yugiohdeckmaker.Controller to javafx.fxml;
+    exports it.unipi.lsmsdb.yugiohdeckmaker.Entities;
+    opens it.unipi.lsmsdb.yugiohdeckmaker.Entities to javafx.fxml;
 }
