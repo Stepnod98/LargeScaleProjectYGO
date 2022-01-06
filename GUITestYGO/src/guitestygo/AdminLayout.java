@@ -126,4 +126,41 @@ public class AdminLayout {
                             remove, cardToRemoveTitle, cardToRemoveSet, removeCard, addCard, logout};
     	return returnNode;
     }
+     
+     public String getTitle(){
+         return cardToAddTitle.getText();
+     }
+     public String getImageUrl(){
+         return cardToAddImage.getText();
+     }
+     public String getAtk(){
+         return cardToAddAtk.getText();
+     }
+     public String getDef(){
+         return cardToAddDef.getText();
+     }
+     public String getLevel(){
+         return cardToAddLevel.getText();
+     }
+     public String getDesc(){
+         return cardToAddDesc.getText();
+     }
+     public String getType(){
+         return cardToAddType.getText();
+     }
+     public String getArchetype(){
+         return cardToAddArchetype.getText();
+     }
+     public String getAttribute(){
+         return cardToAddAttribute.getText();
+     }
+     public String getEffectType(){
+         return cardToAddEffectTypes.getText();
+     }
+     public String getCardToRemoveTitle(){
+         return cardToRemoveTitle.getText();
+     }
+     public String getCardToRemoveSet(){
+         return cardToRemoveSet.getText();
+     }
 }

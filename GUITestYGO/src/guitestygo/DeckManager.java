@@ -16,8 +16,7 @@ import javafx.event.ActionEvent;
 public class DeckManager {
     private static DeckManagerLayout deckManagerLayout;
     public DeckManager(DeckManagerLayout deckManagerLayout){
-        this.deckManagerLayout = deckManagerLayout;
-        
+        this.deckManagerLayout = deckManagerLayout; 
     }
     public static void findDeck(){
         String title = deckManagerLayout.getDeckToBrowse();

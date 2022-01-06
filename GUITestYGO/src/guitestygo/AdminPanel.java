@@ -5,6 +5,7 @@
  */
 package guitestygo;
 
+import static java.lang.Integer.parseInt;
 import javafx.event.ActionEvent;
 
 /**
@@ -18,11 +19,32 @@ public class AdminPanel {
     }
     
     public static void addCard(){
-        
+        String title = adminLayout.getTitle();
+        String imgurl = adminLayout.getImageUrl();
+        int atk = parseInt(adminLayout.getAtk());
+        int def = parseInt(adminLayout.getDef());
+        int level = parseInt(adminLayout.getLevel());
+        String desc = adminLayout.getDesc();
+        String type = adminLayout.getType();
+        String archetype = adminLayout.getArchetype();
+        String attribute = adminLayout.getAttribute();
+        String effectType = adminLayout.getEffectType();
+        MongoDBManager.insertCard(title, imgurl, atk, def, level, desc, type, archetype, attribute, effectType);
     }
     
     public static void removeCard(){
-        
+        String title = adminLayout.getCardToRemoveTitle();
+        String set = adminLayout.getCardToRemoveSet();
+        if(title.equals("")){
+            return;
+        }
+        if(set.equals("")){
+            MongoDBManager.remove(title);
+        }
+        else{
+            MongoDBManager.remove(title, set);
+        }
+                
     }
     
     public static void setEvents(){

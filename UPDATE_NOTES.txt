@@ -1,0 +1,3 @@
+MongoDBManager caricato a parte, completo (da testare insieme a tutto il resto);
+AdminPanel e AdminLayout completati;
+DeckBuilder e DeckBuilderLayout modificati, aggiunti controlli e modificati i metodi (la "add by atk" e "add by def" mostrano l'elenco delle carte con quelle statistiche in una tableview);
