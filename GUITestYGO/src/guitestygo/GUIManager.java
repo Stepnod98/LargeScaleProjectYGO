@@ -99,7 +99,7 @@ public class GUIManager extends Application {
     public static void openDeckBuilder(Deck d){
         root.getChildren().clear();
         deckBLayout = new DeckBuilderLayout();
-        deckLayout = new DeckLayout();
+        deckLayout = new DeckLayout(d);
         Node[] tmp;
         tmp = deckBLayout.getNodes();
         for (Node n: tmp) {

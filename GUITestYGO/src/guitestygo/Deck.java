@@ -16,9 +16,24 @@ public class Deck {
     private static String creator;
     private static List<Card> cards = new ArrayList<Card>();
     private static List<Card> extracards = new ArrayList<Card>();
+    public Deck(){
+        this.title = "";
+    }
     public Deck(String title){
         this.title = title;
     }
+    /*public Deck(Document d){
+        this.title = d.getString("title");
+        this.creator = d.getString("creator");
+        List<Document> documentList = d.get("cards", List.class);
+        for(int i = 0; i < documentList.size(); i++){
+            this.cards.add(new Card(documentList.get(i)));
+        }
+        documentList = d.get("extra_deck", List.class);
+        for(int i = 0; i < documentList.size(); i++){
+            this.cards.add(new Card(documentList.get(i)));
+        }
+    }*/
     
     public List<Card> getCards(){
         return cards;

@@ -5,11 +5,18 @@
  */
 package guitestygo;
 
+import java.util.List;
+import javafx.beans.property.ReadOnlyStringWrapper;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
+import javafx.scene.layout.VBox;
 
 /**
  *
@@ -36,6 +43,9 @@ public class DeckBuilderLayout {
     protected Button save;
     protected Button back;
     private Label err;
+    private TableView<String> table = new TableView<String>();
+    private ObservableList<String> observableList;
+    private VBox vbox;
     public DeckBuilderLayout(){
         title = new Label("Insert Title");
         title.setLayoutX(40);
@@ -110,6 +120,8 @@ public class DeckBuilderLayout {
     	back.setLayoutX(640);
         back.setLayoutY(560);
     	back.setMaxWidth(300);
+        cardfound = new Label();
+        vbox = new VBox();
         /*findStrongest.setOnAction((ActionEvent ev)->{LoginManager.login();});	
         addCard.setOnAction((ActionEvent ev)->{LoginManager.signup();});
         back.setOnAction((ActionEvent ev)->{GUIManager.openAppManager();});*/
@@ -117,7 +129,7 @@ public class DeckBuilderLayout {
     public Node[] getNodes() {
     	Node[] returnNode = { title, deckTitle, add, cardToAdd, addCardByTitle, addCardByAtk, addCardByDef,
                             remove, cardToRemove, removeCard, mostAtk, findStrongest, /*rarest, findRarest,*/
-                            findCard ,setName, save, back, err};
+                            findCard ,setName, save, back, err, cardfound, vbox};
     	return returnNode;
     }
     
@@ -143,10 +155,32 @@ public class DeckBuilderLayout {
     
     public void clearErrors(){
         err.setText("");
+        cardfound.setText("");
+        vbox.getChildren().clear();
+        table.getColumns().clear();
+    }
+    
+    public void showCardResults(List<String> list){
+        TableColumn<String, String> column = new TableColumn("Card Title");
+        column.setCellValueFactory(cellData -> 
+            new ReadOnlyStringWrapper(cellData.getValue()));
+        table.getColumns().add(column);
+        observableList = FXCollections.observableArrayList(list);	
+        table.setItems(observableList);
+        table.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
+        //vbox = new VBox();
+        vbox.setLayoutY(100);
+        vbox.setLayoutX(700);
+        vbox.setMaxHeight(120);
+        vbox.getChildren().addAll(table);
+    }
+    
+    public Node getTableNodes() {
+    	return vbox;
     }
     
     public void showCard(String c){
-        cardfound = new Label(c);
+        cardfound.setText(c);
         cardfound.setLayoutX(580);
         cardfound.setLayoutY(400);
     }
