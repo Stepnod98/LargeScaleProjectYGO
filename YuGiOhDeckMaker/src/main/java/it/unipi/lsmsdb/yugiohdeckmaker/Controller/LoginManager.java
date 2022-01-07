@@ -25,8 +25,9 @@ public class LoginManager {
         String username = loginLayout.getUsername();
         String password = encrypt(loginLayout.getPassword());
 
-        // TODO: 28/12/2021 Add admin control 
-        if(!MongoDBManager.checkUser(username,password)){
+        if(username.equals("admin") && password.equals(encrypt("admin"))){
+            GUIManager.openAdminPanel();
+        }else if(username.isEmpty() || password.isEmpty() || !MongoDBManager.checkUser(username,password)){
             loginLayout.printError("User\\pass not correct");
         }else{
             GUIManager.setCurrentUser(new User(username, MongoDBManager.getDecks(username)));

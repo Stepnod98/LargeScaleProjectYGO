@@ -170,6 +170,55 @@ public class MongoDBManager {
         }
     }
 
+    // TODO: 06/01/2022 ADD this to stefano file
+    public static boolean checkUser(String username){
+
+        MongoCollection<Document> collection = database.getCollection("login");
+
+        Bson projectionFields = Projections.fields(Projections.excludeId(),Projections.include("login.username","login.password"));
+        Bson filter = Filters.eq("login.username",username);
+
+        List<Document> user = collection.find(filter).projection(projectionFields).into(new ArrayList<Document>());
+
+        if(user.size() >= 1){
+            return true;
+        }else{
+            return false;
+        }
+    }
+
+    // TODO: 07/01/2022 ADD in mongo di stefano
+    public static boolean checkEmail(String email){
+
+        MongoCollection<Document> collection = database.getCollection("login");
+
+        Bson projectionFields = Projections.fields(Projections.excludeId(),Projections.include("login.email"));
+        Bson filter = Filters.eq("login.email",email);
+
+        List<Document> user = collection.find(filter).projection(projectionFields).into(new ArrayList<Document>());
+
+        if(user.size() >= 1){
+            return true;
+        }else{
+            return false;
+        }
+    }
+
+    // TODO: 07/01/2022 Add thin on stefano's file 
+    public static void addUser(User user){
+
+        MongoCollection<Document> collection = database.getCollection("login");
+
+        Document login = new Document("username", user.username).append("sha1", user.pwd);
+        Document name = new Document("first", user.firstName).append("last", user.lastName);
+
+        Document doc = new Document("name", name).append("email", user.email).append("login", login);
+
+        collection.insertOne(doc);
+
+    }
+
+
     public static List<String> getDecks(String username) {
 
         MongoCollection<Document> collection = database.getCollection("yugioh");

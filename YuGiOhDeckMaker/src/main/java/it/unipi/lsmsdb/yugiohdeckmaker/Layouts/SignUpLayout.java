@@ -1,6 +1,5 @@
 package it.unipi.lsmsdb.yugiohdeckmaker.Layouts;
 
-import javafx.event.ActionEvent;
 import javafx.scene.Node;
 import javafx.scene.control.*;
 
@@ -19,13 +18,22 @@ public class SignUpLayout {
     private TextField lastName;
     private Label email;
     private TextField emailAddress;
-    protected Button login;
-    protected Button signUp;
-    protected Button sign;
-    protected Button back;
+    private Button sign;
+    private Button back;
+    private Label log;
+    private TextField logText;
 
 
     public SignUpLayout(){
+
+        logText = new TextField();
+        logText.setLayoutX(480);
+        logText.setLayoutY(240);
+        logText.setMinWidth(240);
+        logText.setEditable(false);
+        log = new Label("Log:");
+        log.setLayoutX(480);
+        log.setLayoutY(200);
         fName = new Label("First Name");
         fName.setLayoutX(80);
         fName.setLayoutY(40);
@@ -86,8 +94,18 @@ public class SignUpLayout {
 
     public Node[] getSignUpNodes() {
         Node[] returnNode = {user, username, pwd, password, fName, firstName, lName, lastName,
-                email, emailAddress,confPwd, confirmPassword, sign, back};
+                email, emailAddress,confPwd, confirmPassword, sign, back, log, logText};
         return returnNode;
+    }
+
+    public void printError(String err){
+        logText.setText(err);
+        logText.setStyle("-fx-text-inner-color: red;");
+    }
+
+    public void printLog(String log){
+        logText.setText(log);
+        logText.setStyle("-fx-text-inner-color: green;");
     }
 
     public Button getBack() {
@@ -98,4 +116,31 @@ public class SignUpLayout {
         return sign;
     }
 
+    public TextField getConfirmPassword() {
+        return confirmPassword;
+    }
+
+    public TextField getEmailAddress() {
+        return emailAddress;
+    }
+
+    public TextField getFirstName() {
+        return firstName;
+    }
+
+    public TextField getLastName() {
+        return lastName;
+    }
+
+    public TextField getPassword() {
+        return password;
+    }
+
+    public TextField getUsername() {
+        return username;
+    }
+
+    public TextField getLogText() {
+        return logText;
+    }
 }
