@@ -13,6 +13,9 @@ import javafx.application.Application;
 import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.Scene;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 
@@ -40,6 +43,7 @@ public class GUIManager extends Application {
     public static Pane p;
     public static Node[] newNode; //for cleaning issues
     public static User currentUser;
+    private static Scene card;
 
     @Override
     public void start(Stage stage){
@@ -104,7 +108,25 @@ public class GUIManager extends Application {
     public static void openDeckBuilder(Deck d){
         root.getChildren().clear();
         deckBLayout = new DeckBuilderLayout();
-        deckLayout = new DeckLayout();
+        deckLayout = new DeckLayout(d);
+
+        Node[] tmp;
+        tmp = deckBLayout.getNodes();
+        for (Node n: tmp) {
+            root.getChildren().add(n);
+        }
+        p = (Pane)deckLayout.getGameParent();
+        p.setLayoutX(40);
+        p.setLayoutY(120);
+        root.getChildren().add(p);
+        deckBuilder = new DeckBuilder(deckBLayout, deckLayout, d);
+        deckBuilder.setEvents();
+    }
+
+    public static void openDeckBuilder(Deck d, DeckLayout deckLayout){
+        root.getChildren().clear();
+        deckBLayout = new DeckBuilderLayout();
+        GUIManager.deckLayout = deckLayout;
         Node[] tmp;
         tmp = deckBLayout.getNodes();
         for (Node n: tmp) {
@@ -207,9 +229,24 @@ public class GUIManager extends Application {
         return root;
     }
 
+    public static void openCard(Image image, String title){
+        GridPane pane = new GridPane();
+        ImageView img = new ImageView(image);
+        pane.getChildren().addAll(img);
+        card = new Scene(pane, 400, 600);
+        Stage stage = new Stage();
+        stage.setScene(card);
+        stage.setTitle(title);
+        stage.show();
+    }
+
     // TODO: 29/12/2021 Added this on this day
     public static void addNode(Node node){
         root.getChildren().add(node);
+    }
+
+    public static String getCurrentUser() {
+        return currentUser.username;
     }
 
     public static void main(String args[]){

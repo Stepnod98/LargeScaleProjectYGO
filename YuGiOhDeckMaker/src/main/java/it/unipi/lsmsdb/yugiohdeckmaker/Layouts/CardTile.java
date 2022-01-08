@@ -11,6 +11,8 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+
+import it.unipi.lsmsdb.yugiohdeckmaker.Controller.GUIManager;
 import javafx.embed.swing.SwingFXUtils;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -33,7 +35,7 @@ public class CardTile extends StackPane {
         this.x = x;
         this.y = y;
         cardName = "";
-        relocate(x * 1.0* DeckLayout.tileSize, y * 1.1* DeckLayout.tileSize);
+        relocate(y * 1.0* DeckLayout.tileSize, x * 1.1* DeckLayout.tileSize);
         ImageView cardImg = new ImageView(imgLocation);
 
         double decrementation = 1.5;
@@ -64,6 +66,7 @@ public class CardTile extends StackPane {
                 double decrementation = 1.5;
                 cardImg.setTranslateX(decrementation/2);
                 cardImg.setTranslateY(decrementation/2);
+                cardImg.setOnMouseClicked(e -> GUIManager.openCard(img, name));
                 getChildren().addAll(cardImg);
             } catch (IOException e) {
                 throw new RuntimeException("Failed to read image from URL: " + imageUrl, e);

@@ -26,16 +26,16 @@ import javafx.scene.layout.VBox;
  */
 public class DeckManagerLayout {
     private Label find;
-    private static TextField deckToFind;
+    private TextField deckToFind;
     protected Button findDeck;
     private Label remove;
-    private static TextField deckToRemove;
+    private TextField deckToRemove;
     protected Button removeDeck;
     private Label topCards;
-    private static TextField topCardNumber;
+    private TextField topCardNumber;
     protected Button findTopCards;
     private Label topECards;
-    private static TextField topECardNumber;
+    private  TextField topECardNumber;
     protected Button findTopECards;
     private Label magicTrapDecks;
     protected Button findMagicTrapDecks;
@@ -44,7 +44,7 @@ public class DeckManagerLayout {
     private Label atkDecks;
     protected Button mostAtkDecks;
     private Label avgAtkDecks;
-    private static TextField avgAtk;
+    private  TextField avgAtk;
     protected Button mostAvgAtkDecks;
     private TableView<String> table = new TableView<String>();
     private ObservableList<String> observableList;
@@ -147,25 +147,27 @@ public class DeckManagerLayout {
     	return returnNode;
     }
     
-    public static String getDeckToBrowse(){
+    public  String getDeckToBrowse(){
         return deckToFind.getText();
     }
     
-    public static String getDeckToRemove(){
+    public  String getDeckToRemove(){
         return deckToRemove.getText();
     }
     
-    public static String getCardsRank(){
+    public  String getCardsRank(){
         return topCardNumber.getText();
     }
     
-    public static String getECardsRank(){
+    public  String getECardsRank(){
         return topECardNumber.getText();
     }
     
-    public static String getAvgAtk(){
+    public  String getAvgAtk(){
         return avgAtk.getText();
     }
+
+
     
     public void showCardResults(List<String> list){
         TableColumn<String, String> column = new TableColumn("Card Title");
@@ -236,5 +238,6 @@ public class DeckManagerLayout {
     public Button getMostAtkDecks() {
         return mostAtkDecks;
     }
+
 
 }

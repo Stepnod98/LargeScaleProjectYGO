@@ -23,12 +23,16 @@ public class Deck {
         this.creator = d.getString("creator");
         List<Document> documentList = d.get("cards", List.class);
         for(int i = 0; i < documentList.size(); i++){
-            this.cards.add(new Card(documentList.get(i)));
+            this.cards.add(new Card(documentList.get(i).getString("title"),documentList.get(i).getString("imageUrl")));
         }
         documentList = d.get("extra_deck", List.class);
         for(int i = 0; i < documentList.size(); i++){
-            this.cards.add(new Card(documentList.get(i)));
+            this.cards.add(new Card(documentList.get(i).getString("title"),documentList.get(i).getString("imageUrl")));
         }
+    }
+
+    public Deck() {
+        this.title = "";
     }
 
     public List<Card> getCards(){
@@ -40,23 +44,37 @@ public class Deck {
     }
 
     public boolean addCard(Card c){
+
+        if(cards.isEmpty()) {
+            System.out.println("siamo dentro ");
+            cards.add(c);
+            return true;
+        }
+
         int cont = 0;
-        for(int i = 0; i < cards.size() -1; i++){
+        for(int i = 0; i < cards.size(); i++){
             if(cards.get(i).getTitle().equals(c.getTitle())){
                 cont++;
             }
             if(cont < 3){
                 cards.add(c);
+                return true;
             }
             else{
                 System.out.println("WRN: You have already three copies of that card in your deck!");
                 return false;
             }
         }
-    return true;
+    return false;
     }
 
     public boolean addECard(Card c){
+
+        if(extracards.isEmpty()) {
+            System.out.println("siamo dentro ");
+            extracards.add(c);
+            return true;
+        }
         int cont = 0;
         for(int i = 0; i < extracards.size() -1; i++){
             if(extracards.get(i).getTitle().equals(c.getTitle())){
@@ -64,17 +82,19 @@ public class Deck {
             }
             if(cont < 3){
                 extracards.add(c);
+                return true;
             }
             else{
                 System.out.println("WRN: You have already three copies of that card in your deck!");
                 return false;
             }
         }
-        return true;
+
+       return false;
     }
 
     public void removeCardByTitle(String t){
-        for(int i = 0; i < cards.size() -1; i++){
+        for(int i = 0; i < cards.size(); i++){
             if(cards.get(i).getTitle().equals(t)){
                 cards.remove(i);
                 return;
@@ -83,7 +103,7 @@ public class Deck {
     }
 
     public void removeECardByTitle(String t){
-        for(int i = 0; i < extracards.size() -1; i++){
+        for(int i = 0; i < extracards.size(); i++){
             if(extracards.get(i).getTitle().equals(t)){
                 extracards.remove(i);
                 return;

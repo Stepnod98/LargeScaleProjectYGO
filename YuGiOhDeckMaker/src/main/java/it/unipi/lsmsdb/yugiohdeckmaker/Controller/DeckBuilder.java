@@ -6,7 +6,7 @@
 package it.unipi.lsmsdb.yugiohdeckmaker.Controller;
 
 import static java.lang.Integer.parseInt;
-import java.util.ArrayList;
+
 import java.util.List;
 
 import it.unipi.lsmsdb.yugiohdeckmaker.DBManagers.MongoDBManager;
@@ -18,28 +18,37 @@ import it.unipi.lsmsdb.yugiohdeckmaker.Layouts.DeckLayout;
 import javafx.event.ActionEvent;
 
 public class DeckBuilder {
-    private static Deck deck;
-    private static DeckBuilderLayout deckBuilderLayout;
-    private static DeckLayout deckLayout;
+    private Deck deck;
+    private DeckBuilderLayout deckBuilderLayout;
+    private DeckLayout deckLayout;
     public DeckBuilder(DeckBuilderLayout deckBuilderLayout, DeckLayout deckLayout){
-        deck = new Deck("");
+        deck = new Deck();
         this.deckBuilderLayout = deckBuilderLayout;
         this.deckLayout = deckLayout;
     }
-    
-    public static void addCard(){
-        deckBuilderLayout.clearErrors();
-        String t = DeckBuilderLayout.getCardToAdd();
+
+    public DeckBuilder(DeckBuilderLayout deckBuilderLayout, DeckLayout deckLayout, Deck d){
+        deck = d;
+        this.deckBuilderLayout = deckBuilderLayout;
+        this.deckLayout = deckLayout;
+        setEvents();
+    }
+
+    public void addCard(){
+        deckBuilderLayout.clear();
+        String t = deckBuilderLayout.getCardToAdd();
         Card c = MongoDBManager.findCard(t);
         if(MongoDBManager.checkCardType(t)){
             if(!deck.addCard(c)){
                 deckBuilderLayout.showErrors("Cannot insert this card in the deck!");
                 return;
             }
+
             for(int i = 0; i < DeckLayout.width; i++){
                 for(int j = 0; j < DeckLayout.height; j++){
                     if(deckLayout.getBoard()[i][j].getCard() == ""){
                         deckLayout.getBoard()[i][j] = new CardTile(i,j,c.getImgURL(), c.getTitle());
+                        GUIManager.openDeckBuilder(deck);
                         return;
                     }
                 }
@@ -53,78 +62,29 @@ public class DeckBuilder {
             for(int i = 0; i < DeckLayout.width; i++){
                 if(deckLayout.getBoard()[i][4].getCard() == ""){
                     deckLayout.getBoard()[i][4] = new CardTile(i,4,c.getImgURL(), c.getTitle());
+                    GUIManager.openDeckBuilder(deck);
                     return;
                 }
             }
         }
     }
-    
-    public static void addCardByAtk(){
-        deckBuilderLayout.clearErrors();
-        int atk = parseInt(DeckBuilderLayout.getCardToAdd());
-        Card c = MongoDBManager.findCard(atk, true);
-        if(MongoDBManager.checkCardType(c.getTitle())){
-            if(!deck.addCard(c)){
-                deckBuilderLayout.showErrors("Cannot insert this card in the deck!");
-                return;
-            }
-            for(int i = 0; i < DeckLayout.width; i++){
-                for(int j = 0; j < DeckLayout.height; j++){
-                    if(deckLayout.getBoard()[i][j].getCard() == ""){
-                        deckLayout.getBoard()[i][j] = new CardTile(i,j,c.getImgURL(), c.getTitle());
-                        return;
-                    }
-                }
-            }
-        }
-        else{
-            if(!deck.addECard(c)){
-                deckBuilderLayout.showErrors("Cannot insert this card in the extradeck!");
-                return;
-            }
-            for(int i = 0; i < DeckLayout.width; i++){
-                if(deckLayout.getBoard()[i][4].getCard() == ""){
-                    deckLayout.getBoard()[i][4] = new CardTile(i,4,c.getImgURL(), c.getTitle());
-                    return;
-                }
-            }
-       }
+
+    public void addCardByAtk(){
+        deckBuilderLayout.clear();
+        int atk = parseInt(deckBuilderLayout.getCardToAdd());
+        List<String> c = MongoDBManager.findCard(atk, true);
+        deckBuilderLayout.showCardResults(c);
     }
-    
-    public static void addCardByDef(){
-        deckBuilderLayout.clearErrors();
-        int def = parseInt(DeckBuilderLayout.getCardToAdd());
-        Card c = MongoDBManager.findCard(def, false);
-        if(MongoDBManager.checkCardType(c.getTitle())){
-            if(!deck.addCard(c)){
-                deckBuilderLayout.showErrors("Cannot insert this card in the deck!");
-                return;
-            }
-            for(int i = 0; i < DeckLayout.width; i++){
-                for(int j = 0; j < DeckLayout.height; j++){
-                    if(deckLayout.getBoard()[i][j].getCard() == ""){
-                        deckLayout.getBoard()[i][j] = new CardTile(i,j,c.getImgURL(), c.getTitle());
-                        return;
-                    }
-                }
-            }
-        }
-        else{
-            if(!deck.addECard(c)){
-                deckBuilderLayout.showErrors("Cannot insert this card in the extradeck!");
-                return;
-            }
-            for(int i = 0; i < DeckLayout.width; i++){
-                if(deckLayout.getBoard()[i][4].getCard() == ""){
-                    deckLayout.getBoard()[i][4] = new CardTile(i,4,c.getImgURL(), c.getTitle());
-                    return;
-                }
-            }
-        }
+
+    public  void addCardByDef(){
+        deckBuilderLayout.clear();
+        int def = parseInt(deckBuilderLayout.getCardToAdd());
+        List<String> c = MongoDBManager.findCard(def, false);
+        deckBuilderLayout.showCardResults(c);
     }
-    
-    public static void removeCard(){
-        deckBuilderLayout.clearErrors();
+
+    public void removeCard(){
+        deckBuilderLayout.clear();
         String t = DeckBuilderLayout.getCardToRemove();
         if(MongoDBManager.checkCardType(t)){
             deck.removeCardByTitle(t);
@@ -132,43 +92,33 @@ public class DeckBuilder {
         else{
             deck.removeECardByTitle(t);
         }
-        for(int i = 0; i < DeckLayout.width; i++){
-            for(int j = 0; j < DeckLayout.height; j++){
-                if(deckLayout.getBoard()[i][j].getCard() == t){
-                    deckLayout.getBoard()[i][j] = new CardTile(i, j);
-                    return;
-                }
-            }
+        GUIManager.openDeckBuilder(deck);
+    }
+
+    /*public static void viewCard(){
+
+    }*/
+
+    public void saveDeck(){
+        deckBuilderLayout.clear();
+        if(deck.getCards().size()<40){
+            deckBuilderLayout.showErrors("A deck cannot have less than 40 cards!");
+            return;
         }
-    }
-    
-    public static void viewCard(){
-        
-    }
-    
-    public static void saveDeck(){
-        deckBuilderLayout.clearErrors();
         deck.setTitle(deckBuilderLayout.getDeckTitle());
-        deck.setCreator(GUIManager.currentUser.username);
+        deck.setCreator(GUIManager.getCurrentUser());
         MongoDBManager.saveDeck(deck);
-        
+
     }
-    
-    public static void findStrongestCard(){
-        deckBuilderLayout.clearErrors();
+
+    public void findStrongestCard(){
+        deckBuilderLayout.clear();
         String setName = DeckBuilderLayout.getSetName();
         String t = MongoDBManager.findMostAtk(setName);
         deckBuilderLayout.showCard(t);
     }
     
-    /*public static void findRarestCard(){
-        deckBuilderLayout.clearErrors();
-        String setName = DeckBuilderLayout.getSetName();
-        String t = MongoDBManager.findRarest(setName);
-        deckBuilderLayout.showCard(t);
-    }*/
-    
-    public static void setEvents(){
+    public void setEvents(){
         deckBuilderLayout.getFindStrongest().setOnAction((ActionEvent ev)->{findStrongestCard();});
         //deckBuilderLayout.getFindRarest().setOnAction((ActionEvent ev)->{findRarestCard();});
         deckBuilderLayout.getAddCardByTitle().setOnAction((ActionEvent ev)->{addCard();});

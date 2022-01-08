@@ -9,6 +9,7 @@ import static java.lang.Integer.parseInt;
 import java.util.*;
 
 import it.unipi.lsmsdb.yugiohdeckmaker.DBManagers.MongoDBManager;
+import it.unipi.lsmsdb.yugiohdeckmaker.DBManagers.Neo4jManager;
 import it.unipi.lsmsdb.yugiohdeckmaker.Entities.Deck;
 import it.unipi.lsmsdb.yugiohdeckmaker.Layouts.DeckManagerLayout;
 import javafx.event.ActionEvent;
@@ -21,6 +22,9 @@ public class DeckManager {
     }
     public static void findDeck(){
         String title = deckManagerLayout.getDeckToBrowse();
+        if(!MongoDBManager.existsDeck(title))
+            return;
+
         Deck d = MongoDBManager.findDeck(title);
         int i;
         List<String> result = new ArrayList<String>();
@@ -36,7 +40,11 @@ public class DeckManager {
     
     public static void removeDeck(){
         String title = deckManagerLayout.getDeckToRemove();
-        MongoDBManager.remove(title);
+        if(MongoDBManager.existsDeck(title)){
+            MongoDBManager.remove(title);
+            Neo4jManager.delete(new Deck(title));
+        }
+
     }
     
     public static void findTopXCard(){
@@ -110,7 +118,7 @@ public class DeckManager {
     
     public static void findAvgAtkDecks(){
         List<String> topList = new ArrayList<>();
-        topList = MongoDBManager.findArchetypeDeck();
+        topList = MongoDBManager.findMostAvgAtk(Integer.parseInt(deckManagerLayout.getAvgAtk()));
         //add elements to gui
         deckManagerLayout.showDeckResults(topList);
         //test:

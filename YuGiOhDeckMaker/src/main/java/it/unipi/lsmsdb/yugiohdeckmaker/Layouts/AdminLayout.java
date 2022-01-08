@@ -31,10 +31,10 @@ public class AdminLayout {
     private Label remove;
     private static TextField cardToRemoveTitle;
     private static TextField cardToRemoveSet;
-    private Button removeCard;
-    private Button addCard;
-    private Button logout;
-    
+    protected Button removeCard;
+    protected Button addCard;
+    protected Button logout;
+
     public AdminLayout(){
         adminLabel = new Label("Admin Control Panel");
         adminLabel.setLayoutX(40);
@@ -94,9 +94,9 @@ public class AdminLayout {
         cardToAddDesc.setMinWidth(300);
         cardToAddDesc.setMinHeight(50);
         addCard = new Button("ADD");
-    	addCard.setLayoutX(40);
+        addCard.setLayoutX(40);
         addCard.setLayoutY(420);
-    	addCard.setMaxWidth(300);
+        addCard.setMaxWidth(300);
         remove = new Label("Remove Card:");
         remove.setLayoutX(520);
         remove.setLayoutY(40);
@@ -111,20 +111,20 @@ public class AdminLayout {
         cardToRemoveSet.setFocusTraversable(false);
         cardToRemoveSet.setMaxWidth(200);
         removeCard = new Button("REMOVE");
-    	removeCard.setLayoutY(150);
-    	removeCard.setLayoutX(520);
-    	removeCard.setMaxWidth(300);
+        removeCard.setLayoutY(150);
+        removeCard.setLayoutX(520);
+        removeCard.setMaxWidth(300);
         logout = new Button("LOGOUT");
-    	logout.setLayoutX(640);
+        logout.setLayoutX(640);
         logout.setLayoutY(560);
-    	logout.setMaxWidth(300);
+        logout.setMaxWidth(300);
     }
-    
-     public Node[] getNodes() {
-    	Node[] returnNode = { adminLabel, add, cardToAddTitle, cardToAddImage, cardToAddAtk, cardToAddDef, cardToAddLevel,
-                            cardToAddDesc, cardToAddType, cardToAddArchetype, cardToAddAttribute, cardToAddEffectTypes,
-                            remove, cardToRemoveTitle, cardToRemoveSet, removeCard, addCard, logout};
-    	return returnNode;
+
+    public Node[] getNodes() {
+        Node[] returnNode = { adminLabel, add, cardToAddTitle, cardToAddImage, cardToAddAtk, cardToAddDef, cardToAddLevel,
+                cardToAddDesc, cardToAddType, cardToAddArchetype, cardToAddAttribute, cardToAddEffectTypes,
+                remove, cardToRemoveTitle, cardToRemoveSet, removeCard, addCard, logout};
+        return returnNode;
     }
 
     public Button getAddCard() {
@@ -137,6 +137,43 @@ public class AdminLayout {
 
     public Button getRemoveCard() {
         return removeCard;
+    }
+
+    public String getTitle(){
+        return cardToAddTitle.getText();
+    }
+    public String getImageUrl(){
+        return cardToAddImage.getText();
+    }
+    public String getAtk(){
+        return cardToAddAtk.getText();
+    }
+    public String getDef(){
+        return cardToAddDef.getText();
+    }
+    public String getLevel(){
+        return cardToAddLevel.getText();
+    }
+    public String getDesc(){
+        return cardToAddDesc.getText();
+    }
+    public String getType(){
+        return cardToAddType.getText();
+    }
+    public String getArchetype(){
+        return cardToAddArchetype.getText();
+    }
+    public String getAttribute(){
+        return cardToAddAttribute.getText();
+    }
+    public String getEffectType(){
+        return cardToAddEffectTypes.getText();
+    }
+    public String getCardToRemoveTitle(){
+        return cardToRemoveTitle.getText();
+    }
+    public String getCardToRemoveSet(){
+        return cardToRemoveSet.getText();
     }
 
 }

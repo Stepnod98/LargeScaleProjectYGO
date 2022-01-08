@@ -4,149 +4,57 @@
  * and open the template in the editor.
  */
 package it.unipi.lsmsdb.yugiohdeckmaker.DBManagers;
-/*
+
+import com.mongodb.BasicDBObject;
 import com.mongodb.client.*;
-import com.mongodb.client.model.Accumulators;
-import static com.mongodb.client.model.Filters.and;
-import static com.mongodb.client.model.Filters.gt;
-import static com.mongodb.client.model.Filters.lte;
-import org.bson.Document;
-import java.util.function.Consumer;
-import static com.mongodb.client.model.Aggregates.*;
-import static com.mongodb.client.model.Accumulators.*;
-import com.mongodb.client.model.Aggregates;
-import com.mongodb.client.model.Filters;
-import static com.mongodb.client.model.Projections.*;
-import static com.mongodb.client.model.Filters.*;
-import static com.mongodb.client.model.Indexes.*;*/
-import com.mongodb.client.MongoClient;
-import com.mongodb.client.MongoClients;
-import com.mongodb.client.MongoCollection;
-import com.mongodb.client.MongoDatabase;
-import com.mongodb.client.model.Filters;
-import com.mongodb.client.model.Projections;
+
 import it.unipi.lsmsdb.yugiohdeckmaker.Controller.GUIManager;
 import it.unipi.lsmsdb.yugiohdeckmaker.Entities.Card;
 import it.unipi.lsmsdb.yugiohdeckmaker.Entities.Deck;
 import it.unipi.lsmsdb.yugiohdeckmaker.Entities.User;
 import org.bson.Document;
-import org.bson.conversions.Bson;
-import org.neo4j.driver.AuthTokens;
-import org.neo4j.driver.GraphDatabase;
-
+import static com.mongodb.client.model.Aggregates.*;
+import com.mongodb.client.model.Aggregates;
+import com.mongodb.client.model.Filters;
+import static com.mongodb.client.model.Projections.*;
+import static com.mongodb.client.model.Filters.*;
+import static com.mongodb.client.model.Indexes.*;
+import com.mongodb.client.model.Projections;
+import static com.mongodb.client.model.Updates.set;
+import com.mongodb.client.result.UpdateResult;
 import java.util.*;
-//import org.bson.conversions.*;
+import org.bson.conversions.Bson;
 
-
+/**
+ *
+ * @author Stefano
+ */
 public class MongoDBManager {
-
-    private static MongoClient myClient;
+    private static MongoClient mongoClient;
     private static MongoDatabase database;
 
-
     static{
-        myClient = MongoClients.create("mongodb://localhost:27017");
-        database = myClient.getDatabase("test");
+        mongoClient = MongoClients.create("mongodb://localhost:27017");
+        database = mongoClient.getDatabase("test");
     }
+    /* public Consumer<Document> printDocuments(){
+         Consumer<Document> printDocuments = doc ->
+         {System.out.println(doc.toJson());};
+         collection.find().forEach(printDocuments);
+         return printDocuments;
+     }*/
 
-   /* private MongoClient mongoClient;
-    private MongoDatabase database;
-    private MongoCollection<Document> collection;
-    public MongoDBManager(){
-        mongoClient=MongoClients.create("mongodb://localhost:27017");
-        database = mongoClient.getDatabase("mydb");
-        collection = database.getCollection("cards");
-    }*/
-    /*public void connectMongo(){
-        System.out.println(collection.countDocuments());
-        Consumer<Document> printDocuments = doc ->
-            {System.out.println(doc.toJson());};
-        myColl.find().forEach(printDocuments);
-       
-    }*/
-   /* public Consumer<Document> printDocuments(){
-        Consumer<Document> printDocuments = doc ->
-        {System.out.println(doc.toJson());};
-        collection.find().forEach(printDocuments);
-        return printDocuments;
-    }*/
-
-
-    
-    public static List<String> browse(String t){
-        List list = new ArrayList<String>();
-        return list;
-    }
-    public static boolean existsDeck(String inTitle){
-       /* JSONArray itemsMatched = new JSONArray();
-        try (MongoCursor<Document> cursor = collection.find({title:inTitle}).iterator())
-        {
-            while (cursor.hasNext())
-            {
-                itemsMatched.put(cursor.next().toJson());
-            }
-        }
-        if(itemsMatched != null){
-            return true;
-        }
-        */
-        return false;
-    }
-    
-    public static Deck findDeck(String t){
-        Deck d = new Deck("");
-        /*JSONArray itemsMatched = new JSONArray();
-        try (MongoCursor<Document> cursor = collection.find({title:inTitle}).iterator())
-        {
-            while (cursor.hasNext())
-            {
-                itemsMatched.put(cursor.next().toJson());
-            }
-        }
-        if (itemsMatched != null) { 
-           for (int i=0;i<jArray.length();i++){ 
-                JsonObject decks = (JsonObject) jArray.get(i); 
-                 String issues_key = (String) issues.get("key").toString();
-                String project_name = (String) issues.get("name").toString(); 
-                d.add(jArray.getString(i));
-           } 
-        }
-        */
-        /*
-        Bson projectionFields = Projections.fields(Projections.excludeId(),Projections.include("title"));
-        Bson filterNotFusion = Filters.not(filterFusion);
-        Bson filterNotLink = Filters.not(filterLink);
-        Bson filterNotSynchro = Filters.not(filterSynchro);
-        Bson filterNotXyz = Filters.not(filterXyz);
-        Bson filterExistingTitle = Filters.exists("title");
-
-        //Merge all the filters
-        //Bson filterForNormal = Filters.and(filterExistingTitle,filterNotFusion,filterNotLink,filterNotXyz,filterNotSynchro);
-        List<Document> deckList = collection.find(filterExistingTitle).projection(projectionFields).into(new ArrayList<Document>());
-        */return d;
-    }
-    
-    public static Card findCard(String t){
-        Card c = new Card();
-        return c;
-    }
-    
-    public static Card findCard(int value, boolean type){ //false: def, true: atk
-        Card c = new Card();
-        return c;
-    }
-
-
+    // TODO: 07/01/2022 testare in login
     public static boolean findUser(User user){
 
         MongoCollection<Document> collection = database.getCollection("login");
 
         Bson projectionFields = Projections.fields(Projections.excludeId(),Projections.include("login.username"));
-        Bson filter = Filters.and(Filters.eq("login.username",user.username));
+        Bson filter = Filters.and(Filters.eq("login.username",user.getUsername()));
 
         List<Document> res = collection.find(filter).projection(projectionFields).into(new ArrayList<>());
 
-        if(user.username.equals(GUIManager.currentUser.username)){
+        if(user.getUsername().equals(GUIManager.getCurrentUser())){
             return false;
         }
 
@@ -170,7 +78,6 @@ public class MongoDBManager {
         }
     }
 
-    // TODO: 06/01/2022 ADD this to stefano file
     public static boolean checkUser(String username){
 
         MongoCollection<Document> collection = database.getCollection("login");
@@ -187,7 +94,7 @@ public class MongoDBManager {
         }
     }
 
-    // TODO: 07/01/2022 ADD in mongo di stefano
+
     public static boolean checkEmail(String email){
 
         MongoCollection<Document> collection = database.getCollection("login");
@@ -204,19 +111,9 @@ public class MongoDBManager {
         }
     }
 
-    // TODO: 07/01/2022 Add thin on stefano's file 
-    public static void addUser(User user){
 
-        MongoCollection<Document> collection = database.getCollection("login");
 
-        Document login = new Document("username", user.username).append("sha1", user.pwd);
-        Document name = new Document("first", user.firstName).append("last", user.lastName);
 
-        Document doc = new Document("name", name).append("email", user.email).append("login", login);
-
-        collection.insertOne(doc);
-
-    }
 
 
     public static List<String> getDecks(String username) {
@@ -232,259 +129,68 @@ public class MongoDBManager {
 
         return deckList;
     }
-    
+
+
+    public static boolean existsDeck(String inTitle){
+        MongoCollection<Document> deck = database.getCollection("yugioh");
+        Bson filter = eq("title", inTitle);
+
+        List<Document> decklist = deck.find(filter).into(new ArrayList<Document>());
+        return decklist.size() == 1;
+    }
+
+    public static Deck findDeck(String t){
+        MongoCollection<Document> deck = database.getCollection("yugioh");
+        Bson filter = eq("title", t);
+        try (MongoCursor<Document> cursor = deck.find(filter).iterator()) {
+            Document doc = cursor.next();
+            return new Deck(doc);
+        } catch (Exception ex) {ex.printStackTrace();}
+        return null;
+    }
+
+    public static Card findCard(String t){
+        MongoCollection<Document> card = database.getCollection("yugioh");
+        Bson filter = eq("title", t);
+        try (MongoCursor<Document> cursor = card.find(filter).iterator()) {
+            Document doc = cursor.next();
+            return new Card(doc);
+        } catch (Exception ex) {ex.printStackTrace();}
+        return null;
+    }
+
+    public static List findCard(int value, boolean type){ //false: def, true: atk
+        MongoCollection<Document> card = database.getCollection("yugioh");
+        List<String> cardlist = new ArrayList<>();
+        if(type){
+            Bson filter = eq("atk", value);
+            try (MongoCursor<Document> cursor = card.find(filter).iterator()) {
+                while (cursor.hasNext()) {
+                    Document doc = cursor.next();
+                    cardlist.add(new Card(doc).getTitle());
+                }
+            } catch (Exception ex) {ex.printStackTrace();}
+        }
+        else{
+            Bson filter = eq("def", value);
+            try (MongoCursor<Document> cursor = card.find(filter).iterator()) {
+                while (cursor.hasNext()) {
+                    Document doc = cursor.next();
+                    cardlist.add(new Card(doc).getTitle());
+                }
+            } catch (Exception ex) {ex.printStackTrace();}
+        }
+        return cardlist;
+    }
+
+
     public static boolean checkCardType(String t){
-        return false;
-    }
-    
-    public static void add(String t, ArrayList<Card> cards){
-        
-    }
-    
-    public static void add(String username, String fName, String lName, String email, String pwd){
-        
-    }
-    
-    public static void remove(String inTitle){
-        /*try (MongoCursor<Document> removeRes= collection.remove({title: inTitle})
-        {
-            return remoteRes.nRemoved;
-        }
-        catch(Exception e)
-        {
-            return -1;
-        }*/
-    }
-    
-    public static String findMostAtk(String setName){
-        String t = "";
-        return t;
-    }
-    
-    /*public static String findRarest(String setName){
-        String t = "";
-        
-        return t;
-    }*/
-    
-    public static String findMostAtk(int th){
-        String t = "";
-        
-        return t;
-    }
-    
-    public static List findMostAvgAtk(int th){
-        List<String> cardlist = new ArrayList<String>();
-        
-        /*
-        if (itemsMatched != null) { 
-           for (int i=0;i<jArray.length();i++){ 
-            cardlist.add(jArray.getString(i));
-           } 
-        } */
-        return cardlist;
-    }
-    
-    public static List<String> findTopXCards(int x){
-        List<String> cardlist = new ArrayList<String>();
-        
-        /*
-        if (itemsMatched != null) { 
-           for (int i=0;i<jArray.length();i++){ 
-            cardlist.add(jArray.getString(i));
-           } 
-        } */
-        return cardlist;
-    }
-    
-    public static List<String> findTopXECards(int x){
-        List<String> cardlist = new ArrayList<String>();
-        
-        return cardlist;
-    }
-    
-    public static List<String> findMagicTrapDeck(){
-        List<String> decklist = new ArrayList<String>();
-        
-        return decklist;
-    }
-    
-    public static List<String> findArchetypeDeck(){
-        List<String> decklist = new ArrayList<String>();
-        
-        return decklist;
-    }
-    
-    public static void saveDeck(Deck d){
-        String title = d.getTitle();
-        List<Card> cardlist = new ArrayList<Card>();
-        List<Card> ecardlist = new ArrayList<Card>();
-        cardlist = d.getCards();
-        ecardlist = d.getECards();
-        String creator = d.getCreator();
-    }
-    
-     /*
-    Card Mongo operations
-     */
-
-   /* public static JSONArray findCardByTitle(String inTitle) {
-        JSONArray itemsMatched = new JSONArray();
-        try (MongoCursor<Document> cursor = collection.find({title:inTitle}).iterator())
-        {
-            while (cursor.hasNext())
-            {
-                itemsMatched.put(cursor.next().toJson());
-            }
-        }
-
-        return itemsMatched;
-    }
-
-    public static JSONArray findCardByStats(int valueAtk, int valueDef) {
-        JSONArray itemsMatched = new JSONArray();
-        try (MongoCursor<Document> cursor = collection.find({$and: [{atk: valueAtk},{def: valueDef}]}).iterator())
-        {
-            while (cursor.hasNext())
-            {
-                itemsMatched.put(cursor.next().toJson());
-            }
-        }
-
-        return itemsMatched;
-    }
-
-    public static JSONArray findCardBySetName(String inSetName) {
-        JSONArray itemsMatched = new JSONArray();
-        try (MongoCursor<Document> cursor = collection.find({"sets.setName":inSetName}).iterator())
-        {
-            while (cursor.hasNext())
-            {
-                itemsMatched.put(cursor.next().toJson());
-            }
-        }
-
-        return itemsMatched;
-    }
-
-    public static boolean RemoveCardByTitle(String inCardTitle) {
-        try (MongoCursor<Document> cursor = collection.deleteMany({"cards.title": inCardTitle) }))
-        {
-            collection.remove({title: inCardTitle) })
-            return true;
-        }
-        catch(Exception e)
-        {
-            return false;
-        }
-    }*/
-
-    /*
-    Deck Mongo operations
-     */
-
-   /* public JSONArray findDeckByCard(String inCardTitle) {
-        JSONArray itemsMatched = new JSONArray();
-        try (MongoCursor<Document> cursor = collection.find({"cards.title": inCardTitle}).iterator())
-        {
-            while (cursor.hasNext())
-            {
-                itemsMatched.put(cursor.next().toJson());
-            }
-        }
-
-        return itemsMatched;
-    }
-
-    public static JSONArray findDeckByTitle(String inDeckTitle) {
-        JSONArray itemsMatched = new JSONArray();
-        try (MongoCursor<Document> cursor = collection.find({creator:inDeckTitle}).iterator())
-        {
-            while (cursor.hasNext())
-            {
-                itemsMatched.put(cursor.next().toJson());
-            }
-        }
-
-        return itemsMatched;
-    }
-
-    public static JSONArray findDeckByCreator(String inCreatorName) {
-        JSONArray itemsMatched = new JSONArray();
-        try (MongoCursor<Document> cursor = collection.find({creator:inCreatorName}).iterator())
-        {
-            while (cursor.hasNext())
-            {
-                itemsMatched.put(cursor.next().toJson());
-            }
-        }
-
-        return itemsMatched;
-    }
-
-    public static int RemoveDeckByTitle(String inDeckTitle) {
-        try (MongoCursor<Document> removeRes= collection.remove({title: inDeckTitle})
-        {
-            return remoteRes.nRemoved;
-        }
-        catch(Exception e)
-        {
-            return -1;
-        }
-    }
-
-    /*
-    User Mongo operations
-     */
-
-   /* public static JSONArray findUserByUsername(String inUsername) {
-        JSONArray itemsMatched = new JSONArray();
-        try (MongoCursor<Document> cursor = loginCollection.find({"login.username": "inUserName"}).iterator())
-        {
-            while (cursor.hasNext())
-            {
-                itemsMatched.put(cursor.next().toJson());
-            }
-        }
-
-        return itemsMatched;
-    }*/
-    
-    /*
-    Bson projectionFields = Projections.fields(Projections.excludeId(),Projections.include("login.username"));
-        Bson projectionFields2 = Projections.fields(Projections.excludeId(),Projections.include("title"));
-
-        List<Document> people = collection.find(Filters.exists("name")).projection(projectionFields).into(new ArrayList<Document>());
-
-        //******Extract a list of document containing the special cards.******
-
-        //Build the following query:
-        //db.cards.find({$or:[{types:{$all:["Fusion"]}},{types:{$all:["Link"]}},{types:{$all:["Synchro"]}},{types:{$all:["Xyz"]}}]})
-
-        //Filters for types
+        Bson projectionFields = Projections.fields(Projections.excludeId(),Projections.include("title"));
+        MongoCollection<Document> card = database.getCollection("yugioh");
         Bson filterFusion = Filters.all("types", "Fusion");
         Bson filterLink = Filters.all("types", "Link");
         Bson filterSynchro = Filters.all("types", "Synchro");
         Bson filterXyz = Filters.all("types", "Xyz");
-
-        //Merge all the filters
-        Bson filterForSpecial = Filters.or(filterFusion,filterLink,filterSynchro,filterXyz);
-
-        //Create a list of special cards running the query: the list contains all the titles of the card
-        List<Document> specialCards = collection.find(filterForSpecial).projection(projectionFields2).into(new ArrayList<Document>());
-
-        //Test to see if the query works: the expected result is 882 --> UPDATE --> The query is correct!
-        //System.out.println(specialCards.size());
-
-        //******Extract a list of documents containing all the remaining cards.*******
-        //Build the following query:
-        //db.cards.find({$and: [
-        //  {title: {$exists: true}},
-        //  {types: {$not: {$all: ["Fusion"]}}},
-        //  {types: {$not: {$all: ["Link"]}}},
-        //  {types: {$not: {$all: ["Synchro"]}}},
-        //  {types: {$not: {$all: ["Xyz"]}}}
-        // ]})
 
         //Filters for types
         Bson filterNotFusion = Filters.not(filterFusion);
@@ -492,87 +198,224 @@ public class MongoDBManager {
         Bson filterNotSynchro = Filters.not(filterSynchro);
         Bson filterNotXyz = Filters.not(filterXyz);
         Bson filterExistingTitle = Filters.exists("title");
+        Bson filter = eq("title", t);
 
         //Merge all the filters
-        Bson filterForNormal = Filters.and(filterExistingTitle,filterNotFusion,filterNotLink,filterNotXyz,filterNotSynchro);
+        Bson filterForNormal = Filters.and(filter, filterExistingTitle,filterNotFusion,filterNotLink,filterNotXyz,filterNotSynchro);
+        List<Document> normalCards = card.find(filterForNormal).projection(projectionFields).into(new ArrayList<Document>());
+        if(!normalCards.isEmpty()){
+            return true;
+        }
+        return false;
+    }
+
+    public static void insertCard(String title, String imgurl, int atk, int def, int level, String desc, String type, String archetype, String attribute, String effectType){
+
+        MongoCollection<Document> cards = database.getCollection("decks");
+        Document card = new Document("title", title)
+                .append("imgUrl", imgurl).append("atk", atk).append("level", level)
+                .append("lore", desc).append("types", type)
+                .append("archetypes", archetype).append("attribute", attribute)
+                .append("effectTypes", effectType);
+        cards.insertOne(card);
+    }
+
+    public static void addUser(User user){
+
+        MongoCollection<Document> collection = database.getCollection("login");
+
+        Document login = new Document("username", user.username).append("sha1", user.pwd);
+        Document name = new Document("first", user.firstName).append("last", user.lastName);
+
+        Document doc = new Document("name", name).append("email", user.email).append("login", login);
+
+        collection.insertOne(doc);
+
+    }
+
+    public static void remove(String inTitle){
+        MongoCollection<Document> decks = database.getCollection("yugioh");
+        Bson filter = eq("title", inTitle);
+        decks.deleteOne(filter);
+        //decks.deleteOne(Filters.eq("title", inTitle));
+    }
+
+    public static void remove(String inTitle, String set){
+        MongoCollection<Document> decks = database.getCollection("yugioh");
+        Bson filterTitle = eq("title", inTitle);
+        Bson filterSet = eq("title", set);
+        decks.deleteOne(Filters.and(filterTitle, filterSet));
+        //decks.deleteOne(Filters.eq("title", inTitle));
+    }
+
+    public static void saveDeck(Deck d){
+        String title = d.getTitle();
+        List<Card> cardlist = new ArrayList<Card>();
+        List<Card> ecardlist = new ArrayList<Card>();
+        cardlist = d.getCards();
+        ecardlist = d.getECards();
+        String creator = d.getCreator();
+        MongoCollection<Document> decks = database.getCollection("yugioh");
+        Document deck = new Document("title", title)
+                .append("creator", creator).append("cards", cardlist).append("extra_deck", ecardlist);
+        decks.insertOne(deck);
+    }
+
+    // !!!!!!Aggregations!!!!!!!
+
+    public static String findMostAtk(String setName){
+        MongoCollection<Document> decks = database.getCollection("yugioh");
+        String result  = "";
+        Bson u = unwind("$sets");
+        Bson existsAtk = Filters.exists("atk");
+        Bson filterQM = Filters.eq("atk","?");
+        Bson notQM = Filters.not(filterQM);
+        Bson filterX = Filters.eq("atk","X000");
+        Bson notX = Filters.not(filterX);
+        Bson filterNull = Filters.eq("atk","null");
+        Bson notNull = Filters.not(filterNull);
+        Bson myMatch1 = Aggregates.match(Filters.and(existsAtk, notQM, notX, notNull));
+        Bson groupMultiple = new Document("$group",
+                new Document("_id", new Document("set", "$sets.setName"))
+                        .append("cards", new Document("$push", new Document("card_Name", "$title")
+                                .append("atk_Value", "$atk"))).append("max", new Document("$max", "$atk")));
+        Bson myMatch2 = Aggregates.match(Filters.eq("_id.set",setName));
+        Bson p1 = project(fields(computed("_id", "$_id.set"),
+                computed("cards", new Document("title", "$cards.card_Name")
+                        .append("atk", "$cards.atk_Value")),
+                computed("highestAtk",new BasicDBObject("$cmp", Arrays.asList( "$cards.atk_Value","$max"))))); //<------DA FINIRE?
+        Bson filter = Filters.eq("highestAtk",0);
+        Bson u2 = unwind("$cards");
+        Bson myMatch3 = Aggregates.match(filter);
+        List<Document> doclist = new ArrayList<>();
+        decks.aggregate(Arrays.asList(u,myMatch1,groupMultiple,myMatch2,u2,p1,myMatch3))
+                .forEach(doc -> doclist.add(doc));
+
+        for(int i = 0; i < doclist.size(); i++){
+            result = ((Document)doclist.get(i).get("cards")).getString("title");
+        }
+        System.out.println(result);
+        return result;
+    }
+    /*
+    * db.decks.aggregate([{$unwind:"$sets"},
+    * {$match: {$and: [{"atk": {$exists:true}},{"atk": {$ne:"?"}},{"atk": {$ne:"X000"}},{"atk": {$ne:null}}]}} ,
+    * {$group:{_id:{ set: "$sets.setName"},cards:{$push: {card_Name:"$title", atk_Value:"$atk"}},max: { $max : "$atk" }}},
+    * {$match: {"_id.set" : "Structure Deck: Invincible Fortress"}},
+    * {$unwind:"$cards"},
+    * {$project: {_id: "$_id.set", card:{title: "$cards.card_Name", atk:"$cards.atk_Value", highestAtk : {$cmp:["$cards.atk_Value", "$max"]}}}},
+    * {$match:{ "card.highestAtk":{$eq:0}}}])
+    * */
 
 
-        List<Document> normalCards = collection.find(filterForNormal).projection(projectionFields2).into(new ArrayList<Document>());
 
-        //Test to see if the query works: the expected result is 7086 --> UPDATE --> The query is correct!
-        //System.out.println(normalCards.size());
-    
-    */
-    
-   /* public void executeQuery(){
-        if(query1){
-            try (MongoCursor<Document> cursor = 
-            collection.find(and(gt("i", 50), lte("i", 100))).iterator())
-            {
-                while (cursor.hasNext())
-                {
-                System.out.println(cursor.next().toJson());
-                }
-            }
+    public static List findMostAvgAtk(int th){
+        MongoCollection<Document> decks = database.getCollection("yugioh");
+        List<String> decklist = new ArrayList<String>();
+        Bson u = unwind("$cards");
+        Bson existsAtk = Filters.exists("cards.atk");
+        Bson filterQM = Filters.eq("atk","?");
+        Bson notQM = Filters.not(filterQM);
+        Bson filterX = Filters.eq("atk","X000");
+        Bson notX = Filters.not(filterX);
+        Bson filterNull = Filters.eq("atk","null");
+        Bson notNull = Filters.not(filterNull);
+        Bson myMatch1 = Aggregates.match(Filters.or(existsAtk, notQM, notX, notNull));
+        Bson groupMultiple = new Document("$group",
+                new Document("_id", new Document("deck", "$title"))
+                        .append("avgAtk", new Document("$avg", "$cards.atk")));
+        Bson filterAtk = Filters.gte("avgAtk", th);
+        Bson myMatch2 = Aggregates.match(filterAtk);
+        List<Document> doclist = new ArrayList<>();
+        decks.aggregate(Arrays.asList(u,myMatch1,groupMultiple,myMatch2))
+                .forEach(doc -> doclist.add(doc));
+        for(int i = 0; i < doclist.size(); i++){
+            decklist.add(((Document)doclist.get(i).get("_id")).getString("deck"));
         }
-        else if(query2){
-            try (MongoCursor<Document> cursor = 
-            collection.find(and(gt("i", 50), lte("i", 100))).iterator())
-            {
-                while (cursor.hasNext())
-                {
-                System.out.println(cursor.next().toJson());
-                }
-            }
+        return decklist;
+    }
+
+    public static List<String> findTopXCards(int x){
+        MongoCollection<Document> decks = database.getCollection("yugioh");
+        List<String> cardlist = new ArrayList<String>();
+        Bson cards = unwind("$cards");
+        Bson sortCards = sortByCount("$cards.title");
+        Bson limit = limit(x);
+        List<Document> doclist = new ArrayList<>();
+        decks.aggregate(Arrays.asList(cards, sortCards, limit))
+                .forEach(doc -> doclist.add(doc));
+        System.out.println(doclist);
+        for(int i = 0; i < doclist.size(); i++){
+            cardlist.add(doclist.get(i).getString("_id"));
         }
-        else if(aggr1){
-            Bson myMatch = match(eq("city", "NEW YORK"));
-            Bson myGroup = group("$city", sum("count", 1L));
-            collection.aggregate(Arrays.asList(myMatch, myGroup))
-            .forEach(printDocuments());
+        return cardlist;
+    }
+
+    public static List<String> findTopXECards(int x){
+        MongoCollection<Document> decks = database.getCollection("yugioh");
+        List<String> cardlist = new ArrayList<String>();
+        Bson cards = unwind("$extra_deck");
+        Bson sortCards = sortByCount("$extra_deck.title");
+        Bson limit = limit(x);
+        List<Document> doclist = new ArrayList<>();
+        decks.aggregate(Arrays.asList(cards, sortCards, limit))
+                .forEach(doc -> doclist.add(doc));
+        System.out.println(doclist);
+        for(int i = 0; i < doclist.size(); i++){
+            cardlist.add(doclist.get(i).getString("_id"));
         }
-         else if(aggr1){
-             Bson myMatch = Aggregates.match(Filters.eq("city", "NEW YORK"));
-             Bson myGroup = Aggregates.group("$city", Accumulators.sum("count", 1));
+        return cardlist;
+    }
+
+    public static List<String> findMagicTrapDeck(){
+        MongoCollection<Document> decks = database.getCollection("yugioh");
+        List<String> decklist = new ArrayList<String>();
+        Bson u = unwind("$cards");
+        Bson filterExistsType = Filters.exists("cards.types");
+        Bson myMatch = match(filterExistsType);
+        Bson groupMultiple = new Document("$group",
+                new Document("_id", new Document("deck", "$title"))
+                        .append("cards", new Document("$push", new Document("card_Name", "$title")
+                                .append("type", "$cards.types"))).append("total_count", new Document("$sum", 1)));
+        Bson filterAtk = Filters.lt("total_count", 20);
+        Bson myMatch2 = match(filterAtk);
+        List<Document> doclist = new ArrayList<>();
+        decks.aggregate(Arrays.asList(u, myMatch, groupMultiple, myMatch2))
+                .forEach(doc -> doclist.add(doc));
+        System.out.println(doclist);
+        for(int i = 0; i < doclist.size(); i++){
+            decklist.add(((Document)doclist.get(i).get("_id")).getString("deck"));
         }
-         else if(aggr2){
-             Bson groupSingle = group("$city", sum("totPop", "$pop"));
-             Bson groupMultiple = new Document("$group",
-            new Document("_id", new Document("city", "$city")
-            .append("state", "$state"))
-            .append("totalPop", new Document("$sum", "$pop")));
-             Bson p1 = project(fields(include("city")));
-            Bson p2 = project(fields(
-            excludeId(),include("city", "state")));
-            Bson p3 = project(fields(
-            include("city"), exclude("state")));
-            Bson p4 = project(fields(
-            computed("myID", "_id"),include("city")));
-            Bson s1 = sort(descending("pop"));
-            collection.aggregate(Arrays.asList(s1))
-            .forEach(printDocuments());
-            //Find the 2nd and 3rd biggest cities
-            Bson mySort = sort(descending("pop"));
-            Bson myLimit = limit(2);
-            Bson mySkip = skip(1);
-            collection.aggregate(Arrays.asList(mySort, mySkip, myLimit))
-            .forEach(printDocuments());
-            //Find the average score for the American cusine
-            Bson m = match(eq("cusine", "American"));
-            Bson u = unwind("grades");
-            Bson g = group("$cusine", avg("avgGrade","$grades.score"));
-            collection.aggregate(Arrays.asList(m, u, g))
-            .forEach(printDocuments());*/
-            /*
-            To create an index on a field or fields, pass an index specification document to the 
-            createIndex() method.
-            An index key specification document contains the fieldsto index and the index 
-            type for each field:
-            new Document(<field1>, <type1>).append(<field2>, <type2>) ...
-            For an ascending index type, specify 1 for <type>.
-            For a descending index type, specify -1 for <type>.
-            The following example creates an ascending index on the i field:
-            collection.createIndex(new Document("city", 1));
-            */
-        // }
+        return decklist;
+        //db.decks.aggregate([{$unwind: "$cards"},{$match:{"cards.types":{$exists:1}}},
+        //{$group:{_id:{deck:"$title"}, cards:{$push:{card_name:"$cards.title", type: "$cards.types"}},
+        //total_count:{$sum:1}}}, {$match:{total_count:{$lt:20}}}])
+    }
+
+    public static List<String> findArchetypeDeck(){
+        MongoCollection<Document> decks = database.getCollection("yugioh");
+        List<String> decklist = new ArrayList<String>();
+        Bson u = unwind("$cards");
+        Bson filterExistsType = Filters.exists("cards.archetypes");
+        Bson myMatch = match(filterExistsType);
+        Bson groupMultiple = new Document("$group",
+                new Document("_id", new Document("title", "$title")
+                        .append("creator", "$creator")).append("total_count", new Document("$sum", 1)));
+        Bson mySort = sort(ascending("total_count"));
+        Bson myLimit = limit(1);
+        List<Document> doclist = new ArrayList<>();
+        decks.aggregate(Arrays.asList(u, myMatch, groupMultiple, mySort, myLimit))
+                .forEach(doc -> doclist.add(doc));
+        for(int i = 0; i < doclist.size(); i++){
+            decklist.add(((Document)doclist.get(i).get("_id")).getString("title"));
+        }
+        return decklist;
+        //db.decks.aggregate([{$unwind:"$cards"},{$unwind: "$cards.archetypes"},
+        //{$group:{_id:{title: "$title", creator:"$creator"}, total_count: {$sum:1}}},
+        //{$sort:{total_count:1}},{$limit:1}])
+    }
+
+    public static void connectionCloser(){
+        mongoClient.close();
+    }
 }

@@ -13,50 +13,27 @@ import org.bson.Document;
 public class Card {
     private int id;
     private String title;
-    private String wikiUrl;
-    private String imgLocation;
-    private Image image;
-    private String lore;
-    private List<String> archetypesRelated = new ArrayList<String>();
-    private List<String> archetypes = new ArrayList<String>();
-    private List<String> actions = new ArrayList<String>();
-    private List<String> effectTypes = new ArrayList<String>();
     private String imageUrl;
-    private List<String> tips = new ArrayList<String>();
-    private List<Set> sets = new ArrayList<Set>();
-    private List<String> types = new ArrayList<String>();
-    private String level;
-    private int atk;
-    private int def;
 
-    public Card(){
+    public Card(){this.title = "";};
 
+    public Card(String title){
+        this.title = title;
     }
 
-    // TODO: 05/01/2022
-    //if we want to create a card based on the fields present in the deck information,
-    //we need to change the constructor! Cause most of the information are not present and
-    //it's impossible to fetch them
-    //This is the one that we can use to fetch all the information present in the deck
+    public Card(String title, String imageUrl){
+        this.title = title;
+        this.imageUrl = imageUrl;
+    }
 
-    /*public Card(Document d){
+    public Card(Document d){
         this.title = d.getString("title");
-        List<Document> archetypes = d.get("archetypes",List.class);
-        for (Document document : archetypes) {
-            this.archetypes.add(document.toString());
-        }
         this.imageUrl = d.getString("imageUrl");
-        List<Document> types = d.get("types",List.class);
-        for (Document document : types) {
-            this.types.add(document.toString());
-        }
-        this.atk = d.getInteger("atk");
-        this.def = d.getInteger("def");
-    }*/
+    }
 
 
     //This directly from mongo
-    public Card(Document d){
+    /*public Card(Document d){
         this.id = d.getInteger("id");
         this.title = d.getString("title");
         this.wikiUrl = d.getString("wikiUrl");
@@ -94,12 +71,16 @@ public class Card {
         this.level = d.getString("level");
         this.atk = d.getInteger("atk");
         this.def = d.getInteger("def");
-    }
+    }*/
 
     public String getTitle(){
         return title;
     }
     public String getImgURL(){
         return imageUrl;
+    }
+
+    public int getId() {
+        return id;
     }
 }
