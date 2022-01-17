@@ -24,9 +24,19 @@ public class DeckLayout {
     public DeckLayout(){
        root.setPrefSize(width * tileSize, height * tileSize);
        tileGroup.getChildren().clear();
-       root.getChildren().addAll(tileGroup);     
+       root.getChildren().addAll(tileGroup);
+       //CardTile tile1 = new CardTile(0, 0, "https://vignette2.wikia.nocookie.net/yugioh/images/b/b3/FlamvellFiend-DREV-EN-C-1E.jpg", "Flamvell Fiend");
+       //tileGroup.getChildren().add(tile1);
+       //CardTile tile2 = new CardTile(0, 1, "https://vignette1.wikia.nocookie.net/yugioh/images/9/9f/Jigabyte-SDMP-EN-C-1E.png", "JigaByte");
+       //tileGroup.getChildren().add(tile2);
        for (int x = 0; x < width; x++) {
             for (int y = 0; y < height; y++) {
+                /*if(y == 0 && x == 0){
+                    continue;
+                }
+                if(y == 1 && x == 0){
+                    continue;
+                }*/
                 CardTile tile = new CardTile(x, y);
                 cardBoard[x][y] = tile;
                 tileGroup.getChildren().add(tile);

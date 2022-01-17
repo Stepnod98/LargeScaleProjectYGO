@@ -42,7 +42,6 @@ public class CardTile extends StackPane {
 
         cardImg.setTranslateX(decrementation/2);
         cardImg.setTranslateY(decrementation/2);
-
         getChildren().addAll(cardImg);  
     }
     public CardTile(int x, int y, String imgUrl, String name){
@@ -63,6 +62,7 @@ public class CardTile extends StackPane {
                 double decrementation = 1.5;
                 cardImg.setTranslateX(decrementation/2);
                 cardImg.setTranslateY(decrementation/2);
+                cardImg.setOnMouseClicked(e -> GUIManager.openCard(img, name));
                 getChildren().addAll(cardImg);
             } catch (IOException e) {
                 throw new RuntimeException("Failed to read image from URL: " + imageUrl, e);

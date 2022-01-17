@@ -1,0 +1,71 @@
+/*
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+*/
+/* 
+    Created on : 15-gen-2022, 16.46.14
+    Author     : Stefano
+*/
+.table-row-cell:empty {
+    -fx-background-color: white;
+}
+ 
+.table-row-cell:empty .table-cell {
+    -fx-border-width: 0px;
+}
+
+.table-view .column-header-background .label{
+     -fx-text-alignment: center;
+     -fx-text-fill: whitesmoke;
+     -fx-font-family: "Lucida Console", Courier, monospace;
+}
+
+.table-view .table-column{
+    -fx-alignment:center;
+}
+
+.table-view .column-header {
+     -fx-background-color: #003399;
+} 
+
+.table-view .column-header-background{
+    -fx-background-color: transparent;
+}
+
+.table-view .arrow {
+    -fx-background-insets: 0;
+    -fx-padding: 0;
+    -fx-shape: " ";
+}
+
+.button{
+    -fx-border-color: #0066cc; 
+    -fx-background-color: #003399;
+    -fx-text-fill: whitesmoke;
+    -fx-font-size: 15px;
+    -fx-font-weight: bold;
+    -fx-font-family: "Lucida Console", Courier, monospace;
+    -fx-alignment: center;
+}
+
+.button:hover{
+    -fx-text-fill: black;
+    -fx-background-color: whitesmoke;
+}
+
+.label{
+    -fx-text-fill: whitesmoke;
+    -fx-font-size: 15px; 
+}
+
+#title{
+    -fx-font-family: "Lucida Console", Courier, monospace;
+    -fx-font-size: 25px;
+    -fx-text-fill: whitesmoke;
+    -fx-alignment: center;
+}
+
+.label{
+    -fx-text-fill: whitesmoke;
+}

@@ -8,6 +8,7 @@ package guitestygo;
 import static java.lang.Integer.parseInt;
 import java.util.*;
 import javafx.event.ActionEvent;
+import javafx.scene.layout.BorderPane;
 
 /**
  *
@@ -19,6 +20,7 @@ public class DeckManager {
         this.deckManagerLayout = deckManagerLayout; 
     }
     public static void findDeck(){
+        deckManagerLayout.clearErrors();
         String title = deckManagerLayout.getDeckToBrowse();
         Deck d = MongoDBManager.findDeck(title);
         int i;
@@ -29,52 +31,18 @@ public class DeckManager {
         for(i = 0; i < d.getECards().size(); i++){
             result.add(d.getECards().get(i).getTitle());
         }
-        deckManagerLayout.showDeckResults(result);
+        deckManagerLayout.showCardResults(result);
         GUIManager.openDeckManagerResults(deckManagerLayout);
     }
     
     public static void removeDeck(){
+        deckManagerLayout.clearErrors();
         String title = deckManagerLayout.getDeckToRemove();
         MongoDBManager.remove(title);
     }
     
-    public static void findTopXCard(){
-        int x = parseInt(deckManagerLayout.getCardsRank());
-        List<String> topList = new ArrayList<>();
-        topList = MongoDBManager.findTopXCards(x);
-        //add elements to gui
-        deckManagerLayout.showCardResults(topList);
-        /*List<String> list = new ArrayList<>();
-        list.add("g1");
-        list.add("g2");
-        list.add("g3");
-        list.add("g4");
-        list.add("g5");
-        deckManagerLayout.showCardResults(list);*/
-        GUIManager.openDeckManagerResults(deckManagerLayout);
-    }
-    
-    public static void findTopXECard(){
-        int x = parseInt(deckManagerLayout.getECardsRank());
-        List<String> topList = new ArrayList<>();
-        topList = MongoDBManager.findTopXECards(x);
-        //add elements to gui
-        deckManagerLayout.showCardResults(topList);
-        //test:
-        /*List<String> list = new ArrayList<>();
-        list.add("s1");
-        list.add("s2");
-        list.add("s3");
-        list.add("s4");
-        list.add("s5");
-        list.add("s6");
-        list.add("s7");
-        deckManagerLayout.showCardResults(list);*/
-        GUIManager.openDeckManagerResults(deckManagerLayout);
-        
-    }
-    
     public static void findMagicTrapDeck(){
+        deckManagerLayout.clearErrors();
         List<String> topList = new ArrayList<>();
         topList = MongoDBManager.findMagicTrapDeck();
         //add elements to gui
@@ -92,6 +60,7 @@ public class DeckManager {
     }
      
     public static void findArchetypeDeck(){
+        deckManagerLayout.clearErrors();
         List<String> topList = new ArrayList<>();
         topList = MongoDBManager.findArchetypeDeck();
         //add elements to gui
@@ -108,8 +77,10 @@ public class DeckManager {
     }
     
     public static void findAvgAtkDecks(){
+        deckManagerLayout.clearErrors();
         List<String> topList = new ArrayList<>();
-        topList = MongoDBManager.findArchetypeDeck();
+        int th = Integer.parseInt(deckManagerLayout.getAvgAtk());
+        topList = MongoDBManager.findMostAvgAtk(th);
         //add elements to gui
         deckManagerLayout.showDeckResults(topList);
         //test:
@@ -123,15 +94,46 @@ public class DeckManager {
         GUIManager.openDeckManagerResults(deckManagerLayout);
     }
     
+    public static void viewListToBrowse(){
+            deckManagerLayout.clearErrors();
+            List<String> l = MongoDBManager.findDecks(deckManagerLayout.getDeckToBrowse());
+            /*List<String> l = new ArrayList<>();
+            l.add("ad");
+            l.add("eb");
+            l.add("cgf");
+            l.add("adedf");
+            l.add("tel");*/
+            BorderPane bp = BrowseManager.viewList(deckManagerLayout.getDeckToBrowseTf(), l);
+            deckManagerLayout.showListResults(bp, 180, 60);
+    
+    }
+    
+    public static void viewListToRemove(){
+            deckManagerLayout.clearErrors();
+            List<String> l = MongoDBManager.findDecks(deckManagerLayout.getDeckToRemove());
+            /*List<String> l = new ArrayList<>();
+            l.add("ad");
+            l.add("eb");
+            l.add("cgf");
+            l.add("adedf");
+            l.add("tel");*/
+            BorderPane bp = BrowseManager.viewList(deckManagerLayout.getDeckToRemoveTf(), l);
+            deckManagerLayout.showListResults(bp, 180, 100);
+    }
+    
     public static void setEvents(){
-        deckManagerLayout.findDeck.setOnAction((ActionEvent ev)->{findDeck();});
-        deckManagerLayout.removeDeck.setOnAction((ActionEvent ev)->{removeDeck();});
-        deckManagerLayout.findTopCards.setOnAction((ActionEvent ev)->{findTopXCard();});	
-        deckManagerLayout.findTopECards.setOnAction((ActionEvent ev)->{findTopXECard();});
-        deckManagerLayout.findMagicTrapDecks.setOnAction((ActionEvent ev)->{findMagicTrapDeck();}); 
-        deckManagerLayout.findArchetypeDecks.setOnAction((ActionEvent ev)->{findArchetypeDeck();});
-        deckManagerLayout.mostAvgAtkDecks.setOnAction((ActionEvent ev)->{findAvgAtkDecks();}); 
-        deckManagerLayout.back.setOnAction((ActionEvent ev)->{GUIManager.openAppManager();});
+        deckManagerLayout.getFindDeck().setOnAction((ActionEvent ev)->{findDeck();});
+        deckManagerLayout.getRemoveDeck().setOnAction((ActionEvent ev)->{removeDeck();});
+        deckManagerLayout.getDeckToBrowseTf().textProperty().addListener((obs, oldValue, newValue)->{
+            viewListToBrowse();
+        });
+        deckManagerLayout.getDeckToRemoveTf().textProperty().addListener((obs, oldValue, newValue)->{
+            viewListToRemove();
+        });
+        deckManagerLayout.getFindMagicTrapDecks().setOnAction((ActionEvent ev)->{findMagicTrapDeck();}); 
+        deckManagerLayout.getFindArchetypeDecks().setOnAction((ActionEvent ev)->{findArchetypeDeck();});
+        deckManagerLayout.getMostAvgAtkDecks().setOnAction((ActionEvent ev)->{findAvgAtkDecks();}); 
+        deckManagerLayout.getBack().setOnAction((ActionEvent ev)->{GUIManager.openAppManager();});
     }
      
     

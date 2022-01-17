@@ -9,6 +9,8 @@ import static java.lang.Integer.parseInt;
 import java.util.ArrayList;
 import java.util.List;
 import javafx.event.ActionEvent;
+import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.Pane;
 
 /**
  *
@@ -77,6 +79,12 @@ public class DeckBuilder {
         deckBuilderLayout.showCardResults(c);
     }
     
+    public static void viewMagicTraps(){
+        deckBuilderLayout.clearErrors();
+        List<String> c = MongoDBManager.findMagicTraps();
+        deckBuilderLayout.showCardResults(c);
+    }
+    
     public static void removeCard(){
         deckBuilderLayout.clearErrors();
         String t = DeckBuilderLayout.getCardToRemove();
@@ -96,9 +104,71 @@ public class DeckBuilder {
         }
     }
     
+    public static void viewListToAdd(){
+            deckBuilderLayout.clearErrors();
+            List<String> l = MongoDBManager.findCards(deckBuilderLayout.getCardToAdd());
+            /*List<String> l = new ArrayList<>();
+            l.add("ad");
+            l.add("eb");
+            l.add("cgf");
+            l.add("adedf");
+            l.add("tel");
+            */
+            BorderPane bp = BrowseManager.viewList(deckBuilderLayout.getCardToAddTf(), l);
+            deckBuilderLayout.showListResults(bp, 520, 100);
+    }
+    
+    public static void viewListToRemove(){
+            deckBuilderLayout.clearErrors();
+            List<String> l = MongoDBManager.findCards(deckBuilderLayout.getCardToRemove());
+            /*List<String> l = new ArrayList<>();
+            l.add("ad");
+            l.add("eb");
+            l.add("cgf");
+            l.add("adedf");
+            l.add("tel");*/
+            BorderPane bp = BrowseManager.viewList(deckBuilderLayout.getCardToRemoveTf(), l);
+            deckBuilderLayout.showListResults(bp, 520, 300);
+    }
+    
     /*public static void viewCard(){
         
     }*/
+    public static void findTopXCard(){
+        deckBuilderLayout.clearErrors();
+        int x = parseInt(deckBuilderLayout.getCardsRank());
+        List<String> topList = new ArrayList<>();
+        topList = MongoDBManager.findTopXCards(x);
+        //add elements to gui
+        //deckBuilderLayout.showCardResults(topList);
+        List<String> list = new ArrayList<>();
+        list.add("g1");
+        list.add("g2");
+        list.add("g3");
+        list.add("g4");
+        list.add("g5");
+        deckBuilderLayout.showCardResults(list);
+    }
+    
+    public static void findTopXECard(){
+        deckBuilderLayout.clearErrors();
+        int x = parseInt(deckBuilderLayout.getECardsRank());
+        List<String> topList = new ArrayList<>();
+        topList = MongoDBManager.findTopXECards(x);
+        //add elements to gui
+        //deckBuilderLayout.showCardResults(topList);
+        //test:
+        List<String> list = new ArrayList<>();
+        list.add("s1");
+        list.add("s2");
+        list.add("s3");
+        list.add("s4");
+        list.add("s5");
+        list.add("s6");
+        list.add("s7");
+        deckBuilderLayout.showCardResults(list);
+        
+    }
     
     public static void saveDeck(){
         deckBuilderLayout.clearErrors();
@@ -120,12 +190,21 @@ public class DeckBuilder {
     }
     
     public static void setEvents(){
-        deckBuilderLayout.findStrongest.setOnAction((ActionEvent ev)->{findStrongestCard();});
-        deckBuilderLayout.addCardByTitle.setOnAction((ActionEvent ev)->{addCard();});
-        deckBuilderLayout.addCardByAtk.setOnAction((ActionEvent ev)->{addCardByAtk();});
-        deckBuilderLayout.addCardByDef.setOnAction((ActionEvent ev)->{addCardByDef();});
-        deckBuilderLayout.removeCard.setOnAction((ActionEvent ev)->{removeCard();});
-        deckBuilderLayout.save.setOnAction((ActionEvent ev)->{saveDeck();});	
-        deckBuilderLayout.back.setOnAction((ActionEvent ev)->{GUIManager.openAppManager();});
+        deckBuilderLayout.getAddCardByTitle().setOnAction((ActionEvent ev)->{addCard();});
+        deckBuilderLayout.getAddCardByAtk().setOnAction((ActionEvent ev)->{addCardByAtk();});
+        deckBuilderLayout.getAddCardByDef().setOnAction((ActionEvent ev)->{addCardByDef();});
+        deckBuilderLayout.getMagicTraps().setOnAction((ActionEvent ev)->{viewMagicTraps();});
+        deckBuilderLayout.getRemoveCard().setOnAction((ActionEvent ev)->{removeCard();});
+        deckBuilderLayout.getSave().setOnAction((ActionEvent ev)->{saveDeck();});	
+        deckBuilderLayout.getBack().setOnAction((ActionEvent ev)->{GUIManager.openAppManager();});
+        deckBuilderLayout.getFindTopCards().setOnAction((ActionEvent ev)->{findTopXCard();});	
+        deckBuilderLayout.getFindTopECards().setOnAction((ActionEvent ev)->{findTopXECard();});
+        deckBuilderLayout.getCardToAddTf().textProperty().addListener((obs, oldValue, newValue)->{
+            viewListToAdd();
+        });
+        
+        deckBuilderLayout.getCardToRemoveTf().textProperty().addListener((obs, oldValue, newValue)->{
+            viewListToRemove();
+        });
     }
 }

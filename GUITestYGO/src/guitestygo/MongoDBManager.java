@@ -244,6 +244,68 @@ public class MongoDBManager {
         }
         return false;
     }*/
+     
+     
+    //NUOVE:
+    
+    public static List findCards(String inTitle){
+        /*
+        MongoCollection<Document> card = database.getCollection("cards");
+        List<String> cardlist = new ArrayList<>();
+        Bson filter = regex("title", inTitle);
+        try (MongoCursor<Document> cursor = card.find(filter).iterator()) {
+            Document doc = cursor.next();
+            cardlist.add(new Card(doc).getTitle());
+        } catch (Exception ex) {ex.printStackTrace();}
+        return null;
+        */
+        return null;
+    }
+    
+    public static List findMagicTraps(){
+        List<String> l = new ArrayList<>();
+        /*
+        MongoCollection<Document> card = database.getCollection("cards");
+        List<String> cardlist = new ArrayList<>();
+        Bson filter = regex("title", inTitle);
+        try (MongoCursor<Document> cursor = card.find(filter).iterator()) {
+            Document doc = cursor.next();
+            cardlist.add(new Card(doc).getTitle());
+        } catch (Exception ex) {ex.printStackTrace();}
+        return null;
+        */
+        return l;
+    }
+    
+    public static List findDecks(String inTitle){
+        /*
+        MongoCollection<Document> card = database.getCollection("decks");
+        List<String> cardlist = new ArrayList<>();
+        Bson filter = regex("title", inTitle);
+        try (MongoCursor<Document> cursor = card.find(filter).iterator()) {
+            Document doc = cursor.next();
+            cardlist.add(new Card(doc).getTitle());
+        } catch (Exception ex) {ex.printStackTrace();}
+        return null;
+        */
+        return null;
+    }
+    
+    public static List findUsers(String inUsername){
+        /*
+        MongoCollection<Document> card = database.getCollection("users");
+        List<String> cardlist = new ArrayList<>();
+        Bson filter = regex("username", inUsername);
+        try (MongoCursor<Document> cursor = card.find(filter).iterator()) {
+            Document doc = cursor.next();
+            cardlist.add(new Card(doc).getTitle());
+        } catch (Exception ex) {ex.printStackTrace();}
+        return null;
+        */
+        return null;
+    }
+    
+    //FINE!
 
     public static boolean existsDeck(String inTitle){
        /* JSONArray itemsMatched = new JSONArray();

@@ -12,8 +12,13 @@ import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
+import javafx.scene.paint.Color;
+import javafx.scene.paint.ImagePattern;
 import javafx.stage.Stage;
 
 /**
@@ -38,6 +43,7 @@ public class GUIManager extends Application {
     private static AdminPanel adminPanel;
     private static User current_user;
     public static Scene scene;
+    public static Scene card;
     public static Group root;
     public static Pane p;
     public static Node[] newNode; //for cleaning issues
@@ -48,6 +54,8 @@ public class GUIManager extends Application {
         scene = new Scene(root, 800, 600);
         stage.setTitle("YGODeckMaker");
         stage.setScene(scene);
+        scene.getStylesheets().add("file:style/loginStyle.css");
+        scene.setFill(Color.DARKSLATEGRAY);
        /* stage.setOnCloseRequest(
             (WindowEvent ev)->{
                 GameDataManager.saveGame(); 
@@ -67,6 +75,9 @@ public class GUIManager extends Application {
         for (Node n: tmp) {
             root.getChildren().add(n);
         }
+        scene.setFill(new ImagePattern(new Image("file:img/backgroundapp.jpg")));
+        scene.getStylesheets().clear();
+        scene.getStylesheets().add("file:style/builderStyle.css");
     }
     public static void openSocialManager(){
         root.getChildren().clear();
@@ -88,12 +99,14 @@ public class GUIManager extends Application {
         for (Node n: tmp) {
             root.getChildren().add(n);
         }
+        //deckBLayout.initLayout(root);
         p = (Pane)deckLayout.getGameParent();
         p.setLayoutX(40);
         p.setLayoutY(120);
         root.getChildren().add(p);
         deckBuilder = new DeckBuilder(deckBLayout, deckLayout);
         deckBuilder.setEvents();
+        scene.setFill(new ImagePattern(new Image("file:img/backgroundyugioh.png")));
     }
     
     public static void openDeckBuilder(Deck d){
@@ -111,6 +124,7 @@ public class GUIManager extends Application {
         root.getChildren().add(p);
         deckBuilder = new DeckBuilder(deckBLayout, deckLayout);
         deckBuilder.setEvents();
+        scene.setFill(new ImagePattern(new Image("file:img/backgroundyugioh.png")));
     }
     
     public static void openDeckOpener(){
@@ -128,6 +142,7 @@ public class GUIManager extends Application {
         root.getChildren().add(p);
         deckOpener = new DeckOpener(deckOLayout);
         deckOpener.setEvents();
+        scene.setFill(new ImagePattern(new Image("file:img/backgroundyugioh.png")));
     }
      
     public static void openDeckManager(){
@@ -140,6 +155,7 @@ public class GUIManager extends Application {
         }
         deckManager = new DeckManager(deckMLayout);
         deckManager.setEvents();
+        scene.setFill(new ImagePattern(new Image("file:img/backgroundyugioh.png")));
     }
     
     public static void openDeckManagerResults(DeckManagerLayout dm){
@@ -166,6 +182,9 @@ public class GUIManager extends Application {
         }
         loginManager = new LoginManager(loginLayout);
         loginManager.setEvents();
+        scene.setFill(Color.DARKSLATEGRAY);
+        scene.getStylesheets().clear();
+        scene.getStylesheets().add("file:style/loginStyle.css");
     }
     
     public static void openSignUpManager(){
@@ -190,6 +209,19 @@ public class GUIManager extends Application {
         }
         adminPanel = new AdminPanel(adminLayout);
         adminPanel.setEvents();
+        scene.setFill(new ImagePattern(new Image("file:img/backgroundapp.jpg")));
+        scene.getStylesheets().add("file:style/builderStyle.css");
+    }
+    
+    public static void openCard(Image image, String title){
+        GridPane pane = new GridPane();
+        ImageView img = new ImageView(image);
+        pane.getChildren().addAll(img);
+        card = new Scene(pane, 400, 600);
+        Stage stage = new Stage();
+        stage.setScene(card);
+        stage.setTitle(title);
+        stage.show();
     }
     
     public static Group setUI() {

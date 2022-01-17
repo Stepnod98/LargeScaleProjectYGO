@@ -6,6 +6,7 @@
             <file>file:/C:/prg/myapps/GUITestYGO/src/guitestygo/AppLayout.java</file>
             <file>file:/C:/prg/myapps/GUITestYGO/src/guitestygo/Set.java</file>
             <file>file:/C:/prg/myapps/GUITestYGO/src/guitestygo/Deck.java</file>
+            <file>file:/C:/prg/myapps/GUITestYGO/style/builderStyle.css</file>
             <file>file:/C:/prg/myapps/GUITestYGO/src/guitestygo/GUIManager.java</file>
             <file>file:/C:/prg/myapps/GUITestYGO/src/guitestygo/DeckManager.java</file>
             <file>file:/C:/prg/myapps/GUITestYGO/src/guitestygo/MongoDBManager.java</file>
@@ -20,9 +21,11 @@
             <file>file:/C:/prg/myapps/GUITestYGO/src/guitestygo/SocialLayout.java</file>
             <file>file:/C:/prg/myapps/GUITestYGO/src/guitestygo/DeckLayout.java</file>
             <file>file:/C:/prg/myapps/GUITestYGO/src/guitestygo/AdminPanel.java</file>
+            <file>file:/C:/prg/myapps/GUITestYGO/style/loginStyle.css</file>
             <file>file:/C:/prg/myapps/GUITestYGO/src/guitestygo/DeckBuilderLayout.java</file>
             <file>file:/C:/prg/myapps/GUITestYGO/src/guitestygo/User.java</file>
             <file>file:/C:/prg/myapps/GUITestYGO/src/guitestygo/DeckOpenerLayout.java</file>
+            <file>file:/C:/prg/myapps/GUITestYGO/src/guitestygo/BrowseManager.java</file>
             <file>file:/C:/prg/myapps/GUITestYGO/src/guitestygo/Card.java</file>
         </group>
     </open-files>

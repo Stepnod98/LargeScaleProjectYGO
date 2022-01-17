@@ -42,7 +42,7 @@ public class LoginLayout {
         pwd = new Label("Insert Password");
         pwd.setLayoutX(280);
         pwd.setLayoutY(120);
-        password = new TextField();
+        password = new PasswordField();
         password.setLayoutX(280);
         password.setLayoutY(160);
         password.setFocusTraversable(false);
@@ -97,7 +97,7 @@ public class LoginLayout {
         pwd = new Label("Insert Password");
         pwd.setLayoutX(280);
         pwd.setLayoutY(120);
-        password = new TextField();
+        password = new PasswordField();
         password.setLayoutX(280);
         password.setLayoutY(160);
         password.setFocusTraversable(false);
@@ -105,7 +105,7 @@ public class LoginLayout {
         confPwd = new Label("Confirm Password");
         confPwd.setLayoutX(280);
         confPwd.setLayoutY(200);
-        confirmPassword = new TextField();
+        confirmPassword = new PasswordField();
         confirmPassword.setLayoutX(280);
         confirmPassword.setLayoutY(240);
         confirmPassword.setFocusTraversable(false);

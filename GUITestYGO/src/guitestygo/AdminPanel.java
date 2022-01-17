@@ -6,7 +6,10 @@
 package guitestygo;
 
 import static java.lang.Integer.parseInt;
+import java.util.ArrayList;
+import java.util.List;
 import javafx.event.ActionEvent;
+import javafx.scene.layout.BorderPane;
 
 /**
  *
@@ -34,21 +37,58 @@ public class AdminPanel {
     
     public static void removeCard(){
         String title = adminLayout.getCardToRemoveTitle();
-        String set = adminLayout.getCardToRemoveSet();
         if(title.equals("")){
             return;
         }
-        if(set.equals("")){
-            MongoDBManager.remove(title);
-        }
         else{
-            MongoDBManager.remove(title, set);
+            MongoDBManager.remove(title);
         }
                 
     }
     
+    public static void removeUser(){
+        String username = adminLayout.getUserToRemove();
+        if(username.equals("")){
+            return;
+        }
+        else{
+            MongoDBManager.remove(username);
+        }
+                
+    }
+    
+    public static void viewCardList(){
+        adminLayout.clearErrors();
+        List<String> l = MongoDBManager.findUsers(adminLayout.getCardToRemoveTitle());
+        /*List<String> l = new ArrayList<>();
+        l.add("ad");
+        l.add("eb");
+        l.add("cgf");
+        l.add("adedf");
+        l.add("tel");*/
+        BorderPane bp = BrowseManager.viewList(adminLayout.getCardToRemoveTf(), l);
+        adminLayout.showListResults(bp, 520, 100);
+    
+    }
+    
+    public static void viewUserList(){
+        adminLayout.clearErrors();
+        List<String> l = MongoDBManager.findUsers(adminLayout.getUserToRemove());
+        /*List<String> l = new ArrayList<>();
+        l.add("ad");
+        l.add("eb");
+        l.add("cgf");
+        l.add("adedf");
+        l.add("tel");*/
+        BorderPane bp = BrowseManager.viewList(adminLayout.getUserToRemoveTf(), l);
+        adminLayout.showListResults(bp, 520, 230);
+    }
+    
     public static void setEvents(){
+        adminLayout.getCardToRemoveTf().textProperty().addListener((obs, oldValue, newValue)->{viewCardList();});
+        adminLayout.getUserToRemoveTf().textProperty().addListener((obs, oldValue, newValue)->{viewUserList();});
         adminLayout.removeCard.setOnAction((ActionEvent ev)->{removeCard();});
+        adminLayout.removeUser.setOnAction((ActionEvent ev)->{removeUser();});
         adminLayout.addCard.setOnAction((ActionEvent ev)->{addCard();});	
         adminLayout.logout.setOnAction((ActionEvent ev)->{GUIManager.openLoginManager();});
     }
