@@ -6,20 +6,56 @@ import com.mongodb.client.model.Projections;
 import org.bson.Document;
 import org.bson.conversions.Bson;
 import org.json.JSONObject;
+import org.neo4j.driver.*;
 
 import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
+import static org.neo4j.driver.Values.parameters;
+
 public class DeckGenerator
 {
+    //Uri to connect with the server on listening
+    private static final String uri = "neo4j://localhost:7687";
+
+    //Default username
+    private static final String user = "neo4j";
+
+    //Change the password to "neo4j" if it doesn't work.
+    //default login credentials: User: neo4j    Pass: neo4j
+    private static final String password = "root";
+    private static final Driver driver;
+
+    static{
+        driver = GraphDatabase.driver(uri, AuthTokens.basic(user,password));
+    }
+
     public static void main( String[] args ) throws IOException {
 
         MongoClient myClient = MongoClients.create("mongodb://localhost:27017");
         MongoDatabase database = myClient.getDatabase("test");
-        MongoCollection<Document> collection = database.getCollection("cards");
-        MongoCollection<Document> yugioh = database.getCollection("yugioh");
+        MongoCollection<Document> collection = database.getCollection("yugioh");
+
+        Bson projectionFields = Projections.fields(Projections.excludeId(),Projections.include("login.username"));
+        List<Document> people = collection.find().projection(projectionFields).skip(51).limit(74948).into(new ArrayList<Document>());
+
+        System.out.println(people.size());
+
+
+        for(int i = 0; i < people.size(); i++){
+            String username = ((Document)people.get(i).get("login")).get("username").toString();
+            add(username);
+            System.out.println(username + i + " Added");
+        }
+
+        System.out.println(((Document)people.get(74947).get("login")).get("username"));
+
+
+
+
+        /*MongoCollection<Document> yugioh = database.getCollection("yugioh");
 
         Bson projectionFields = Projections.fields(Projections.excludeId(),Projections.include("login.username"));
         Bson projectionFields2 = Projections.fields(Projections.excludeId(),Projections.include("title","imageUrl","atk","def","types","archetypes"));
@@ -109,5 +145,66 @@ public class DeckGenerator
 
         yugioh.insertMany(insertionList);
         myClient.close();
+    */
+
+
     }
+
+    /*public static void populateGraphUser(){
+
+        MongoClient myClient = MongoClients.create("mongodb://localhost:27017");
+        MongoDatabase database = myClient.getDatabase("test");
+        MongoCollection<Document> collection = database.getCollection("login");
+
+        Bson projectionFields = Projections.fields(Projections.excludeId(),Projections.include("login.username"));
+        List<Document> people = collection.find().projection(projectionFields).limit(50).into(new ArrayList<>());
+
+        //Add into nodeDB
+
+        String user;
+        for (Document person : people) {
+            user = (String) ((Document) person.get("login")).get("username");
+            add(user, "User");
+        }
+
+        for(int i = 0; i < people.size(); i++){
+            user = (String) ((Document) people.get(i).get("login")).get("username");
+            String matchQuery = "MATCH(u:User {username: \""+ user +"\"})";
+            String mergeQuery = "CREATE ";
+            int randomFriendsNumb = new Random().nextInt(9) + 1;
+            System.out.println(user + " has " + randomFriendsNumb + " friends");
+            List<String> friends = new ArrayList<>();
+            for( int j = 0; j < randomFriendsNumb; j++){
+                String friend =  (String) ((Document) people.get(new Random().nextInt(people.size())).get("login")).get("username");
+                if(friend.equals(user) || friends.contains(friend))
+                    continue;
+                friends.add(friend);
+                matchQuery +=  ",\n(u"+j+":User {username: \""+friend+"\"})";
+
+                if(j == 0) {
+                    mergeQuery += "(u)-[:FOLLOWS]->(u" + j + ")";
+                }else{
+                    if(mergeQuery.equals("CREATE ")) {
+                        mergeQuery += "(u)-[:FOLLOWS]->(u" + j + ")";
+                    }else{
+                        mergeQuery += ",\n(u)-[:FOLLOWS]->(u"+j+")";
+                    }
+                }
+            }
+            System.out.println(matchQuery+"\n"+mergeQuery);
+            runQuery(matchQuery+"\n"+mergeQuery);
+        }
+    }*/
+
+    public static void add(final String name){
+        try ( Session session = driver.session() )
+        {
+            session.writeTransaction((TransactionWork<Void>) tx -> {
+                tx.run( "MERGE (p:User {username: $name})",
+                        parameters( "name", name ) );
+                return null;
+            });
+        }
+    }
+
 }

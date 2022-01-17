@@ -245,6 +245,70 @@ public class GUIManager extends Application {
         root.getChildren().add(node);
     }
 
+    public static  void removeNode(Node node){
+        root.getChildren().remove(node);
+    }
+
+    public static void clearSocialLayout(){
+        if(socialLayout.getUserVbox() != null)
+            removeNode(socialLayout.getUserVbox());
+
+        if(socialLayout.getDeckVbox() != null)
+            removeNode(socialLayout.getDeckVbox());
+    }
+
+    public static void clearRecSocialLayout(){
+        if(socialLayout.getFindUserRecTable() != null)
+            removeNode(socialLayout.getFindUserRecTable());
+
+        if(socialLayout.getFindDeckRecTable() != null)
+            removeNode(socialLayout.getFindDeckRecTable());
+    }
+
+    public static void clearProfSocialLayout(){
+        if(socialLayout.getUserProfileVbox() != null)
+            removeNode(socialLayout.getUserProfileVbox());
+
+        clearProfTables();
+
+        if(socialLayout.getViewFriends() != null)
+            removeNode(socialLayout.getViewFriends());
+
+        if(socialLayout.getViewFollowers() != null)
+            removeNode(socialLayout.getViewFollowers());
+
+        if(socialLayout.getViewSharedDecks() != null)
+            removeNode(socialLayout.getViewSharedDecks());
+
+        if(socialLayout.getViewLikedDecks() != null)
+            removeNode(socialLayout.getViewLikedDecks());
+
+        if(socialLayout.getViewRecentDecks() != null)
+            removeNode(socialLayout.getViewRecentDecks());
+
+        if(socialLayout.getFollowUserButton() != null)
+            removeNode(socialLayout.getFollowUserButton());
+    }
+
+    public static void clearProfTables(){
+        if(socialLayout.getSharedDecksTable() != null)
+            removeNode(socialLayout.getSharedDecksTable());
+
+        if(socialLayout.getFriendsTable() != null)
+            removeNode(socialLayout.getFriendsTable());
+
+        if(socialLayout.getFollowersTable() != null)
+            removeNode(socialLayout.getFollowersTable());
+
+        if(socialLayout.getLikedDecksTable() != null)
+            removeNode(socialLayout.getLikedDecksTable());
+
+        if(socialLayout.getRecentDecksTable() != null)
+            removeNode(socialLayout.getRecentDecksTable());
+    }
+
+
+
     public static String getCurrentUser() {
         return currentUser.username;
     }
