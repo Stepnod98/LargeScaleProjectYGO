@@ -5,6 +5,7 @@
  */
 package it.unipi.lsmsdb.yugiohdeckmaker.Layouts;
 
+import it.unipi.lsmsdb.yugiohdeckmaker.Controller.GUIManager;
 import javafx.beans.property.ReadOnlyStringWrapper;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -21,26 +22,33 @@ import java.util.List;
  */
 public class DeckBuilderLayout {
     private Label title;
-    private static TextField deckTitle;
+    private TextField deckTitle;
     private Label add;
-    private static TextField cardToAdd;
+    private TextField cardToAdd;
     protected Button addCardByTitle;
     protected Button addCardByAtk;
     protected Button addCardByDef;
+    protected Button magicTraps;
     private Label remove;
-    private static TextField cardToRemove;
+    private TextField cardToRemove;
     protected Button removeCard;
     private Label findCard;
     private Label cardfound;
-    private static TextField setName;
-    private Label mostAtk;
     protected Button findStrongest;
+    private Label topCards;
+    private TextField topCardNumber;
+    protected Button findTopCards;
+    private Label topECards;
+    private TextField topECardNumber;
+    protected Button findTopECards;
     /*private Label rarest;
     protected Button findRarest;*/
     protected Button save;
     protected Button back;
     private Label err;
     private TableView<String> table = new TableView<String>();
+    private ListView<String> browseCardsToRemove;
+    private ListView<String> browseCardsToAdd;
     private ObservableList<String> observableList;
     private VBox vbox;
     public DeckBuilderLayout(){
@@ -48,7 +56,7 @@ public class DeckBuilderLayout {
         title.setLayoutX(40);
         title.setLayoutY(30);
         deckTitle = new TextField();
-        deckTitle.setLayoutX(100);
+        deckTitle.setLayoutX(130);
         deckTitle.setLayoutY(30);
         deckTitle.setFocusTraversable(false);
         deckTitle.setMaxWidth(200);
@@ -59,19 +67,23 @@ public class DeckBuilderLayout {
         cardToAdd.setLayoutX(520);
         cardToAdd.setLayoutY(80);
         cardToAdd.setFocusTraversable(false);
-        cardToAdd.setMaxWidth(200);
-        addCardByTitle = new Button("ADD BY TITLE");
-        addCardByTitle.setLayoutY(120);
-        addCardByTitle.setLayoutX(520);
+        cardToAdd.setMaxWidth(180);
+        addCardByTitle = new Button("ADD");
+        addCardByTitle.setLayoutY(80);
+        addCardByTitle.setLayoutX(680);
         addCardByTitle.setMaxWidth(100);
-        addCardByAtk = new Button("ADD BY ATK");
-        addCardByAtk.setLayoutY(160);
+        addCardByAtk = new Button("FILTER BY ATK");
+        addCardByAtk.setLayoutY(120);
         addCardByAtk.setLayoutX(520);
-        addCardByAtk.setMaxWidth(100);
-        addCardByDef = new Button("ADD BY DEF");
-        addCardByDef.setLayoutY(200);
+        addCardByAtk.setMaxWidth(300);
+        addCardByDef = new Button("FILTER BY DEF");
+        addCardByDef.setLayoutY(160);
         addCardByDef.setLayoutX(520);
-        addCardByDef.setMaxWidth(100);
+        addCardByDef.setMaxWidth(300);
+        magicTraps = new Button("FILTER MAGIC AND TRAPS");
+        magicTraps.setLayoutY(200);
+        magicTraps.setLayoutX(520);
+        magicTraps.setMaxWidth(300);
         remove = new Label("Remove Card:");
         remove.setLayoutX(520);
         remove.setLayoutY(240);
@@ -79,35 +91,49 @@ public class DeckBuilderLayout {
         cardToRemove.setLayoutX(520);
         cardToRemove.setLayoutY(280);
         cardToRemove.setFocusTraversable(false);
-        cardToRemove.setMaxWidth(200);
-        removeCard = new Button("REMOVE BY TITLE");
-        removeCard.setLayoutY(320);
-        removeCard.setLayoutX(520);
+        cardToRemove.setMaxWidth(180);
+        removeCard = new Button("REMOVE");
+        removeCard.setLayoutY(280);
+        removeCard.setLayoutX(680);
         removeCard.setMaxWidth(300);
-        findCard = new Label("Find Card in set:");
-        findCard.setLayoutX(480);
-        findCard.setLayoutY(400);
-        setName = new TextField();
-        setName.setLayoutX(480);
-        setName.setLayoutY(440);
-        setName.setFocusTraversable(false);
-        setName.setMaxWidth(300);
-        mostAtk = new Label("Most ATK");
-        mostAtk.setLayoutX(500);
-        mostAtk.setLayoutY(480);
-        findStrongest = new Button("FIND");
-        findStrongest.setLayoutY(480);
-        findStrongest.setLayoutX(560);
-        findStrongest.setMaxWidth(300);
-        /*rarest = new Label("Rarest");
-        rarest.setLayoutX(500);
-        rarest.setLayoutY(520);
-        findRarest = new Button("FIND");
-    	findRarest.setLayoutY(520);
-    	findRarest.setLayoutX(560);
-    	findRarest.setMaxWidth(300);*/
+        topCards = new Label("Find top X Cards");
+        topCards.setLayoutX(520);
+        topCards.setLayoutY(320);
+        topCardNumber = new TextField("5");
+        topCardNumber.setLayoutX(520);
+        topCardNumber.setLayoutY(360);
+        topCardNumber.setFocusTraversable(false);
+        topCardNumber.setMaxWidth(50);
+        findTopCards = new Button("FIND");
+        findTopCards.setLayoutY(360);
+        findTopCards.setLayoutX(580);
+        findTopCards.setMaxWidth(300);
+        topECards = new Label("Find top X Extra Cards");
+        topECards.setLayoutX(520);
+        topECards.setLayoutY(400);
+        topECardNumber = new TextField("5");
+        topECardNumber.setLayoutX(520);
+        topECardNumber.setLayoutY(440);
+        topECardNumber.setFocusTraversable(false);
+        topECardNumber.setMaxWidth(50);
+        findTopECards = new Button("FIND");
+        findTopECards.setLayoutY(440);
+        findTopECards.setLayoutX(580);
+        findTopECards.setMaxWidth(300);
+        browseCardsToRemove = new ListView<>();
+        browseCardsToRemove.setLayoutY(305);
+        browseCardsToRemove.setLayoutX(520);
+        browseCardsToRemove.setMaxWidth(cardToRemove.getMaxWidth());
+        browseCardsToRemove.setMaxHeight(120);
+        browseCardsToRemove.setVisible(false);
+        browseCardsToAdd = new ListView<>();
+        browseCardsToAdd.setLayoutY(105);
+        browseCardsToAdd.setLayoutX(520);
+        browseCardsToAdd.setMaxWidth(cardToAdd.getMaxWidth());
+        browseCardsToAdd.setMaxHeight(120);
+        browseCardsToAdd.setVisible(false);
         save = new Button("SAVE");
-        save.setLayoutX(320);
+        save.setLayoutX(340);
         save.setLayoutY(30);
         save.setMaxWidth(300);
         err = new Label();
@@ -123,27 +149,41 @@ public class DeckBuilderLayout {
         addCard.setOnAction((ActionEvent ev)->{LoginManager.signup();});
         back.setOnAction((ActionEvent ev)->{GUIManager.openAppManager();});*/
     }
+
     public Node[] getNodes() {
         Node[] returnNode = { title, deckTitle, add, cardToAdd, addCardByTitle, addCardByAtk, addCardByDef,
-                remove, cardToRemove, removeCard, mostAtk, findStrongest, /*rarest, findRarest,*/
-                findCard ,setName, save, back, err, cardfound, vbox};
+                topCards, topCardNumber, findTopCards, topECards ,topECardNumber, findTopECards,
+                browseCardsToAdd, browseCardsToRemove,
+                magicTraps, remove, cardToRemove, removeCard, save, back, err, cardfound, vbox};
         return returnNode;
     }
-    
-    public static String getCardToAdd(){
+
+    public String getCardToAdd(){
         return cardToAdd.getText();
     }
-    
-    public static String getCardToRemove(){
+
+    public TextField getCardToAddTf(){
+        return cardToAdd;
+    }
+
+    public String getCardToRemove(){
         return cardToRemove.getText();
     }
-    
-    public static String getSetName(){
-        return setName.getText();
+
+    public TextField getCardToRemoveTf(){
+        return cardToRemove;
     }
-    
-    public static String getDeckTitle(){
+
+    public String getDeckTitle(){
         return deckTitle.getText();
+    }
+
+    public String getCardsRank(){
+        return topCardNumber.getText();
+    }
+
+    public String getECardsRank(){
+        return topECardNumber.getText();
     }
 
     public Button getAddCardByAtk() {
@@ -152,6 +192,10 @@ public class DeckBuilderLayout {
 
     public Button getAddCardByTitle() {
         return addCardByTitle;
+    }
+
+    public Button getMagicTraps(){
+        return magicTraps;
     }
 
     public Button getBack() {
@@ -174,16 +218,54 @@ public class DeckBuilderLayout {
         return save;
     }
 
-
     public void showErrors(String text){
         err.setText(text);
     }
 
-    public void clear(){
+    public Button getFindTopCards() {
+        return findTopCards;
+    }
+
+    public Button getFindTopECards() {
+        return findTopECards;
+    }
+
+    public ListView<String> getBrowseCardsToAdd() {
+        return browseCardsToAdd;
+    }
+
+    public ListView<String> getBrowseCardsToRemove() {
+        return browseCardsToRemove;
+    }
+
+    public void clearLayout(){
         err.setText("");
         cardfound.setText("");
         vbox.getChildren().clear();
         table.getColumns().clear();
+        GUIManager.removeNode(vbox);
+    }
+
+
+
+    public void updateBrowseCardsToRemove(List<String> result){
+        browseCardsToRemove.getItems().clear();
+        if(result.isEmpty()){
+            browseCardsToRemove.setVisible(false);
+        }else{
+            browseCardsToRemove.setVisible(true);
+            browseCardsToRemove.getItems().addAll(result);
+        }
+    }
+
+    public void updateBrowseCardsToAdd(List<String> result){
+        browseCardsToAdd.getItems().clear();
+        if(result.isEmpty()){
+            browseCardsToAdd.setVisible(false);
+        }else{
+            browseCardsToAdd.setVisible(true);
+            browseCardsToAdd.getItems().addAll(result);
+        }
     }
 
     public void showCardResults(List<String> list){
@@ -195,11 +277,20 @@ public class DeckBuilderLayout {
         table.setItems(observableList);
         table.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
         //vbox = new VBox();
-        vbox.setLayoutY(100);
-        vbox.setLayoutX(700);
+        /*table.getSelectionModel().getSelectedItem();
+        table.getSelectionModel().selectedItemProperty().addListener(
+            (ObservableValue<? extends String> observable, String oldValue, String newValue) -> {
+                cardToAdd.setText(table.selectionModelProperty().getValue().getSelectedItem());
+        });*/
+        vbox.setLayoutY(360);
+        vbox.setLayoutX(50);
         vbox.setMaxHeight(120);
+        vbox.setMinWidth(300);
         vbox.getChildren().addAll(table);
+        GUIManager.addNode(vbox);
     }
+
+
 
     public Node getTableNodes() {
         return vbox;

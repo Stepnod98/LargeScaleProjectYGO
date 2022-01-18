@@ -9,7 +9,12 @@ import javafx.event.ActionEvent;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
+import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.VBox;
+
+import java.util.List;
 
 /**
  *
@@ -29,11 +34,16 @@ public class AdminLayout {
     private static TextField cardToAddAttribute;
     private static TextField cardToAddEffectTypes;
     private Label remove;
-    private static TextField cardToRemoveTitle;
-    private static TextField cardToRemoveSet;
+    private TextField cardToRemoveTitle;
+    private Label removeU;
+    private TextField userToRemove;
     protected Button removeCard;
     protected Button addCard;
+    protected Button removeUser;
+    private VBox vbox;
     protected Button logout;
+    private ListView<String> browseCardResults;
+    private ListView<String> browseUserResults;
 
     public AdminLayout(){
         adminLabel = new Label("Admin Control Panel");
@@ -100,48 +110,81 @@ public class AdminLayout {
         remove = new Label("Remove Card:");
         remove.setLayoutX(520);
         remove.setLayoutY(40);
-        cardToRemoveTitle = new TextField("Insert card title");
+        cardToRemoveTitle = new TextField();
         cardToRemoveTitle.setLayoutX(520);
         cardToRemoveTitle.setLayoutY(80);
         cardToRemoveTitle.setFocusTraversable(false);
-        cardToRemoveTitle.setMaxWidth(200);
-        cardToRemoveSet = new TextField("Insert card set");
-        cardToRemoveSet.setLayoutX(520);
-        cardToRemoveSet.setLayoutY(120);
-        cardToRemoveSet.setFocusTraversable(false);
-        cardToRemoveSet.setMaxWidth(200);
+        cardToRemoveTitle.setPrefWidth(150);
         removeCard = new Button("REMOVE");
-        removeCard.setLayoutY(150);
-        removeCard.setLayoutX(520);
+        removeCard.setLayoutY(80);
+        removeCard.setLayoutX(680);
         removeCard.setMaxWidth(300);
+        removeU = new Label("Remove User:");
+        removeU.setLayoutX(520);
+        removeU.setLayoutY(180);
+        userToRemove = new TextField();
+        userToRemove.setLayoutX(520);
+        userToRemove.setLayoutY(210);
+        userToRemove.setFocusTraversable(false);
+        userToRemove.setPrefWidth(150);
+        removeUser = new Button("REMOVE");
+        removeUser.setLayoutY(210);
+        removeUser.setLayoutX(680);
+        removeUser.setMaxWidth(300);
+        vbox = new VBox();
         logout = new Button("LOGOUT");
         logout.setLayoutX(640);
         logout.setLayoutY(560);
         logout.setMaxWidth(300);
+
+        browseCardResults = new ListView<>();
+        browseCardResults.setLayoutY(105);
+        browseCardResults.setLayoutX(520);
+        browseCardResults.setMaxWidth(cardToRemoveTitle.getPrefWidth());
+        browseCardResults.setMaxHeight(120);
+        browseCardResults.setVisible(false);
+
+        browseUserResults = new ListView<>();
+        browseUserResults.setLayoutY(235);
+        browseUserResults.setLayoutX(520);
+        browseUserResults.setMaxWidth(userToRemove.getPrefWidth());
+        browseUserResults.setMaxHeight(120);
+        browseUserResults.setVisible(false);
     }
+
+    public void updateBrowseCardResults(List<String> result){
+        browseCardResults.getItems().clear();
+        if(result.isEmpty()){
+            browseCardResults.setVisible(false);
+        }else{
+            browseCardResults.setVisible(true);
+            browseCardResults.getItems().addAll(result);
+        }
+    }
+
+    public void updateBrowseUserResults(List<String> result){
+        browseUserResults.getItems().clear();
+        if(result.isEmpty()){
+            browseUserResults.setVisible(false);
+        }else{
+            browseUserResults.setVisible(true);
+            browseUserResults.getItems().addAll(result);
+        }
+    }
+
 
     public Node[] getNodes() {
         Node[] returnNode = { adminLabel, add, cardToAddTitle, cardToAddImage, cardToAddAtk, cardToAddDef, cardToAddLevel,
                 cardToAddDesc, cardToAddType, cardToAddArchetype, cardToAddAttribute, cardToAddEffectTypes,
-                remove, cardToRemoveTitle, cardToRemoveSet, removeCard, addCard, logout};
+                remove, cardToRemoveTitle, removeCard, addCard, removeU, userToRemove,
+                removeUser, vbox, logout, browseCardResults, browseUserResults};
         return returnNode;
-    }
-
-    public Button getAddCard() {
-        return addCard;
-    }
-
-    public Button getLogout() {
-        return logout;
-    }
-
-    public Button getRemoveCard() {
-        return removeCard;
     }
 
     public String getTitle(){
         return cardToAddTitle.getText();
     }
+
     public String getImageUrl(){
         return cardToAddImage.getText();
     }
@@ -172,8 +215,45 @@ public class AdminLayout {
     public String getCardToRemoveTitle(){
         return cardToRemoveTitle.getText();
     }
-    public String getCardToRemoveSet(){
-        return cardToRemoveSet.getText();
+
+    public TextField getCardToRemoveTf(){
+        return cardToRemoveTitle;
+    }
+
+    public String getUserToRemove(){
+        return userToRemove.getText();
+    }
+
+    public TextField getUserToRemoveTf(){
+        return userToRemove;
+    }
+
+    public Button getRemoveCard() {
+        return removeCard;
+    }
+
+    public Button getLogout() {
+        return logout;
+    }
+
+    public Button getAddCard() {
+        return addCard;
+    }
+
+    public Button getRemoveUser() {
+        return removeUser;
+    }
+
+    public void clearErrors(){
+        vbox.getChildren().clear();
+    }
+
+    public ListView<String> getBrowseCardResults() {
+        return browseCardResults;
+    }
+
+    public ListView<String> getBrowseUserResults() {
+        return browseUserResults;
     }
 
 }

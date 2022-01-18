@@ -23,23 +23,29 @@ public class AppLayout {
     private Button bLogout;
     public AppLayout(){
         title = new Label("Welcome in YugiOhDeckMaker!");
-        title.setLayoutX(280);
+        title.setLayoutX(190);
         title.setLayoutY(20);
+        title.setId("title");
         bDeckBuilder = new Button("CREATE A DECK");
         bDeckBuilder.setLayoutX(280);
         bDeckBuilder.setLayoutY(80);
+        bDeckBuilder.setMinWidth(200);
         bDeckManager = new Button("BROWSE YOUR DECKS");
         bDeckManager.setLayoutX(280);
         bDeckManager.setLayoutY(130);
+        bDeckManager.setMinWidth(200);
         bDeckOpener = new Button("OPEN A DECK");
         bDeckOpener.setLayoutX(280);
         bDeckOpener.setLayoutY(180);
+        bDeckOpener.setMinWidth(200);
         bSocial = new Button("SEARCH NEW DECKS");
         bSocial.setLayoutX(280);
         bSocial.setLayoutY(230);
+        bSocial.setMinWidth(200);
         bLogout = new Button("LOGOUT");
         bLogout.setLayoutX(280);
         bLogout.setLayoutY(280);
+        bLogout.setMinWidth(200);
 
     }
 

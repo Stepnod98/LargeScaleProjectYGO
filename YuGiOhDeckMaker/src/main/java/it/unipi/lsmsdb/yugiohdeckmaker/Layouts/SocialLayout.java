@@ -616,9 +616,6 @@ public class SocialLayout {
         return userToFind;
     }
 
-    public TextField getLogText() {
-        return logText;
-    }
 
     public TextField getDeckToFind() {
         return deckToFind;

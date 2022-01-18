@@ -24,12 +24,21 @@ public class SocialManager {
     private final User currentUser;
     private final SocialLayout socialLayout;
 
+//*************************************************************************************************************
+//*                                    CONSTRUCTOR                                                            *
+//*************************************************************************************************************
+
     public SocialManager(SocialLayout socialLayout, User currentUser){
         this.currentUser = currentUser;
         this.socialLayout = socialLayout;
         setEvents();
         setProfile();
     }
+
+
+//*************************************************************************************************************
+//*                                    SET STATIC ELEMENTS EVENTS                                             *
+//*************************************************************************************************************
 
     private void setEvents(){
         socialLayout.getShareDeck().setOnAction((ActionEvent ev)->{
@@ -185,7 +194,9 @@ public class SocialManager {
         setBrowseEvents();
     }
 
-
+//*************************************************************************************************************
+//*                                    SET BROWSE EVENTS                                                      *
+//*************************************************************************************************************
 
     private void setBrowseEvents(){
         socialLayout.getBrowseUserResults().getSelectionModel().selectedItemProperty().addListener(new ChangeListener<String>() {
@@ -207,6 +218,10 @@ public class SocialManager {
             }
         });
     }
+
+//*************************************************************************************************************
+//*                                    TASKS FOR Platform.runLater                                            *
+//*************************************************************************************************************
 
     private void browseUserTasks(){
         if(socialLayout.getBrowseUserResults().getSelectionModel().getSelectedItem() != null) {
@@ -259,6 +274,10 @@ public class SocialManager {
         }
     }
 
+//*************************************************************************************************************
+//*                                    SET RECOMMENDATION TABLE ITEMS EVENTS                                  *
+//*************************************************************************************************************
+
     private void setRecUsersEvents(){
         socialLayout.getFindUserRecTable().getSelectionModel().selectedItemProperty().addListener(new ChangeListener<String>() {
             @Override
@@ -276,6 +295,10 @@ public class SocialManager {
             }
         });
     }
+
+//*************************************************************************************************************
+//*                                    SET PROFILE TABLE EVENTS                                               *
+//*************************************************************************************************************
 
     private void setFriendsTableEvents(){
         socialLayout.getFriendsTable().getSelectionModel().selectedItemProperty().addListener(new ChangeListener<String>() {
@@ -321,6 +344,10 @@ public class SocialManager {
             }
         });
     }
+
+//*************************************************************************************************************
+//*                                    SET PROFILE BUTTON EVENTS                                              *
+//*************************************************************************************************************
 
     private void setProfileEvents(){
 
@@ -407,7 +434,7 @@ public class SocialManager {
 
 
 //*************************************************************************************************************
-//*                                    ACTIONS
+//*                                    ACTIONS                                                                *
 //*************************************************************************************************************
 
     public void share(){
@@ -474,7 +501,10 @@ public class SocialManager {
         }
     }
 
-//
+//*************************************************************************************************************
+//*                                    FINDS                                                                  *
+//*************************************************************************************************************
+
     public void findUser(User user){
 
         if(MongoDBManager.findUser(user)){
@@ -507,6 +537,10 @@ public class SocialManager {
             socialLayout.printError("Deck not found");
         }
     }
+
+//*************************************************************************************************************
+//*                                    SET BOXES                                                              *
+//*************************************************************************************************************
 
     private void setDeckVbox(Deck deck,double x, double y){
         String creator = Neo4jManager.getCreator(deck.getTitle());
@@ -575,6 +609,10 @@ public class SocialManager {
         }
 
     }
+
+//*************************************************************************************************************
+//*                               SET USERS PROFILE INFO                                                      *
+//*************************************************************************************************************
 
     private void setUserInfo(User user){
         String followers = Integer.toString(Neo4jManager.getCountFollowers(user.username));

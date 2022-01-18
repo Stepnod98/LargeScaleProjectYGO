@@ -149,6 +149,48 @@ public class MongoDBManager {
         return null;
     }
 
+    public static List<String> findCards(String inTitle){
+        MongoCollection<Document> card = database.getCollection("cards");
+        List<String> cardList = new ArrayList<>();
+        Bson filter = regex("title", inTitle);
+        try (MongoCursor<Document> cursor = card.find(filter).iterator()) {
+            while(cursor.hasNext()){
+                Document doc = cursor.next();
+                cardList.add(new Card(doc).getTitle());
+            }
+        } catch (Exception ex) {ex.printStackTrace();}
+        return cardList;
+    }
+
+    public static List<String> findDecks(String inTitle){
+        MongoCollection<Document> deck = database.getCollection("decks");
+        List<String> deckList = new ArrayList<>();
+        Bson filter = regex("title", inTitle);
+        try (MongoCursor<Document> cursor = deck.find(filter).iterator()) {
+
+            while(cursor.hasNext()){
+                Document doc = cursor.next();
+                deckList.add(new Deck(doc).getTitle());
+            }
+
+        } catch (Exception ex) {ex.printStackTrace();}
+        return deckList;
+    }
+
+    public static List<String> findMagicTraps(){
+        // db.decks.find({types: {$exists:0}})
+        MongoCollection<Document> card = database.getCollection("cards");
+        List<String> cardList = new ArrayList<>();
+        Bson filter = Filters.not(Filters.exists("types"));
+        try (MongoCursor<Document> cursor = card.find(filter).iterator()) {
+            while(cursor.hasNext()){
+                Document doc = cursor.next();
+                cardList.add(new Deck(doc).getTitle());
+            }
+        } catch (Exception ex) {ex.printStackTrace();}
+        return cardList;
+    }
+
     public static Card findCard(String t){
         MongoCollection<Document> card = database.getCollection("yugioh");
         Bson filter = eq("title", t);

@@ -7,6 +7,7 @@ package it.unipi.lsmsdb.yugiohdeckmaker.Controller;
 
 import static java.lang.Integer.parseInt;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import it.unipi.lsmsdb.yugiohdeckmaker.DBManagers.MongoDBManager;
@@ -15,6 +16,9 @@ import it.unipi.lsmsdb.yugiohdeckmaker.Entities.Deck;
 import it.unipi.lsmsdb.yugiohdeckmaker.Layouts.CardTile;
 import it.unipi.lsmsdb.yugiohdeckmaker.Layouts.DeckBuilderLayout;
 import it.unipi.lsmsdb.yugiohdeckmaker.Layouts.DeckLayout;
+import javafx.application.Platform;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 
 public class DeckBuilder {
@@ -25,6 +29,7 @@ public class DeckBuilder {
         deck = new Deck();
         this.deckBuilderLayout = deckBuilderLayout;
         this.deckLayout = deckLayout;
+        setEvents();
     }
 
     public DeckBuilder(DeckBuilderLayout deckBuilderLayout, DeckLayout deckLayout, Deck d){
@@ -35,7 +40,7 @@ public class DeckBuilder {
     }
 
     public void addCard(){
-        deckBuilderLayout.clear();
+        deckBuilderLayout.clearLayout();
         String t = deckBuilderLayout.getCardToAdd();
         Card c = MongoDBManager.findCard(t);
         if(MongoDBManager.checkCardType(t)){
@@ -70,22 +75,64 @@ public class DeckBuilder {
     }
 
     public void addCardByAtk(){
-        deckBuilderLayout.clear();
+        deckBuilderLayout.clearLayout();
         int atk = parseInt(deckBuilderLayout.getCardToAdd());
         List<String> c = MongoDBManager.findCard(atk, true);
         deckBuilderLayout.showCardResults(c);
     }
 
     public  void addCardByDef(){
-        deckBuilderLayout.clear();
+        deckBuilderLayout.clearLayout();
         int def = parseInt(deckBuilderLayout.getCardToAdd());
         List<String> c = MongoDBManager.findCard(def, false);
         deckBuilderLayout.showCardResults(c);
     }
 
+    public void viewMagicTraps(){
+        deckBuilderLayout.clearLayout();
+        List<String> c = MongoDBManager.findMagicTraps();
+        deckBuilderLayout.showCardResults(c);
+    }
+
+    public void findTopXCard(){
+        deckBuilderLayout.clearLayout();
+        int x = parseInt(deckBuilderLayout.getCardsRank());
+        List<String> topList = new ArrayList<>();
+        topList = MongoDBManager.findTopXCards(x);
+        //add elements to gui
+        //deckBuilderLayout.showCardResults(topList);
+        List<String> list = new ArrayList<>();
+        list.add("ed");
+        list.add("g2");
+        list.add("g3");
+        list.add("g4");
+        list.add("g5");
+        deckBuilderLayout.showCardResults(list);
+    }
+
+    public void findTopXECard(){
+        deckBuilderLayout.clearLayout();
+        int x = parseInt(deckBuilderLayout.getECardsRank());
+        //List<String> topList = new ArrayList<>();
+        //topList = MongoDBManager.findTopXECards(x);
+        //add elements to gui
+        //deckBuilderLayout.showCardResults(topList);
+        //test:
+        List<String> list = new ArrayList<>();
+        list.add("te");
+        list.add("s2");
+        list.add("s3");
+        list.add("s4");
+        list.add("s5");
+        list.add("s6");
+        list.add("s7");
+        deckBuilderLayout.showCardResults(list);
+
+    }
+
     public void removeCard(){
-        deckBuilderLayout.clear();
-        String t = DeckBuilderLayout.getCardToRemove();
+        deckBuilderLayout.clearLayout();
+        String t = deckBuilderLayout.getCardToRemove();
         if(MongoDBManager.checkCardType(t)){
             deck.removeCardByTitle(t);
         }
@@ -100,7 +147,7 @@ public class DeckBuilder {
     }*/
 
     public void saveDeck(){
-        deckBuilderLayout.clear();
+        deckBuilderLayout.clearLayout();
         if(deck.getCards().size()<40){
             deckBuilderLayout.showErrors("A deck cannot have less than 40 cards!");
             return;
@@ -111,21 +158,127 @@ public class DeckBuilder {
 
     }
 
-    public void findStrongestCard(){
-        deckBuilderLayout.clear();
-        String setName = DeckBuilderLayout.getSetName();
+    /*public void findStrongestCard(){
+        deckBuilderLayout.clearLayout();
+        String setName = deckBuilderLayout.getSetName();
         String t = MongoDBManager.findMostAtk(setName);
         deckBuilderLayout.showCard(t);
+    }*/
+
+    private void browseCardToAddTask(){
+        if(deckBuilderLayout.getBrowseCardsToAdd().getSelectionModel().getSelectedItem() != null) {
+            String selected = deckBuilderLayout.getBrowseCardsToAdd().getSelectionModel().getSelectedItem();
+            deckBuilderLayout.getBrowseCardsToAdd().getSelectionModel().clearSelection();
+            deckBuilderLayout.getCardToAddTf().setText(selected);
+            deckBuilderLayout.getBrowseCardsToAdd().setVisible(false);
+        }
+    }
+
+    private void browseCardToRemoveTask(){
+        if(deckBuilderLayout.getBrowseCardsToRemove().getSelectionModel().getSelectedItem() != null) {
+            String selected = deckBuilderLayout.getBrowseCardsToRemove().getSelectionModel().getSelectedItem();
+            deckBuilderLayout.getBrowseCardsToRemove().getSelectionModel().clearSelection();
+            deckBuilderLayout.getCardToRemoveTf().setText(selected);
+            deckBuilderLayout.getBrowseCardsToRemove().setVisible(false);
+        }
     }
     
     public void setEvents(){
-        deckBuilderLayout.getFindStrongest().setOnAction((ActionEvent ev)->{findStrongestCard();});
-        //deckBuilderLayout.getFindRarest().setOnAction((ActionEvent ev)->{findRarestCard();});
         deckBuilderLayout.getAddCardByTitle().setOnAction((ActionEvent ev)->{addCard();});
         deckBuilderLayout.getAddCardByAtk().setOnAction((ActionEvent ev)->{addCardByAtk();});
         deckBuilderLayout.getAddCardByDef().setOnAction((ActionEvent ev)->{addCardByDef();});
+        deckBuilderLayout.getMagicTraps().setOnAction((ActionEvent ev)->{viewMagicTraps();});
         deckBuilderLayout.getRemoveCard().setOnAction((ActionEvent ev)->{removeCard();});
         deckBuilderLayout.getSave().setOnAction((ActionEvent ev)->{saveDeck();});
         deckBuilderLayout.getBack().setOnAction((ActionEvent ev)->{GUIManager.openAppManager();});
+        deckBuilderLayout.getFindTopCards().setOnAction((ActionEvent ev)->{findTopXCard();});
+        deckBuilderLayout.getFindTopECards().setOnAction((ActionEvent ev)->{findTopXECard();});
+
+        deckBuilderLayout.getCardToAddTf().textProperty().addListener(new ChangeListener<String>() {
+            @Override
+            public void changed(ObservableValue<? extends String> observable,
+                                String oldValue, String newValue) {
+
+                if(newValue.equals("")){
+                    deckBuilderLayout.getBrowseCardsToAdd().setVisible(false);
+                }else {
+                    deckBuilderLayout.updateBrowseCardsToAdd(MongoDBManager.findCards(newValue));
+                }
+            }
+        });
+
+        deckBuilderLayout.getCardToAddTf().focusedProperty().addListener(new ChangeListener<Boolean>() {
+            @Override
+            public void changed(ObservableValue<? extends Boolean> arg0, Boolean oldPropertyValue, Boolean newPropertyValue)
+            {
+                if (!newPropertyValue){
+                    deckBuilderLayout.getBrowseCardsToAdd().setVisible(false);
+                }
+            }
+        });
+
+        deckBuilderLayout.getCardToRemoveTf().textProperty().addListener(new ChangeListener<String>() {
+            @Override
+            public void changed(ObservableValue<? extends String> observable,
+                                String oldValue, String newValue) {
+
+                if(newValue.equals("")){
+                    deckBuilderLayout.getBrowseCardsToRemove().setVisible(false);
+                }else {
+                    //deckBuilderLayout.updateBrowseCardsToRemove(MongoDBManager.findCards(newValue));
+                    // TODO: 18/01/2022 PRENDERLE DAL DECK IN QUESTIONE
+                    deckBuilderLayout.updateBrowseCardsToRemove(MongoDBManager.findCards(newValue));
+                }
+            }
+        });
+
+        deckBuilderLayout.getCardToRemoveTf().focusedProperty().addListener(new ChangeListener<Boolean>() {
+            @Override
+            public void changed(ObservableValue<? extends Boolean> arg0, Boolean oldPropertyValue, Boolean newPropertyValue)
+            {
+                if (!newPropertyValue){
+                    deckBuilderLayout.getBrowseCardsToRemove().setVisible(false);
+                }
+            }
+        });
+        deckBuilderLayout.getBrowseCardsToAdd().focusedProperty().addListener(new ChangeListener<Boolean>() {
+            @Override
+            public void changed(ObservableValue<? extends Boolean> arg0, Boolean oldPropertyValue, Boolean newPropertyValue)
+            {
+                if(newPropertyValue){
+                    deckBuilderLayout.getBrowseCardsToAdd().setVisible(true);
+                }else {
+                    deckBuilderLayout.getBrowseCardsToAdd().setVisible(false);
+                }
+            }
+        });
+        deckBuilderLayout.getBrowseCardsToRemove().focusedProperty().addListener(new ChangeListener<Boolean>() {
+            @Override
+            public void changed(ObservableValue<? extends Boolean> arg0, Boolean oldPropertyValue, Boolean newPropertyValue)
+            {
+                if(newPropertyValue){
+                    deckBuilderLayout.getBrowseCardsToRemove().setVisible(true);
+                }else {
+                    deckBuilderLayout.getBrowseCardsToRemove().setVisible(false);
+                }
+            }
+        });
+
+        setBrowseEvents();
+    }
+
+    private void setBrowseEvents(){
+        deckBuilderLayout.getBrowseCardsToAdd().getSelectionModel().selectedItemProperty().addListener(new ChangeListener<String>() {
+            @Override
+            public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
+                Platform.runLater(() -> browseCardToAddTask());
+            }
+        });
+        deckBuilderLayout.getBrowseCardsToRemove().getSelectionModel().selectedItemProperty().addListener(new ChangeListener<String>() {
+            @Override
+            public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
+                Platform.runLater(() -> browseCardToRemoveTask());
+            }
+        });
     }
 }
