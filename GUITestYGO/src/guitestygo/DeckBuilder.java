@@ -34,7 +34,7 @@ public class DeckBuilder {
     }
     
     public static void addCard(){
-        deckBuilderLayout.clearErrors();
+        deckBuilderLayout.clearLayout();
         String t = deckBuilderLayout.getCardToAdd();
         Card c = MongoDBManager.findCard(t);
         if(MongoDBManager.checkCardType(t)){
@@ -66,28 +66,28 @@ public class DeckBuilder {
     }
     
     public static void addCardByAtk(){
-        deckBuilderLayout.clearErrors();
+        deckBuilderLayout.clearLayout();
         int atk = parseInt(deckBuilderLayout.getCardToAdd());
         List<String> c = MongoDBManager.findCard(atk, true);
         deckBuilderLayout.showCardResults(c);
     }
     
     public static void addCardByDef(){
-        deckBuilderLayout.clearErrors();
+        deckBuilderLayout.clearLayout();
         int def = parseInt(deckBuilderLayout.getCardToAdd());
         List<String> c = MongoDBManager.findCard(def, false);
         deckBuilderLayout.showCardResults(c);
     }
     
     public static void viewMagicTraps(){
-        deckBuilderLayout.clearErrors();
+        deckBuilderLayout.clearLayout();
         List<String> c = MongoDBManager.findMagicTraps();
         deckBuilderLayout.showCardResults(c);
     }
     
     public static void removeCard(){
-        deckBuilderLayout.clearErrors();
-        String t = DeckBuilderLayout.getCardToRemove();
+        deckBuilderLayout.clearLayout();
+        String t = deckBuilderLayout.getCardToRemove();
         if(MongoDBManager.checkCardType(t)){
             deck.removeCardByTitle(t);
         }
@@ -105,28 +105,28 @@ public class DeckBuilder {
     }
     
     public static void viewListToAdd(){
-            deckBuilderLayout.clearErrors();
-            List<String> l = MongoDBManager.findCards(deckBuilderLayout.getCardToAdd());
-            /*List<String> l = new ArrayList<>();
+            deckBuilderLayout.clearLayout();
+            //List<String> l = MongoDBManager.findCards(deckBuilderLayout.getCardToAdd());
+            List<String> l = new ArrayList<>();
             l.add("ad");
             l.add("eb");
             l.add("cgf");
             l.add("adedf");
             l.add("tel");
-            */
+            
             BorderPane bp = BrowseManager.viewList(deckBuilderLayout.getCardToAddTf(), l);
             deckBuilderLayout.showListResults(bp, 520, 100);
     }
     
     public static void viewListToRemove(){
-            deckBuilderLayout.clearErrors();
-            List<String> l = MongoDBManager.findCards(deckBuilderLayout.getCardToRemove());
-            /*List<String> l = new ArrayList<>();
+            deckBuilderLayout.clearLayout();
+            //List<String> l = MongoDBManager.findCards(deckBuilderLayout.getCardToRemove());
+            List<String> l = new ArrayList<>();
             l.add("ad");
             l.add("eb");
             l.add("cgf");
             l.add("adedf");
-            l.add("tel");*/
+            l.add("tel");
             BorderPane bp = BrowseManager.viewList(deckBuilderLayout.getCardToRemoveTf(), l);
             deckBuilderLayout.showListResults(bp, 520, 300);
     }
@@ -135,14 +135,14 @@ public class DeckBuilder {
         
     }*/
     public static void findTopXCard(){
-        deckBuilderLayout.clearErrors();
+        deckBuilderLayout.clearLayout();
         int x = parseInt(deckBuilderLayout.getCardsRank());
         List<String> topList = new ArrayList<>();
         topList = MongoDBManager.findTopXCards(x);
         //add elements to gui
         //deckBuilderLayout.showCardResults(topList);
         List<String> list = new ArrayList<>();
-        list.add("g1");
+        list.add("ed");
         list.add("g2");
         list.add("g3");
         list.add("g4");
@@ -151,15 +151,15 @@ public class DeckBuilder {
     }
     
     public static void findTopXECard(){
-        deckBuilderLayout.clearErrors();
+        deckBuilderLayout.clearLayout();
         int x = parseInt(deckBuilderLayout.getECardsRank());
-        List<String> topList = new ArrayList<>();
-        topList = MongoDBManager.findTopXECards(x);
+        //List<String> topList = new ArrayList<>();
+        //topList = MongoDBManager.findTopXECards(x);
         //add elements to gui
         //deckBuilderLayout.showCardResults(topList);
         //test:
         List<String> list = new ArrayList<>();
-        list.add("s1");
+        list.add("te");
         list.add("s2");
         list.add("s3");
         list.add("s4");
@@ -171,7 +171,7 @@ public class DeckBuilder {
     }
     
     public static void saveDeck(){
-        deckBuilderLayout.clearErrors();
+        deckBuilderLayout.clearLayout();
         if(deck.getCards().size()<40){
             deckBuilderLayout.showErrors("A deck cannot have less than 40 cards!");
             return;
@@ -182,12 +182,12 @@ public class DeckBuilder {
         
     }
     
-    public static void findStrongestCard(){
-        deckBuilderLayout.clearErrors();
+    /*public static void findStrongestCard(){
+        deckBuilderLayout.clearLayout();
         String setName = DeckBuilderLayout.getSetName();
         String t = MongoDBManager.findMostAtk(setName);
         deckBuilderLayout.showCard(t);
-    }
+    }*/
     
     public static void setEvents(){
         deckBuilderLayout.getAddCardByTitle().setOnAction((ActionEvent ev)->{addCard();});

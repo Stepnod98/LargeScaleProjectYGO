@@ -8,6 +8,8 @@ package guitestygo;
 import java.util.ArrayList;
 import java.util.List;
 import javafx.beans.property.ReadOnlyStringWrapper;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -40,8 +42,6 @@ public class DeckBuilderLayout {
     protected Button removeCard;
     private Label findCard;
     private Label cardfound;
-    private static TextField setName;
-    private Label mostAtk;
     protected Button findStrongest;
     private Label topCards;
     private static TextField topCardNumber;
@@ -151,35 +151,31 @@ public class DeckBuilderLayout {
     	return returnNode;
     }
     
-    public static String getCardToAdd(){
+    public String getCardToAdd(){
         return cardToAdd.getText();
     }
     
-    public static TextField getCardToAddTf(){
+    public TextField getCardToAddTf(){
         return cardToAdd;
     }
     
-    public static String getCardToRemove(){
+    public String getCardToRemove(){
         return cardToRemove.getText();
     }
     
-    public static TextField getCardToRemoveTf(){
+    public TextField getCardToRemoveTf(){
         return cardToRemove;
     }
     
-    public static String getSetName(){
-        return setName.getText();
-    }
-    
-    public static String getDeckTitle(){
+    public String getDeckTitle(){
         return deckTitle.getText();
     }
     
-    public static String getCardsRank(){
+    public String getCardsRank(){
         return topCardNumber.getText();
     }
     
-    public static String getECardsRank(){
+    public String getECardsRank(){
         return topECardNumber.getText();
     }
     
@@ -227,7 +223,7 @@ public class DeckBuilderLayout {
         return findTopECards;
     }
  
-    public void clearErrors(){
+    public void clearLayout(){
         err.setText("");
         cardfound.setText("");
         vbox.getChildren().clear();
@@ -243,9 +239,15 @@ public class DeckBuilderLayout {
         table.setItems(observableList);
         table.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
         //vbox = new VBox();
+        table.getSelectionModel().getSelectedItem();
+        table.getSelectionModel().selectedItemProperty().addListener(
+            (ObservableValue<? extends String> observable, String oldValue, String newValue) -> {
+                cardToAdd.setText(table.selectionModelProperty().getValue().getSelectedItem());
+        });
         vbox.setLayoutY(360);
         vbox.setLayoutX(50);
         vbox.setMaxHeight(120);
+        vbox.setMinWidth(300);
         vbox.getChildren().addAll(table);
     }
     
@@ -256,6 +258,7 @@ public class DeckBuilderLayout {
         vbox.setLayoutX(x);
         vbox.setLayoutY(y);
         vbox.setMaxHeight(120);
+        vbox.setMinWidth(100);
         vbox.setMaxWidth(150);
         vbox.getChildren().addAll(bp);
     }
