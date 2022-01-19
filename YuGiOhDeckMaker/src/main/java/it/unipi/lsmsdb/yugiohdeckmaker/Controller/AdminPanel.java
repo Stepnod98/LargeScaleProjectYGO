@@ -7,29 +7,34 @@ package it.unipi.lsmsdb.yugiohdeckmaker.Controller;
 
 import it.unipi.lsmsdb.yugiohdeckmaker.DBManagers.MongoDBManager;
 import it.unipi.lsmsdb.yugiohdeckmaker.DBManagers.Neo4jManager;
+import it.unipi.lsmsdb.yugiohdeckmaker.Entities.Card;
+import it.unipi.lsmsdb.yugiohdeckmaker.Entities.User;
 import it.unipi.lsmsdb.yugiohdeckmaker.Layouts.AdminLayout;
 import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
+import javafx.scene.control.Button;
+import javafx.scene.image.Image;
+import javafx.scene.layout.HBox;
 
-import static java.lang.Integer.parseInt;
+
 
 public class AdminPanel {
 
-    private static AdminLayout adminLayout;
+    private AdminLayout adminLayout;
     public AdminPanel(AdminLayout adminLayout){
         this.adminLayout = adminLayout;
         setEvents();
         setBrowseEvents();
     }
 
-    public static void addCard(){
+    public void addCard(){
         String title = adminLayout.getTitle();
         String imgurl = adminLayout.getImageUrl();
-        int atk = parseInt(adminLayout.getAtk());
-        int def = parseInt(adminLayout.getDef());
-        int level = parseInt(adminLayout.getLevel());
+        int atk = Integer.parseInt(adminLayout.getAtk());
+        int def = Integer.parseInt(adminLayout.getDef());
+        int level = Integer.parseInt(adminLayout.getLevel());
         String desc = adminLayout.getDesc();
         String type = adminLayout.getType();
         String archetype = adminLayout.getArchetype();
@@ -38,8 +43,8 @@ public class AdminPanel {
         MongoDBManager.insertCard(title, imgurl, atk, def, level, desc, type, archetype, attribute, effectType);
     }
 
-    public static void removeCard(){
-        String title = adminLayout.getCardToRemoveTitle();
+    public void removeCard(String title){
+
         if(title.equals("")){
             return;
         }
@@ -49,47 +54,41 @@ public class AdminPanel {
 
     }
 
-    public static void removeUser(){
-        String username = adminLayout.getUserToRemove();
+    public void removeUser(String username){
+
         if(username.equals("")){
             return;
         }
         else{
             MongoDBManager.remove(username);
+            Neo4jManager.delete(new User(username));
         }
 
     }
 
-    public static void viewCardList(){
-        adminLayout.clearErrors();
-        //List<String> l = MongoDBManager.findUsers(adminLayout.getCardToRemoveTitle());
-        /*List<String> l = new ArrayList<>();
-        l.add("ad");
-        l.add("eb");
-        l.add("cgf");
-        l.add("adedf");
-        l.add("tel");*/
-        //BorderPane bp = BrowseManager.viewList(adminLayout.getCardToRemoveTf(), l);
-        //adminLayout.showListResults(bp, 520, 100);
 
-    }
+    public void setEvents(){
+        adminLayout.getRemoveUser().setOnAction((ActionEvent ev)->{
+            GUIManager.clearAdminBoxes();
 
-    public static void viewUserList(){
-        adminLayout.clearErrors();
-        //List<String> l = MongoDBManager.findUsers(adminLayout.getUserToRemove());
-        /*List<String> l = new ArrayList<>();
-        l.add("ad");
-        l.add("eb");
-        l.add("cgf");
-        l.add("adedf");
-        l.add("tel");*/
-        //BorderPane bp = BrowseManager.viewList(adminLayout.getUserToRemoveTf(), l);
-        //adminLayout.showListResults(bp, 520, 230);
-    }
+            if(MongoDBManager.findUser(new User (adminLayout.getUserToRemove()))){
+                setUserVbox();
+                GUIManager.addNode(adminLayout.getUserVbox());
+            }
 
-    public static void setEvents(){
-        adminLayout.getRemoveUser().setOnAction((ActionEvent ev)->{removeUser();});
-        adminLayout.getRemoveCard().setOnAction((ActionEvent ev)->{removeCard();});
+        });
+
+        adminLayout.getRemoveCard().setOnAction((ActionEvent ev)->{
+
+            GUIManager.clearAdminBoxes();
+
+            if(MongoDBManager.findCard(adminLayout.getCardToRemoveTitle()) != null){
+                setCardVbox();
+                GUIManager.addNode(adminLayout.getCardVbox());
+            }
+
+
+        });
         adminLayout.getAddCard().setOnAction((ActionEvent ev)->{addCard();});
         adminLayout.getLogout().setOnAction((ActionEvent ev)->{GUIManager.openLoginManager();});
         adminLayout.getCardToRemoveTf().textProperty().addListener(new ChangeListener<String>() {
@@ -192,5 +191,35 @@ public class AdminPanel {
             adminLayout.getUserToRemoveTf().setText(selected);
             adminLayout.getBrowseUserResults().setVisible(false);
         }
+    }
+
+    private void setUserVbox(){
+        String username = adminLayout.getUserToRemove();
+        adminLayout.showUserFindResults(username);
+
+        HBox hBox = (HBox) adminLayout.getUserVbox().getChildren().get(adminLayout.getUserVbox().getChildren().size()-1);
+
+        ((Button) hBox.getChildren().get(0)).setText("REMOVE");
+        ((Button) hBox.getChildren().get(0)).setOnAction((ActionEvent ev) -> {
+            removeUser(username);
+            hBox.getChildren().get(0).setDisable(true);
+        });
+    }
+
+    private void setCardVbox(){
+        String title = adminLayout.getCardToRemoveTitle();
+
+        Image image = new Image(MongoDBManager.getImageUrl(new Card(title)), 300, 300, true, false);
+
+
+        adminLayout.showCardFindResults(title, image);
+
+        HBox hBox = (HBox) adminLayout.getCardVbox().getChildren().get(adminLayout.getCardVbox().getChildren().size()-1);
+
+        ((Button) hBox.getChildren().get(0)).setText("REMOVE");
+        ((Button) hBox.getChildren().get(0)).setOnAction((ActionEvent ev) -> {
+            removeCard(title);
+            hBox.getChildren().get(0).setDisable(true);
+        });
     }
 }

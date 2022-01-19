@@ -289,16 +289,4 @@ public class DeckBuilderLayout {
         vbox.getChildren().addAll(table);
         GUIManager.addNode(vbox);
     }
-
-
-
-    public Node getTableNodes() {
-        return vbox;
-    }
-
-    public void showCard(String c){
-        cardfound.setText(c);
-        cardfound.setLayoutX(580);
-        cardfound.setLayoutY(400);
-    }
 }

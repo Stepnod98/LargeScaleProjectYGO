@@ -20,15 +20,10 @@ import static com.mongodb.client.model.Projections.*;
 import static com.mongodb.client.model.Filters.*;
 import static com.mongodb.client.model.Indexes.*;
 import com.mongodb.client.model.Projections;
-import static com.mongodb.client.model.Updates.set;
-import com.mongodb.client.result.UpdateResult;
 import java.util.*;
 import org.bson.conversions.Bson;
 
-/**
- *
- * @author Stefano
- */
+
 public class MongoDBManager {
     private static MongoClient mongoClient;
     private static MongoDatabase database;
@@ -113,7 +108,14 @@ public class MongoDBManager {
 
 
 
+    public static String getImageUrl(Card card){
 
+        MongoCollection<Document> cards = database.getCollection("cards");
+
+        List<Document> cardUrldoc = cards.find(Filters.eq("title", card.getTitle())).into(new ArrayList<Document>());
+
+        return cardUrldoc.get(0).getString("imageUrl");
+    }
 
 
     public static List<String> getDecks(String username) {
@@ -143,8 +145,10 @@ public class MongoDBManager {
         MongoCollection<Document> deck = database.getCollection("yugioh");
         Bson filter = eq("title", t);
         try (MongoCursor<Document> cursor = deck.find(filter).iterator()) {
-            Document doc = cursor.next();
-            return new Deck(doc);
+            while(cursor.hasNext()) {
+                Document doc = cursor.next();
+                return new Deck(doc);
+            }
         } catch (Exception ex) {ex.printStackTrace();}
         return null;
     }
@@ -185,18 +189,20 @@ public class MongoDBManager {
         try (MongoCursor<Document> cursor = card.find(filter).iterator()) {
             while(cursor.hasNext()){
                 Document doc = cursor.next();
-                cardList.add(new Deck(doc).getTitle());
+                cardList.add(new Card(doc).getTitle());
             }
         } catch (Exception ex) {ex.printStackTrace();}
         return cardList;
     }
 
     public static Card findCard(String t){
-        MongoCollection<Document> card = database.getCollection("yugioh");
+        MongoCollection<Document> card = database.getCollection("cards");
         Bson filter = eq("title", t);
         try (MongoCursor<Document> cursor = card.find(filter).iterator()) {
-            Document doc = cursor.next();
-            return new Card(doc);
+            while (cursor.hasNext()) {
+                Document doc = cursor.next();
+                return new Card(doc);
+            }
         } catch (Exception ex) {ex.printStackTrace();}
         return null;
     }
@@ -253,7 +259,7 @@ public class MongoDBManager {
 
     public static void insertCard(String title, String imgurl, int atk, int def, int level, String desc, String type, String archetype, String attribute, String effectType){
 
-        MongoCollection<Document> cards = database.getCollection("decks");
+        MongoCollection<Document> cards = database.getCollection("cards");
         Document card = new Document("title", title)
                 .append("imgUrl", imgurl).append("atk", atk).append("level", level)
                 .append("lore", desc).append("types", type)
@@ -460,4 +466,5 @@ public class MongoDBManager {
     public static void connectionCloser(){
         mongoClient.close();
     }
+
 }

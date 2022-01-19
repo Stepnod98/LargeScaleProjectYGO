@@ -5,45 +5,48 @@
  */
 package it.unipi.lsmsdb.yugiohdeckmaker.Layouts;
 
-import javafx.event.ActionEvent;
+import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.scene.Node;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.ListView;
-import javafx.scene.control.TextField;
-import javafx.scene.layout.BorderPane;
+import javafx.scene.control.*;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import javafx.scene.text.Text;
 
+import java.io.IOException;
+import java.net.URL;
 import java.util.List;
 
-/**
- *
- * @author Stefano
- */
+
 public class AdminLayout {
     private Label adminLabel;
     private Label add;
-    private static TextField cardToAddTitle;
-    private static TextField cardToAddImage;
-    private static TextField cardToAddAtk;
-    private static TextField cardToAddDef;
-    private static TextField cardToAddLevel;
-    private static TextField cardToAddDesc;
-    private static TextField cardToAddType;
-    private static TextField cardToAddArchetype;
-    private static TextField cardToAddAttribute;
-    private static TextField cardToAddEffectTypes;
     private Label remove;
-    private TextField cardToRemoveTitle;
     private Label removeU;
+    private TextField cardToAddTitle;
+    private TextField cardToAddImage;
+    private TextField cardToAddAtk;
+    private TextField cardToAddDef;
+    private TextField cardToAddLevel;
+    private TextField cardToAddDesc;
+    private TextField cardToAddType;
+    private TextField cardToAddArchetype;
+    private TextField cardToAddAttribute;
+    private TextField cardToAddEffectTypes;
+    private TextField cardToRemoveTitle;
     private TextField userToRemove;
     protected Button removeCard;
     protected Button addCard;
     protected Button removeUser;
-    private VBox vbox;
     protected Button logout;
+    private VBox vbox;
+    private VBox userVbox;
+    private VBox cardVbox;
     private ListView<String> browseCardResults;
     private ListView<String> browseUserResults;
+
 
     public AdminLayout(){
         adminLabel = new Label("Admin Control Panel");
@@ -51,53 +54,63 @@ public class AdminLayout {
         adminLabel.setLayoutY(10);
         add = new Label("Add Card:");
         add.setLayoutX(40);
-        add.setLayoutY(40);
-        cardToAddTitle = new TextField("Insert title");
+        add.setLayoutY(50);
+        cardToAddTitle = new TextField();
+        cardToAddTitle.setPromptText("Insert title");
         cardToAddTitle.setLayoutX(40);
         cardToAddTitle.setLayoutY(80);
         cardToAddTitle.setFocusTraversable(false);
         cardToAddTitle.setMaxWidth(200);
-        cardToAddImage = new TextField("Insert image url");
+        cardToAddImage = new TextField();
+        cardToAddImage.setPromptText("Insert image url");
         cardToAddImage.setLayoutX(40);
         cardToAddImage.setLayoutY(110);
         cardToAddImage.setFocusTraversable(false);
         cardToAddImage.setMaxWidth(200);
-        cardToAddAttribute = new TextField("Insert attribute");
+        cardToAddAttribute = new TextField();
+        cardToAddAttribute.setPromptText("Insert attribute");
         cardToAddAttribute.setLayoutX(40);
         cardToAddAttribute.setLayoutY(140);
         cardToAddAttribute.setFocusTraversable(false);
         cardToAddAttribute.setMaxWidth(200);
-        cardToAddType = new TextField("Insert type(s)");
+        cardToAddType = new TextField();
+        cardToAddType.setPromptText("Insert type(s)");
         cardToAddType.setLayoutX(40);
         cardToAddType.setLayoutY(170);
         cardToAddType.setFocusTraversable(false);
         cardToAddType.setMaxWidth(200);
-        cardToAddArchetype = new TextField("Insert archetype");
+        cardToAddArchetype = new TextField();
+        cardToAddArchetype.setPromptText("Insert archetype");
         cardToAddArchetype.setLayoutX(40);
         cardToAddArchetype.setLayoutY(200);
         cardToAddArchetype.setFocusTraversable(false);
         cardToAddArchetype.setMaxWidth(200);
-        cardToAddLevel = new TextField("Insert level");
+        cardToAddLevel = new TextField();
+        cardToAddLevel.setPromptText("Insert level");
         cardToAddLevel.setLayoutX(40);
         cardToAddLevel.setLayoutY(230);
         cardToAddLevel.setFocusTraversable(false);
         cardToAddLevel.setMaxWidth(200);
-        cardToAddAtk = new TextField("Insert attack value");
+        cardToAddAtk = new TextField();
+        cardToAddAtk.setPromptText("Insert attack value");
         cardToAddAtk.setLayoutX(40);
         cardToAddAtk.setLayoutY(260);
         cardToAddAtk.setFocusTraversable(false);
         cardToAddAtk.setMaxWidth(200);
-        cardToAddDef = new TextField("Insert defense value");
+        cardToAddDef = new TextField();
+        cardToAddDef.setPromptText("Insert defense value");
         cardToAddDef.setLayoutX(40);
         cardToAddDef.setLayoutY(290);
         cardToAddDef.setFocusTraversable(false);
         cardToAddDef.setMaxWidth(200);
-        cardToAddEffectTypes = new TextField("Insert effect types");
+        cardToAddEffectTypes = new TextField();
+        cardToAddEffectTypes.setPromptText("Insert effect types");
         cardToAddEffectTypes.setLayoutX(40);
         cardToAddEffectTypes.setLayoutY(320);
         cardToAddEffectTypes.setFocusTraversable(false);
         cardToAddEffectTypes.setMaxWidth(200);
-        cardToAddDesc = new TextField("Insert card description/effect");
+        cardToAddDesc = new TextField();
+        cardToAddDesc.setPromptText("Insert card description/effect");
         cardToAddDesc.setLayoutX(40);
         cardToAddDesc.setLayoutY(350);
         cardToAddDesc.setFocusTraversable(false);
@@ -107,30 +120,33 @@ public class AdminLayout {
         addCard.setLayoutX(40);
         addCard.setLayoutY(420);
         addCard.setMaxWidth(300);
+
         remove = new Label("Remove Card:");
-        remove.setLayoutX(520);
-        remove.setLayoutY(40);
+        remove.setLayoutX(290);
+        remove.setLayoutY(50);
         cardToRemoveTitle = new TextField();
-        cardToRemoveTitle.setLayoutX(520);
+        cardToRemoveTitle.setLayoutX(290);
         cardToRemoveTitle.setLayoutY(80);
         cardToRemoveTitle.setFocusTraversable(false);
         cardToRemoveTitle.setPrefWidth(150);
-        removeCard = new Button("REMOVE");
+        removeCard = new Button("FIND");
         removeCard.setLayoutY(80);
-        removeCard.setLayoutX(680);
+        removeCard.setLayoutX(450);
         removeCard.setMaxWidth(300);
+
         removeU = new Label("Remove User:");
-        removeU.setLayoutX(520);
-        removeU.setLayoutY(180);
+        removeU.setLayoutX(290);
+        removeU.setLayoutY(115);
         userToRemove = new TextField();
-        userToRemove.setLayoutX(520);
-        userToRemove.setLayoutY(210);
+        userToRemove.setLayoutX(290);
+        userToRemove.setLayoutY(145);
         userToRemove.setFocusTraversable(false);
         userToRemove.setPrefWidth(150);
-        removeUser = new Button("REMOVE");
-        removeUser.setLayoutY(210);
-        removeUser.setLayoutX(680);
+        removeUser = new Button("FIND");
+        removeUser.setLayoutY(145);
+        removeUser.setLayoutX(450);
         removeUser.setMaxWidth(300);
+
         vbox = new VBox();
         logout = new Button("LOGOUT");
         logout.setLayoutX(640);
@@ -139,14 +155,14 @@ public class AdminLayout {
 
         browseCardResults = new ListView<>();
         browseCardResults.setLayoutY(105);
-        browseCardResults.setLayoutX(520);
+        browseCardResults.setLayoutX(290);
         browseCardResults.setMaxWidth(cardToRemoveTitle.getPrefWidth());
         browseCardResults.setMaxHeight(120);
         browseCardResults.setVisible(false);
 
         browseUserResults = new ListView<>();
-        browseUserResults.setLayoutY(235);
-        browseUserResults.setLayoutX(520);
+        browseUserResults.setLayoutY(170);
+        browseUserResults.setLayoutX(290);
         browseUserResults.setMaxWidth(userToRemove.getPrefWidth());
         browseUserResults.setMaxHeight(120);
         browseUserResults.setVisible(false);
@@ -170,6 +186,84 @@ public class AdminLayout {
             browseUserResults.setVisible(true);
             browseUserResults.getItems().addAll(result);
         }
+    }
+
+    public void showUserFindResults(String username){
+
+        userVbox = new VBox();
+
+        HBox usernameBox = new HBox();
+        Label usernameLabel = new Label("Username: ");
+        usernameLabel.setStyle("-fx-font-weight: bold;");
+        Text usernameText = new Text(username);
+
+        usernameBox.getChildren().addAll(usernameLabel, usernameText);
+        usernameBox.setStyle("-fx-font-size: 15");
+
+        HBox commandBox = new HBox();
+        Button action = new Button("ACTION");
+
+        action.setPrefSize(100, 20);
+
+        commandBox.getChildren().addAll(action);
+        commandBox.setAlignment(Pos.CENTER);
+        commandBox.setPadding(new Insets(30, 0,0, 0));
+
+
+        userVbox.getChildren().addAll(usernameBox,commandBox);
+
+
+        userVbox.setLayoutY(80);
+        userVbox.setLayoutX(520);
+        userVbox.setMinWidth(250);
+        userVbox.setMinHeight(100);
+        userVbox.setStyle("-fx-background-color: DARKSLATEGRAY;" +
+                " -fx-padding: 20;" +
+                " -fx-border-style: solid;" +
+                " -fx-border-color: black;");
+
+    }
+
+    public void showCardFindResults(String title, Image image){
+
+        cardVbox = new VBox();
+
+        HBox titleBox = new HBox();
+        Label titleLabel = new Label("Title: ");
+        titleLabel.setStyle("-fx-font-weight: bold;");
+        Text titleText = new Text(title);
+
+        titleBox.getChildren().addAll(titleLabel, titleText);
+        titleBox.setStyle("-fx-font-size: 15");
+
+        HBox imageBox = new HBox();
+        ImageView cardImage = new ImageView(image);
+        imageBox.getChildren().add(cardImage);
+        imageBox.setAlignment(Pos.CENTER);
+        imageBox.setPadding(new Insets(20,0,0,0));
+
+        HBox commandBox = new HBox();
+        Button action = new Button("ACTION");
+
+        action.setPrefSize(100, 20);
+
+        commandBox.getChildren().addAll(action);
+        commandBox.setAlignment(Pos.CENTER);
+        commandBox.setPadding(new Insets(30, 0,0, 0));
+
+
+        cardVbox.getChildren().addAll(titleBox,imageBox,commandBox);
+
+
+        cardVbox.setLayoutY(80);
+        cardVbox.setLayoutX(520);
+        cardVbox.setMinWidth(250);
+        cardVbox.setMinHeight(100);
+        cardVbox.setStyle("-fx-background-color: DARKSLATEGRAY;" +
+                " -fx-padding: 20;" +
+                " -fx-border-style: solid;" +
+                " -fx-border-color: black;");
+
     }
 
 
@@ -244,10 +338,6 @@ public class AdminLayout {
         return removeUser;
     }
 
-    public void clearErrors(){
-        vbox.getChildren().clear();
-    }
-
     public ListView<String> getBrowseCardResults() {
         return browseCardResults;
     }
@@ -256,4 +346,11 @@ public class AdminLayout {
         return browseUserResults;
     }
 
+    public VBox getUserVbox() {
+        return userVbox;
+    }
+
+    public VBox getCardVbox() {
+        return cardVbox;
+    }
 }

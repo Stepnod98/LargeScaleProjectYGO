@@ -318,7 +318,13 @@ public class GUIManager extends Application {
             removeNode(socialLayout.getRecentDecksTable());
     }
 
+    public static void clearAdminBoxes(){
+        if(adminLayout.getUserVbox() != null)
+            removeNode(adminLayout.getUserVbox());
 
+        if(adminLayout.getCardVbox() != null)
+            removeNode(adminLayout.getCardVbox());
+    }
 
     public static String getCurrentUser() {
         return currentUser.username;

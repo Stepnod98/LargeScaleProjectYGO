@@ -120,7 +120,7 @@ public class SocialLayout {
         back = new Button("BACK");
     	back.setLayoutX(690);
         back.setLayoutY(510);
-    	back.setPrefWidth(50);
+    	back.setPrefWidth(80);
         back.setTextAlignment(TextAlignment.CENTER);
         viewProfile = new Button("View your profile");
         viewProfile.setLayoutX(20);
@@ -408,7 +408,7 @@ public class SocialLayout {
         deckVbox.setLayoutX(x);
         deckVbox.setMinHeight(100);
         deckVbox.setMinWidth(300);
-        deckVbox.setStyle("-fx-background-color: cornsilk;" +
+        deckVbox.setStyle("-fx-background-color: DARKSLATEGRAY;" +
                 " -fx-padding: 20;" +
                 " -fx-border-style: solid;" +
                 " -fx-border-color: black;");
@@ -466,7 +466,7 @@ public class SocialLayout {
         userVbox.setLayoutX(x);
         userVbox.setMinWidth(300);
         userVbox.setMinHeight(100);
-        userVbox.setStyle("-fx-background-color: cornsilk;" +
+        userVbox.setStyle("-fx-background-color: DARKSLATEGRAY;" +
                 " -fx-padding: 20;" +
                 " -fx-border-style: solid;" +
                 " -fx-border-color: black;");
@@ -516,7 +516,7 @@ public class SocialLayout {
         userProfileVbox.setLayoutX(20);
         userProfileVbox.setMinWidth(200);
         userProfileVbox.setMinHeight(100);
-        userProfileVbox.setStyle("-fx-background-color: cornsilk;" +
+        userProfileVbox.setStyle("-fx-background-color: DARKSLATEGRAY;" +
                 " -fx-padding: 20;" +
                 " -fx-border-style: solid;" +
                 " -fx-border-color: black;");

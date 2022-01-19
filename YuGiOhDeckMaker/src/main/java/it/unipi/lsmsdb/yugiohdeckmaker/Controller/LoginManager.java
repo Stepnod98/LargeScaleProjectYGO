@@ -26,6 +26,7 @@ public class LoginManager {
         String password = encrypt(loginLayout.getPassword());
 
         if(username.equals("admin") && password.equals(encrypt("admin"))){
+            GUIManager.setCurrentUser(new User("admin"));
             GUIManager.openAdminPanel();
         }else if(username.isEmpty() || password.isEmpty() || !MongoDBManager.checkUser(username,password)){
             loginLayout.printError("User\\pass not correct");
