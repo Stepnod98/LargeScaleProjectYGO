@@ -39,7 +39,7 @@ public class DeckOpener {
                 if(newValue.equals("")){
                     deckOpenerLayout.getBrowseDeckResults().setVisible(false);
                 }else {
-                    deckOpenerLayout.updateBrowseDeckResults(MongoDBManager.findDecks(newValue));
+                    deckOpenerLayout.updateBrowseDeckResults(MongoDBManager.findYourDecks(newValue));
                 }
             }
         });

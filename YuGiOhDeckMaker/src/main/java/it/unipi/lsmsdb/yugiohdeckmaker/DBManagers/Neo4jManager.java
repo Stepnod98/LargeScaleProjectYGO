@@ -49,18 +49,36 @@ public class Neo4jManager {
     }
 
 
-    // TODO: 05/01/2022 ADD to mongodb when delete an user
     public static void delete(User user){
         String query = "MATCH(u:User {username: \""+user.username+"\"}) DETACH DELETE u";
         runQuery(query);
         //System.out.println(user.username + " deleted on the social!");
     }
 
-    // TODO: 05/01/2022 ADD to mongodb when delete a deck
     public static void delete(Deck deck){
         String query = "MATCH(u:Deck {title: \""+deck.getTitle()+"\"}) DETACH DELETE u";
         runQuery(query);
         //System.out.println(deck.getTitle() + " deleted on the social!");
+    }
+
+    public static void updateUser(String oldUsername, String newUsername){
+        String query = "MATCH(u:User {username: \""+oldUsername+"\"})" +
+                " SET u.username = \""+newUsername+"\"";
+        System.out.println(query);
+        runQuery(query);
+    }
+
+    public static void updateUserDecks(String oldUsername, String newUsername){
+        String query = "MATCH(u:User {username: \""+oldUsername+"\"})-[:HAS_SHARED]->(d)" +
+            " SET d.creator = \""+newUsername+"\"";
+        System.out.println(query);
+        runQuery(query);
+    }
+
+    public static void updateDeck(String oldTitle, String newTitle){
+        String query = "MATCH(d:Deck {title: \""+oldTitle+"\"})" +
+                " SET d.title = \""+newTitle+"\"";
+        runQuery(query);
     }
 
     private static void runQuery(final String query){
@@ -125,7 +143,7 @@ public class Neo4jManager {
     //This method is used tho share a deck given a user and its deck
     public static void shareDeck(User user,Deck deck) throws DeckPresentException, DeckNotExistsException {
 
-        if(!user.checkDeck(deck.getTitle())){
+        if(MongoDBManager.findYourDecks(deck.getTitle()).isEmpty()){
          throw new DeckNotExistsException();
         }
         if(checkSharedDeck(user,deck)){
@@ -639,6 +657,7 @@ public class Neo4jManager {
 
     public static void main(String[] args){
 
-        System.out.println(Neo4jManager.getRecentSharedDecks(new User("fabi8")));
+        //System.out.println(Neo4jManager.getRecentSharedDecks(new User("fabi8")));
+        Neo4jManager.delete(new Deck("prova2"));
     }
 }

@@ -9,38 +9,35 @@ import java.util.List;
 import javafx.beans.property.ReadOnlyStringWrapper;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.*;
 import javafx.scene.control.TextField;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import javafx.scene.text.Text;
 
 
 public class DeckManagerLayout {
     private Label find;
     private TextField deckToFind;
     protected Button findDeck;
-    private Label remove;
-    private  TextField deckToRemove;
-    protected Button removeDeck;
     private Label magicTrapDecks;
     protected Button findMagicTrapDecks;
     private Label archetypeDecks;
     protected Button findArchetypeDecks;
-    private Label atkDecks;
     protected Button mostAtkDecks;
+    private Button showYourDecksButton;
     private Label avgAtkDecks;
     private TextField avgAtk;
     protected Button mostAvgAtkDecks;
-    private TableView<String> table = new TableView<>();
+    private TableView<String> deckResultTable;
     private ObservableList<String> observableList;
     private ListView<String> browseDeckToFind;
-    private ListView<String> browseDeckToRemove;
-    private VBox vbox;
-    private Label result;
-    private Label findD;
-    private Label viewD;
+    private VBox deckVbox;
     protected Button back;
     public DeckManagerLayout(){
         find = new Label("Find a Deck:");
@@ -50,23 +47,14 @@ public class DeckManagerLayout {
         deckToFind.setLayoutX(180);
         deckToFind.setLayoutY(40);
         deckToFind.setFocusTraversable(false);
-        deckToFind.setMaxWidth(200);
+        deckToFind.setPrefWidth(160);
         findDeck = new Button("FIND");
         findDeck.setLayoutY(40);
         findDeck.setLayoutX(350);
         findDeck.setMaxWidth(300);
-        remove = new Label("Remove a Deck:");
-        remove.setLayoutX(50);
-        remove.setLayoutY(80);
-        deckToRemove = new TextField();
-        deckToRemove.setLayoutX(180);
-        deckToRemove.setLayoutY(80);
-        deckToRemove.setFocusTraversable(false);
-        deckToRemove.setMaxWidth(200);
-        removeDeck = new Button("REMOVE");
-        removeDeck.setLayoutY(80);
-        removeDeck.setLayoutX(350);
-        removeDeck.setMaxWidth(300);
+        showYourDecksButton = new Button("SHOW YOUR DECKS");
+        showYourDecksButton.setLayoutX(50);
+        showYourDecksButton.setLayoutY(80);
         magicTrapDecks = new Label("Magic and Trap Decks");
         magicTrapDecks.setLayoutX(50);
         magicTrapDecks.setLayoutY(120);
@@ -84,11 +72,12 @@ public class DeckManagerLayout {
         avgAtkDecks =  new Label("Find Decks with Average ATK more than");
         avgAtkDecks.setLayoutX(50);
         avgAtkDecks.setLayoutY(200);
-        avgAtk = new TextField("5");
+        avgAtk = new TextField();
         avgAtk.setLayoutX(50);
         avgAtk.setLayoutY(240);
         avgAtk.setFocusTraversable(false);
         avgAtk.setMaxWidth(100);
+        avgAtk.setPromptText("Value");
         mostAvgAtkDecks = new Button("FIND");
         mostAvgAtkDecks.setLayoutY(240);
         mostAvgAtkDecks.setLayoutX(190);
@@ -96,32 +85,19 @@ public class DeckManagerLayout {
         browseDeckToFind = new ListView<>();
         browseDeckToFind.setLayoutY(65);
         browseDeckToFind.setLayoutX(180);
-        browseDeckToFind.setMaxWidth(deckToFind.getMaxWidth());
+        browseDeckToFind.setMaxWidth(deckToFind.getPrefWidth());
         browseDeckToFind.setMaxHeight(120);
         browseDeckToFind.setVisible(false);
-        browseDeckToRemove = new ListView<>();
-        browseDeckToRemove.setLayoutY(105);
-        browseDeckToRemove.setLayoutX(180);
-        browseDeckToRemove.setMaxWidth(deckToRemove.getMaxWidth());
-        browseDeckToRemove.setMaxHeight(120);
-        browseDeckToRemove.setVisible(false);
-        vbox = new VBox();
         back = new Button("BACK");
         back.setLayoutX(640);
         back.setLayoutY(560);
         back.setMaxWidth(300);
-        /*findDeck.setOnAction((ActionEvent ev)->{DeckManager.findDeck();});
-        removeDeck.setOnAction((ActionEvent ev)->{DeckManager.removeDeck();});
-        findTopCards.setOnAction((ActionEvent ev)->{DeckManager.findTopXCard();});
-        findTopECards.setOnAction((ActionEvent ev)->{DeckManager.findTopXECard();});
-        back.setOnAction((ActionEvent ev)->{GUIManager.openAppManager();});*/
     }
 
     public Node[] getNodes() {
-        Node[] returnNode = { find, deckToFind, findDeck, remove, deckToRemove, removeDeck, magicTrapDecks,
+        Node[] returnNode = { find, deckToFind, findDeck, magicTrapDecks,
                 findMagicTrapDecks, archetypeDecks, findArchetypeDecks,
-                avgAtkDecks, avgAtk, mostAvgAtkDecks, browseDeckToFind,
-                browseDeckToRemove, vbox, back};
+                avgAtkDecks, avgAtk,showYourDecksButton, mostAvgAtkDecks, browseDeckToFind, back};
         return returnNode;
     }
 
@@ -133,20 +109,8 @@ public class DeckManagerLayout {
         return deckToFind;
     }
 
-    public String getDeckToRemove(){
-        return deckToRemove.getText();
-    }
-
-    public TextField getDeckToRemoveTf(){
-        return deckToRemove;
-    }
-
     public String getAvgAtk(){
         return avgAtk.getText();
-    }
-
-    public Button getRemoveDeck() {
-        return removeDeck;
     }
 
     public Button getFindDeck() {
@@ -159,6 +123,18 @@ public class DeckManagerLayout {
 
     public Button getBack() {
         return back;
+    }
+
+    public Button getShowYourDecksButton() {
+        return showYourDecksButton;
+    }
+
+    public VBox getDeckVbox() {
+        return deckVbox;
+    }
+
+    public TableView<String> getDeckResultTable() {
+        return deckResultTable;
     }
 
     public Button getFindMagicTrapDecks() {
@@ -177,20 +153,6 @@ public class DeckManagerLayout {
         return browseDeckToFind;
     }
 
-    public ListView<String> getBrowseDeckToRemove() {
-        return browseDeckToRemove;
-    }
-
-    public void updateBrowseDeckToRemove(List<String> result){
-        browseDeckToRemove.getItems().clear();
-        if(result.isEmpty()){
-            browseDeckToRemove.setVisible(false);
-        }else{
-            browseDeckToRemove.setVisible(true);
-            browseDeckToRemove.getItems().addAll(result);
-        }
-    }
-
     public void updateBrowseDeckToFind(List<String> result){
         browseDeckToFind.getItems().clear();
         if(result.isEmpty()){
@@ -201,41 +163,64 @@ public class DeckManagerLayout {
         }
     }
 
-    public void showCardResults(List<String> list){
-        TableColumn<String, String> column = new TableColumn("Card Title");
-        column.setCellValueFactory(cellData ->
-                new ReadOnlyStringWrapper(cellData.getValue()));
-        table.getColumns().add(column);
-        observableList = FXCollections.observableArrayList(list);
-        table.setItems(observableList);
-        table.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
-        vbox.setLayoutY(40);
-        vbox.setLayoutX(500);
-        vbox.setMaxHeight(180);
-        vbox.getChildren().addAll(table);
+    public void showDeckFindResults(String title, String creator){
+
+        deckVbox = new VBox();
+
+        HBox titleBox = new HBox();
+        Label titleLabel = new Label("Title: ");
+        titleLabel.setStyle("-fx-font-weight: bold;");
+        Text titleText = new Text(title);
+
+        titleBox.getChildren().addAll(titleLabel, titleText);
+        titleBox.setStyle("-fx-font-size: 15");
+
+        HBox creatorBox = new HBox();
+        Label creatorLabel = new Label("Creator: ");
+        creatorLabel.setStyle("-fx-font-weight: bold;");
+        Text creatorText = new Text(creator);
+
+        creatorBox.getChildren().addAll(creatorLabel, creatorText);
+        creatorBox.setStyle("-fx-font-size: 15");
+
+
+        HBox commandBox = new HBox();
+        Button action = new Button("VIEW");
+        Button action2 = new Button("REMOVE");
+        action.setPrefSize(100, 20);
+        action2.setPrefSize(100, 20);
+        commandBox.getChildren().addAll(action, action2);
+        commandBox.setAlignment(Pos.CENTER);
+        commandBox.setPadding(new Insets(30, 0,0, 0));
+
+
+        deckVbox.getChildren().addAll(titleBox, creatorBox, commandBox);
+
+
+        deckVbox.setLayoutY(240);
+        deckVbox.setLayoutX(500);
+        deckVbox.setMinWidth(250);
+        deckVbox.setMinHeight(100);
+        deckVbox.setStyle("-fx-background-color: DARKSLATEGRAY;" +
+                " -fx-padding: 20;" +
+                " -fx-border-style: solid;" +
+                " -fx-border-color: black;");
+
     }
 
     public void showDeckResults(List<String> list){
+
+        deckResultTable = new TableView<>();
         TableColumn<String, String> column = new TableColumn("Deck Title");
         column.setCellValueFactory(cellData ->
                 new ReadOnlyStringWrapper(cellData.getValue()));
-        table.getColumns().add(column);
+        deckResultTable.getColumns().add(column);
         observableList = FXCollections.observableArrayList(list);
-        table.setItems(observableList);
-        table.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
-        vbox.setLayoutY(40);
-        vbox.setLayoutX(500);
-        vbox.setMaxHeight(180);
-        vbox.getChildren().addAll(table);
+        deckResultTable.setItems(observableList);
+        deckResultTable.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
+        deckResultTable.setLayoutY(40);
+        deckResultTable.setLayoutX(500);
+        deckResultTable.setMaxHeight(180);
     }
 
-
-    public void clearErrors(){
-        vbox.getChildren().clear();
-        table.getColumns().clear();
-    }
-
-    public Node getTableNodes() {
-        return vbox;
-    }
 }

@@ -21,7 +21,6 @@ public class AppLayoutManager {
         appLayout.getbDeckManager().setOnAction((ActionEvent ev)->{GUIManager.openDeckManager();});
         appLayout.getbSocial().setOnAction((ActionEvent ev)->{GUIManager.openSocialManager(user);});
         appLayout.getbLogout().setOnAction((ActionEvent ev)->{LoginManager.logout();});
-        appLayout.getbDeckOpener().setOnAction((ActionEvent ev)->{GUIManager.openDeckOpener();});
     }
 
 }

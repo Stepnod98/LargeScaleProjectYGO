@@ -18,7 +18,6 @@ public class AppLayout {
     private Label title;
     private Button bDeckBuilder;
     private Button bDeckManager;
-    private Button bDeckOpener;
     private Button bSocial;
     private Button bLogout;
     public AppLayout(){
@@ -34,38 +33,18 @@ public class AppLayout {
         bDeckManager.setLayoutX(280);
         bDeckManager.setLayoutY(130);
         bDeckManager.setMinWidth(200);
-        bDeckOpener = new Button("OPEN A DECK");
-        bDeckOpener.setLayoutX(280);
-        bDeckOpener.setLayoutY(180);
-        bDeckOpener.setMinWidth(200);
         bSocial = new Button("SEARCH NEW DECKS");
         bSocial.setLayoutX(280);
-        bSocial.setLayoutY(230);
+        bSocial.setLayoutY(180);
         bSocial.setMinWidth(200);
         bLogout = new Button("LOGOUT");
         bLogout.setLayoutX(280);
-        bLogout.setLayoutY(280);
+        bLogout.setLayoutY(230);
         bLogout.setMinWidth(200);
 
     }
-
-    public static void createDeck(){
-
-    }
-
-    public static void openSocial(){
-
-    }
-
-    public static void logout(){
-
-    }
-
-    public static void openDeckManager(){
-
-    }
     public Node[] getNodes() {
-        Node[] returnNode = {title, bDeckBuilder, bDeckOpener,bDeckManager, bSocial, bLogout};
+        Node[] returnNode = {title, bDeckBuilder,bDeckManager, bSocial, bLogout};
         return returnNode;
     }
 
@@ -79,10 +58,6 @@ public class AppLayout {
 
     public Button getbLogout() {
         return bLogout;
-    }
-
-    public Button getbDeckOpener() {
-        return bDeckOpener;
     }
 
     public Button getbSocial() {

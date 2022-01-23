@@ -141,8 +141,7 @@ public class SocialManager {
                 if(newValue.equals("")){
                     socialLayout.getBrowseYourDeckResults().setVisible(false);
                 }else {
-                    // TODO: 17/01/2022 METTERE MONGODB.FINDDECKS CON LA NEW VALUE
-                    socialLayout.updateBrowseYourDeckResults(Neo4jManager.browseYourDecks(currentUser.username, newValue));
+                    socialLayout.updateBrowseYourDeckResults(MongoDBManager.findYourDecks(newValue));
                 }
             }
         });

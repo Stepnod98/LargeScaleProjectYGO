@@ -1,13 +1,9 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package it.unipi.lsmsdb.yugiohdeckmaker.Controller;
 
 import it.unipi.lsmsdb.yugiohdeckmaker.DBManagers.MongoDBManager;
 import it.unipi.lsmsdb.yugiohdeckmaker.DBManagers.Neo4jManager;
 import it.unipi.lsmsdb.yugiohdeckmaker.Entities.Card;
+import it.unipi.lsmsdb.yugiohdeckmaker.Entities.Deck;
 import it.unipi.lsmsdb.yugiohdeckmaker.Entities.User;
 import it.unipi.lsmsdb.yugiohdeckmaker.Layouts.AdminLayout;
 import javafx.application.Platform;
@@ -15,9 +11,9 @@ import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.scene.control.Button;
+import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.layout.HBox;
-
 
 
 public class AdminPanel {
@@ -49,7 +45,21 @@ public class AdminPanel {
             return;
         }
         else{
-            MongoDBManager.remove(title);
+            MongoDBManager.removeCard(title);
+            GUIManager.clearAdminBoxes();
+        }
+
+    }
+
+    public void removeDeck(String title){
+
+        if(title.equals("")){
+            return;
+        }
+        else{
+            MongoDBManager.removeDeck(title);
+            Neo4jManager.delete(new Deck(title));
+            GUIManager.clearAdminBoxes();
         }
 
     }
@@ -60,17 +70,50 @@ public class AdminPanel {
             return;
         }
         else{
-            MongoDBManager.remove(username);
+            MongoDBManager.removeUser(username);
             Neo4jManager.delete(new User(username));
+            GUIManager.clearAdminBoxes();
         }
 
+    }
+
+    // TODO: 23/01/2022 da togliere 
+    public void updateCardTitle(String oldTitle, String newTitle){
+        if(newTitle.equals("")){
+            return;
+        }
+        else{
+            MongoDBManager.updateCardTitle(oldTitle, newTitle);
+        }
+    }
+
+    // TODO: 23/01/2022 da togliere 
+    public void updateDeckTitle(String oldTitle, String newTitle){
+        if(newTitle.equals("")){
+            return;
+        }
+        else{
+            MongoDBManager.updateDeckTitle(oldTitle,newTitle);
+            Neo4jManager.updateDeck(oldTitle,newTitle);
+        }
+    }
+
+    public void updateUsername(String oldUsername, String newUsername){
+        if(newUsername.equals("")){
+            return;
+        }
+        else{
+            MongoDBManager.updateUsername(oldUsername, newUsername);
+            Neo4jManager.updateUserDecks(oldUsername, newUsername);
+            Neo4jManager.updateUser(oldUsername, newUsername);
+            GUIManager.clearAdminBoxes();
+        }
     }
 
 
     public void setEvents(){
         adminLayout.getRemoveUser().setOnAction((ActionEvent ev)->{
             GUIManager.clearAdminBoxes();
-
             if(MongoDBManager.findUser(new User (adminLayout.getUserToRemove()))){
                 setUserVbox();
                 GUIManager.addNode(adminLayout.getUserVbox());
@@ -79,12 +122,20 @@ public class AdminPanel {
         });
 
         adminLayout.getRemoveCard().setOnAction((ActionEvent ev)->{
-
             GUIManager.clearAdminBoxes();
-
             if(MongoDBManager.findCard(adminLayout.getCardToRemoveTitle()) != null){
                 setCardVbox();
                 GUIManager.addNode(adminLayout.getCardVbox());
+            }
+
+
+        });
+
+        adminLayout.getRemoveDeck().setOnAction((ActionEvent ev)->{
+            GUIManager.clearAdminBoxes();
+            if(MongoDBManager.findDeck(adminLayout.getDeckToRemove()) != null){
+                setDeckVbox();
+                GUIManager.addNode(adminLayout.getDeckVbox());
             }
 
 
@@ -123,7 +174,7 @@ public class AdminPanel {
                     adminLayout.getBrowseUserResults().setVisible(false);
                 }else {
 
-                    adminLayout.updateBrowseUserResults(Neo4jManager.browseUsers(newValue));
+                    adminLayout.updateBrowseUserResults(MongoDBManager.findUsers(newValue));
                 }
             }
         });
@@ -136,6 +187,30 @@ public class AdminPanel {
                 }
             }
         });
+
+        adminLayout.getDeckToRemoveTf().textProperty().addListener(new ChangeListener<String>() {
+            @Override
+            public void changed(ObservableValue<? extends String> observable,
+                                String oldValue, String newValue) {
+
+                if(newValue.equals("")){
+                    adminLayout.getBrowseDeckResults().setVisible(false);
+                }else {
+
+                    adminLayout.updateBrowseDeckResults(MongoDBManager.findDecks(newValue));
+                }
+            }
+        });
+        adminLayout.getDeckToRemoveTf().focusedProperty().addListener(new ChangeListener<Boolean>() {
+            @Override
+            public void changed(ObservableValue<? extends Boolean> arg0, Boolean oldPropertyValue, Boolean newPropertyValue)
+            {
+                if (!newPropertyValue){
+                    adminLayout.getBrowseDeckResults().setVisible(false);
+                }
+            }
+        });
+
         adminLayout.getBrowseCardResults().focusedProperty().addListener(new ChangeListener<Boolean>() {
             @Override
             public void changed(ObservableValue<? extends Boolean> arg0, Boolean oldPropertyValue, Boolean newPropertyValue)
@@ -158,6 +233,20 @@ public class AdminPanel {
                 }
             }
         });
+
+        adminLayout.getBrowseDeckResults().focusedProperty().addListener(new ChangeListener<Boolean>() {
+            @Override
+            public void changed(ObservableValue<? extends Boolean> arg0, Boolean oldPropertyValue, Boolean newPropertyValue)
+            {
+                if(newPropertyValue){
+                    adminLayout.getBrowseDeckResults().setVisible(true);
+                }else {
+                    adminLayout.getBrowseDeckResults().setVisible(false);
+                }
+            }
+        });
+
+
     }
 
     private void setBrowseEvents() {
@@ -171,6 +260,13 @@ public class AdminPanel {
             @Override
             public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
                 Platform.runLater(() -> browseUserTasks());
+            }
+        });
+
+        adminLayout.getBrowseDeckResults().getSelectionModel().selectedItemProperty().addListener(new ChangeListener<String>() {
+            @Override
+            public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
+                Platform.runLater(() -> browseDeckTasks());
             }
         });
     }
@@ -193,16 +289,32 @@ public class AdminPanel {
         }
     }
 
+    private void browseDeckTasks(){
+        if(adminLayout.getBrowseDeckResults().getSelectionModel().getSelectedItem() != null) {
+            String selected = adminLayout.getBrowseDeckResults().getSelectionModel().getSelectedItem();
+            adminLayout.getBrowseDeckResults().getSelectionModel().clearSelection();
+            adminLayout.getDeckToRemoveTf().setText(selected);
+            adminLayout.getBrowseDeckResults().setVisible(false);
+        }
+    }
+
     private void setUserVbox(){
         String username = adminLayout.getUserToRemove();
         adminLayout.showUserFindResults(username);
 
-        HBox hBox = (HBox) adminLayout.getUserVbox().getChildren().get(adminLayout.getUserVbox().getChildren().size()-1);
+        HBox hBox = (HBox) adminLayout.getUserVbox().getChildren().get(adminLayout.getUserVbox().getChildren().size()-3);
 
         ((Button) hBox.getChildren().get(0)).setText("REMOVE");
         ((Button) hBox.getChildren().get(0)).setOnAction((ActionEvent ev) -> {
             removeUser(username);
             hBox.getChildren().get(0).setDisable(true);
+        });
+        HBox hBox2 = (HBox) adminLayout.getUserVbox().getChildren().get(adminLayout.getUserVbox().getChildren().size()-2);
+        HBox hBox3 = (HBox) adminLayout.getUserVbox().getChildren().get(adminLayout.getUserVbox().getChildren().size()-1);
+        ((Button) hBox3.getChildren().get(0)).setText("UPDATE");
+        ((Button) hBox3.getChildren().get(0)).setOnAction((ActionEvent ev) -> {
+            updateUsername(username, ((TextField) hBox2.getChildren().get(0)).getText());
+            System.out.println("QUI!! " + ((TextField) hBox2.getChildren().get(0)).getText());
         });
     }
 
@@ -210,16 +322,43 @@ public class AdminPanel {
         String title = adminLayout.getCardToRemoveTitle();
 
         Image image = new Image(MongoDBManager.getImageUrl(new Card(title)), 300, 300, true, false);
-
+        //Image image = new Image("file:./../img/backCard.png", 300, 300, true, false);
 
         adminLayout.showCardFindResults(title, image);
 
-        HBox hBox = (HBox) adminLayout.getCardVbox().getChildren().get(adminLayout.getCardVbox().getChildren().size()-1);
+        HBox hBox = (HBox) adminLayout.getCardVbox().getChildren().get(adminLayout.getCardVbox().getChildren().size()-3);
 
         ((Button) hBox.getChildren().get(0)).setText("REMOVE");
         ((Button) hBox.getChildren().get(0)).setOnAction((ActionEvent ev) -> {
             removeCard(title);
             hBox.getChildren().get(0).setDisable(true);
+        });
+        HBox hBox2 = (HBox) adminLayout.getCardVbox().getChildren().get(adminLayout.getCardVbox().getChildren().size()-2);
+        HBox hBox3 = (HBox) adminLayout.getCardVbox().getChildren().get(adminLayout.getCardVbox().getChildren().size()-1);
+        ((Button) hBox3.getChildren().get(0)).setText("UPDATE");
+        ((Button) hBox3.getChildren().get(0)).setOnAction((ActionEvent ev) -> {
+            updateCardTitle(title, ((TextField) hBox2.getChildren().get(0)).getText());
+        });
+    }
+
+    private void setDeckVbox(){
+        String title = adminLayout.getDeckToRemove();
+        //String creator = "prova";
+        String creator = MongoDBManager.getCreator(title);
+        adminLayout.showDeckFindResults(title, creator);
+
+        HBox hBox1 = (HBox) adminLayout.getDeckVbox().getChildren().get(adminLayout.getDeckVbox().getChildren().size()-3);
+
+        ((Button) hBox1.getChildren().get(0)).setText("REMOVE");
+        ((Button) hBox1.getChildren().get(0)).setOnAction((ActionEvent ev) -> {
+            removeDeck(title);
+            hBox1.getChildren().get(0).setDisable(true);
+        });
+        HBox hBox2 = (HBox) adminLayout.getDeckVbox().getChildren().get(adminLayout.getDeckVbox().getChildren().size()-2);
+        HBox hBox3 = (HBox) adminLayout.getDeckVbox().getChildren().get(adminLayout.getDeckVbox().getChildren().size()-1);
+        ((Button) hBox3.getChildren().get(0)).setText("UPDATE");
+        ((Button) hBox3.getChildren().get(0)).setOnAction((ActionEvent ev) -> {
+            updateDeckTitle(title, ((TextField) hBox2.getChildren().get(0)).getText());
         });
     }
 }

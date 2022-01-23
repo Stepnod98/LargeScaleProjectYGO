@@ -14,9 +14,6 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
-
-import java.io.IOException;
-import java.net.URL;
 import java.util.List;
 
 
@@ -25,6 +22,7 @@ public class AdminLayout {
     private Label add;
     private Label remove;
     private Label removeU;
+    private Label removeD;
     private TextField cardToAddTitle;
     private TextField cardToAddImage;
     private TextField cardToAddAtk;
@@ -36,16 +34,20 @@ public class AdminLayout {
     private TextField cardToAddAttribute;
     private TextField cardToAddEffectTypes;
     private TextField cardToRemoveTitle;
+    private TextField deckToRemove;
     private TextField userToRemove;
     protected Button removeCard;
     protected Button addCard;
     protected Button removeUser;
+    protected Button removeDeck;
     protected Button logout;
     private VBox vbox;
     private VBox userVbox;
     private VBox cardVbox;
+    private VBox deckVbox;
     private ListView<String> browseCardResults;
     private ListView<String> browseUserResults;
+    private ListView<String> browseDeckResults;
 
 
     public AdminLayout(){
@@ -121,7 +123,7 @@ public class AdminLayout {
         addCard.setLayoutY(420);
         addCard.setMaxWidth(300);
 
-        remove = new Label("Remove Card:");
+        remove = new Label("Find Card:");
         remove.setLayoutX(290);
         remove.setLayoutY(50);
         cardToRemoveTitle = new TextField();
@@ -134,7 +136,7 @@ public class AdminLayout {
         removeCard.setLayoutX(450);
         removeCard.setMaxWidth(300);
 
-        removeU = new Label("Remove User:");
+        removeU = new Label("Find User:");
         removeU.setLayoutX(290);
         removeU.setLayoutY(115);
         userToRemove = new TextField();
@@ -147,10 +149,23 @@ public class AdminLayout {
         removeUser.setLayoutX(450);
         removeUser.setMaxWidth(300);
 
+        removeD = new Label("Find Deck:");
+        removeD.setLayoutX(290);
+        removeD.setLayoutY(180);
+        deckToRemove = new TextField();
+        deckToRemove.setLayoutX(290);
+        deckToRemove.setLayoutY(210);
+        deckToRemove.setFocusTraversable(false);
+        deckToRemove.setPrefWidth(150);
+        removeDeck = new Button("FIND");
+        removeDeck.setLayoutY(210);
+        removeDeck.setLayoutX(450);
+        removeDeck.setMaxWidth(300);
+
         vbox = new VBox();
         logout = new Button("LOGOUT");
         logout.setLayoutX(640);
-        logout.setLayoutY(560);
+        logout.setLayoutY(10);
         logout.setMaxWidth(300);
 
         browseCardResults = new ListView<>();
@@ -166,6 +181,13 @@ public class AdminLayout {
         browseUserResults.setMaxWidth(userToRemove.getPrefWidth());
         browseUserResults.setMaxHeight(120);
         browseUserResults.setVisible(false);
+
+        browseDeckResults = new ListView<>();
+        browseDeckResults.setLayoutY(235);
+        browseDeckResults.setLayoutX(290);
+        browseDeckResults.setMaxWidth(userToRemove.getPrefWidth());
+        browseDeckResults.setMaxHeight(120);
+        browseDeckResults.setVisible(false);
     }
 
     public void updateBrowseCardResults(List<String> result){
@@ -185,6 +207,16 @@ public class AdminLayout {
         }else{
             browseUserResults.setVisible(true);
             browseUserResults.getItems().addAll(result);
+        }
+    }
+
+    public void updateBrowseDeckResults(List<String> result){
+        browseDeckResults.getItems().clear();
+        if(result.isEmpty()){
+            browseDeckResults.setVisible(false);
+        }else{
+            browseDeckResults.setVisible(true);
+            browseDeckResults.getItems().addAll(result);
         }
     }
 
@@ -209,15 +241,91 @@ public class AdminLayout {
         commandBox.setAlignment(Pos.CENTER);
         commandBox.setPadding(new Insets(30, 0,0, 0));
 
+        HBox changeBox = new HBox();
+        TextField tf = new TextField();
+        tf.setPromptText("Change Username");
+        tf.setPrefSize(120, 20);
+        changeBox.getChildren().addAll(tf);
+        changeBox.setAlignment(Pos.CENTER);
+        changeBox.setPadding(new Insets(10, 0,0, 0));
 
-        userVbox.getChildren().addAll(usernameBox,commandBox);
+        HBox updateBox = new HBox();
+        Button update = new Button("ACTION");
+
+        update.setPrefSize(100, 20);
+
+        updateBox.getChildren().addAll(update);
+        updateBox.setAlignment(Pos.CENTER);
+        updateBox.setPadding(new Insets(10, 0,0, 0));
+
+        userVbox.getChildren().addAll(usernameBox,commandBox, changeBox, updateBox);
 
 
-        userVbox.setLayoutY(80);
+        userVbox.setLayoutY(60);
         userVbox.setLayoutX(520);
         userVbox.setMinWidth(250);
         userVbox.setMinHeight(100);
         userVbox.setStyle("-fx-background-color: DARKSLATEGRAY;" +
+                " -fx-padding: 20;" +
+                " -fx-border-style: solid;" +
+                " -fx-border-color: black;");
+
+    }
+
+    public void showDeckFindResults(String title, String creator){
+
+        deckVbox = new VBox();
+
+        HBox titleBox = new HBox();
+        Label titleLabel = new Label("Title: ");
+        titleLabel.setStyle("-fx-font-weight: bold;");
+        Text titleText = new Text(title);
+
+        titleBox.getChildren().addAll(titleLabel, titleText);
+        titleBox.setStyle("-fx-font-size: 15");
+
+        HBox creatorBox = new HBox();
+        Label creatorLabel = new Label("Creator: ");
+        creatorLabel.setStyle("-fx-font-weight: bold;");
+        Text creatorText = new Text(creator);
+
+        creatorBox.getChildren().addAll(creatorLabel, creatorText);
+        creatorBox.setStyle("-fx-font-size: 15");
+
+        HBox commandBox = new HBox();
+        Button action = new Button("ACTION");
+
+        action.setPrefSize(100, 20);
+
+        commandBox.getChildren().addAll(action);
+        commandBox.setAlignment(Pos.CENTER);
+        commandBox.setPadding(new Insets(20, 0,0, 0));
+
+        HBox changeBox = new HBox();
+        TextField tf = new TextField();
+        tf.setPromptText("Change Title");
+        tf.setPrefSize(100, 20);
+        changeBox.getChildren().addAll(tf);
+        changeBox.setAlignment(Pos.CENTER);
+        changeBox.setPadding(new Insets(10, 0,0, 0));
+
+        HBox updateBox = new HBox();
+        Button update = new Button("ACTION");
+
+        update.setPrefSize(100, 20);
+
+        updateBox.getChildren().addAll(update);
+        updateBox.setAlignment(Pos.CENTER);
+        updateBox.setPadding(new Insets(10, 0,0, 0));
+
+        deckVbox.getChildren().addAll(titleBox, creatorBox, commandBox, changeBox, updateBox);
+
+
+        deckVbox.setLayoutY(60);
+        deckVbox.setLayoutX(520);
+        deckVbox.setMinWidth(250);
+        deckVbox.setMinHeight(100);
+        deckVbox.setStyle("-fx-background-color: DARKSLATEGRAY;" +
                 " -fx-padding: 20;" +
                 " -fx-border-style: solid;" +
                 " -fx-border-color: black;");
@@ -251,11 +359,28 @@ public class AdminLayout {
         commandBox.setAlignment(Pos.CENTER);
         commandBox.setPadding(new Insets(30, 0,0, 0));
 
+        HBox changeBox = new HBox();
+        TextField tf = new TextField();
+        tf.setPromptText("Change Title");
+        tf.setPrefSize(100, 20);
+        changeBox.getChildren().addAll(tf);
+        changeBox.setAlignment(Pos.CENTER);
+        changeBox.setPadding(new Insets(20, 0,0, 0));
 
-        cardVbox.getChildren().addAll(titleBox,imageBox,commandBox);
+        HBox updateBox = new HBox();
+        Button update = new Button("ACTION");
+
+        update.setPrefSize(100, 20);
+
+        updateBox.getChildren().addAll(update);
+        updateBox.setAlignment(Pos.CENTER);
+        updateBox.setPadding(new Insets(20, 0,0, 0));
 
 
-        cardVbox.setLayoutY(80);
+        cardVbox.getChildren().addAll(titleBox,imageBox,commandBox, changeBox, updateBox);
+
+
+        cardVbox.setLayoutY(60);
         cardVbox.setLayoutX(520);
         cardVbox.setMinWidth(250);
         cardVbox.setMinHeight(100);
@@ -270,8 +395,8 @@ public class AdminLayout {
     public Node[] getNodes() {
         Node[] returnNode = { adminLabel, add, cardToAddTitle, cardToAddImage, cardToAddAtk, cardToAddDef, cardToAddLevel,
                 cardToAddDesc, cardToAddType, cardToAddArchetype, cardToAddAttribute, cardToAddEffectTypes,
-                remove, cardToRemoveTitle, removeCard, addCard, removeU, userToRemove,
-                removeUser, vbox, logout, browseCardResults, browseUserResults};
+                remove, cardToRemoveTitle, removeCard, addCard, removeD, deckToRemove, removeDeck, removeU, userToRemove,
+                removeUser, vbox, logout, browseCardResults, browseUserResults, browseDeckResults};
         return returnNode;
     }
 
@@ -326,6 +451,18 @@ public class AdminLayout {
         return removeCard;
     }
 
+    public String getDeckToRemove(){
+        return deckToRemove.getText();
+    }
+
+    public TextField getDeckToRemoveTf(){
+        return deckToRemove;
+    }
+
+    public Button getRemoveDeck(){
+        return removeDeck;
+    }
+
     public Button getLogout() {
         return logout;
     }
@@ -346,11 +483,19 @@ public class AdminLayout {
         return browseUserResults;
     }
 
+    public ListView<String> getBrowseDeckResults() {
+        return browseDeckResults;
+    }
+
     public VBox getUserVbox() {
         return userVbox;
     }
 
     public VBox getCardVbox() {
         return cardVbox;
+    }
+
+    public VBox getDeckVbox(){
+        return deckVbox;
     }
 }

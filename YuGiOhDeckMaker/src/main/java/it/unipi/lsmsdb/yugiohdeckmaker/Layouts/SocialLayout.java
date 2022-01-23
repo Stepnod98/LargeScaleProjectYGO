@@ -87,7 +87,7 @@ public class SocialLayout {
         userToFind.setLayoutY(40);
         userToFind.setFocusTraversable(false);
         userToFind.setMaxWidth(150);
-        findUser = new Button("FIND USER");
+        findUser = new Button("FIND");
         findUser.setLayoutY(40);
     	findUser.setLayoutX(420);
     	findUser.setMaxWidth(100);
@@ -99,7 +99,7 @@ public class SocialLayout {
         deckToFind.setLayoutY(40);
         deckToFind.setFocusTraversable(false);
         deckToFind.setMaxWidth(150);
-        findDeck = new Button("FIND DECK");
+        findDeck = new Button("FIND");
         findDeck.setLayoutY(40);
     	findDeck.setLayoutX(680);
     	findDeck.setMaxWidth(100);
@@ -531,7 +531,6 @@ public class SocialLayout {
         viewFriends.setLayoutY(390);
         viewFriends.setPrefWidth(150);
         viewFriends.setTextAlignment(TextAlignment.CENTER);
-
 
         viewFollowers = new Button("View your followers");
 
