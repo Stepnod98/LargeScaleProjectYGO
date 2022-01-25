@@ -6,7 +6,6 @@
 package it.unipi.lsmsdb.yugiohdeckmaker.Controller;
 
 import it.unipi.lsmsdb.yugiohdeckmaker.Entities.Deck;
-import it.unipi.lsmsdb.yugiohdeckmaker.Layouts.DeckLayout;
 import it.unipi.lsmsdb.yugiohdeckmaker.Layouts.*;
 import it.unipi.lsmsdb.yugiohdeckmaker.Entities.User;
 import javafx.application.Application;
@@ -29,13 +28,10 @@ public class GUIManager extends Application {
     private static DeckManagerLayout deckMLayout;
     private static DeckBuilder deckBuilder;
     private static DeckBuilderLayout deckBuilderLayout;
-    private static DeckOpenerLayout deckOLayout;
-    private static DeckOpener deckOpener;
     private static SocialLayout socialLayout;
     private static SocialManager socialManager;
     private static LoginLayout loginLayout;
     private static LoginManager loginManager;
-    //private static DeckLayout deckLayout;
     private static AdminLayout adminLayout;
     private static AdminPanel adminPanel;
     private static SignUpLayout signUpLayout;
