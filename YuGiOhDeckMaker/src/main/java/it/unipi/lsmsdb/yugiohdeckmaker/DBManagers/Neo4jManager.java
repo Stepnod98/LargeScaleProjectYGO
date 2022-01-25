@@ -97,10 +97,10 @@ public class Neo4jManager {
 
         MongoClient myClient = MongoClients.create("mongodb://localhost:27017");
         MongoDatabase database = myClient.getDatabase("test");
-        MongoCollection<Document> collection = database.getCollection("login");
+        MongoCollection<Document> collection = database.getCollection("users");
 
         Bson projectionFields = Projections.fields(Projections.excludeId(),Projections.include("login.username"));
-        List<Document> people = collection.find().projection(projectionFields).limit(50).into(new ArrayList<>());
+        List<Document> people = collection.find().projection(projectionFields).limit(500).into(new ArrayList<>());
 
         //Add into nodeDB
 
@@ -655,9 +655,4 @@ public class Neo4jManager {
         return likes[0];
     }
 
-    public static void main(String[] args){
-
-        //System.out.println(Neo4jManager.getRecentSharedDecks(new User("fabi8")));
-        Neo4jManager.delete(new Deck("prova2"));
-    }
 }

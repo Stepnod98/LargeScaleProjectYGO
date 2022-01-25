@@ -5,12 +5,14 @@
  */
 package it.unipi.lsmsdb.yugiohdeckmaker.DBManagers;
 
+import com.mongodb.BasicDBObject;
 import com.mongodb.MongoException;
 import com.mongodb.client.*;
 
 import com.mongodb.client.model.Updates;
 import com.mongodb.client.result.UpdateResult;
 import it.unipi.lsmsdb.yugiohdeckmaker.Controller.GUIManager;
+import it.unipi.lsmsdb.yugiohdeckmaker.Controller.LoginManager;
 import it.unipi.lsmsdb.yugiohdeckmaker.Entities.Card;
 import it.unipi.lsmsdb.yugiohdeckmaker.Entities.Deck;
 import it.unipi.lsmsdb.yugiohdeckmaker.Entities.User;
@@ -20,6 +22,8 @@ import com.mongodb.client.model.Aggregates;
 import com.mongodb.client.model.Filters;
 import static com.mongodb.client.model.Filters.*;
 import static com.mongodb.client.model.Indexes.*;
+import static com.mongodb.client.model.Projections.*;
+
 import com.mongodb.client.model.Projections;
 import java.util.*;
 import org.bson.conversions.Bson;
@@ -30,8 +34,8 @@ public class MongoDBManager {
     private static MongoDatabase database;
 
     static{
-        mongoClient = MongoClients.create("mongodb://localhost:27017");
-        database = mongoClient.getDatabase("test");
+        mongoClient = MongoClients.create("mongodb://localhost:27018");
+        database = mongoClient.getDatabase("examtest");
     }
 
     // TODO: 07/01/2022 testare in login
@@ -39,7 +43,7 @@ public class MongoDBManager {
 
         MongoCollection<Document> collection = database.getCollection("users");
 
-        Bson projectionFields = Projections.fields(Projections.excludeId(),Projections.include("login.username"));
+        Bson projectionFields = fields(Projections.excludeId(),Projections.include("login.username"));
         Bson filter = Filters.and(Filters.eq("login.username",user.getUsername()));
 
         List<Document> res = collection.find(filter).projection(projectionFields).into(new ArrayList<>());
@@ -48,14 +52,14 @@ public class MongoDBManager {
             return false;
         }
 
-        return res.size() == 1;
+        return res.size() >= 1;
     }
 
     public static boolean checkUser(String username, String pwd){
 
         MongoCollection<Document> collection = database.getCollection("users");
 
-        Bson projectionFields = Projections.fields(Projections.excludeId(),Projections.include("login.username","login.password"));
+        Bson projectionFields = fields(Projections.excludeId(),Projections.include("login.username","login.password"));
         Bson filter = Filters.and(Filters.eq("login.username",username),Filters.eq("login.sha1",pwd));
 
         List<Document> user = collection.find(filter).projection(projectionFields).into(new ArrayList<Document>());
@@ -71,7 +75,7 @@ public class MongoDBManager {
 
         MongoCollection<Document> collection = database.getCollection("users");
 
-        Bson projectionFields = Projections.fields(Projections.excludeId(),Projections.include("login.username","login.password"));
+        Bson projectionFields = fields(Projections.excludeId(),Projections.include("login.username","login.password"));
         Bson filter = Filters.eq("login.username",username);
 
         List<Document> user = collection.find(filter).projection(projectionFields).into(new ArrayList<Document>());
@@ -88,7 +92,7 @@ public class MongoDBManager {
 
         MongoCollection<Document> collection = database.getCollection("users");
 
-        Bson projectionFields = Projections.fields(Projections.excludeId(),Projections.include("login.email"));
+        Bson projectionFields = fields(Projections.excludeId(),Projections.include("login.email"));
         Bson filter = Filters.eq("login.email",email);
 
         List<Document> user = collection.find(filter).projection(projectionFields).into(new ArrayList<Document>());
@@ -111,8 +115,6 @@ public class MongoDBManager {
         return cardUrldoc.get(0).getString("imageUrl");
     }
 
-
-    // TODO: 23/01/2022 Prendere direttamente dall'utente 
     public static List<String> getDecks(String username) {
 
         MongoCollection<Document> users = database.getCollection("users");
@@ -124,9 +126,8 @@ public class MongoDBManager {
             if(cursor.hasNext()) {
                 Document doc = cursor.next();
                 deckList = doc.get("decks", List.class);
-
-                return deckList;
             }
+            return deckList;
         } catch (Exception ex) {ex.printStackTrace();}
 
         return null;
@@ -191,7 +192,7 @@ public class MongoDBManager {
 
         MongoCollection<Document> collection = database.getCollection("decks");
 
-        Bson projectionFields = Projections.fields(Projections.excludeId(), Projections.include("title"), Projections.include("creator"));
+        Bson projectionFields = fields(Projections.excludeId(), Projections.include("title"), Projections.include("creator"));
         List<Document> decks = collection.find(Filters.eq("title", title)).projection(projectionFields).into(new ArrayList<Document>());
 
         return decks.get(0).getString("creator");
@@ -338,7 +339,7 @@ public class MongoDBManager {
 
 
     public static boolean checkCardType(String t){
-        Bson projectionFields = Projections.fields(Projections.excludeId(),Projections.include("title"));
+        Bson projectionFields = fields(Projections.excludeId(),Projections.include("title"));
         MongoCollection<Document> card = database.getCollection("cards");
         Bson filterFusion = Filters.all("types", "Fusion");
         Bson filterLink = Filters.all("types", "Link");
@@ -593,6 +594,20 @@ public class MongoDBManager {
         return false;
     }
 
+    public static boolean saveDeck(Deck d, String username){
+        MongoCollection<Document> decks = database.getCollection("decks");
+        if(existsDeck(d.getTitle())){
+            return false;
+        }
+        if(d.toDocument() != null){
+            decks.insertOne(d.toDocument());
+            updateCards(d.getTitle());
+            updateUserDeck(username,d.getTitle());
+            return true;
+        }
+        return false;
+    }
+
     // !!!!!!Aggregations!!!!!!!
 
     /*
@@ -662,33 +677,42 @@ public class MongoDBManager {
     }*/
 
     public static List<String> findTopXCards(int x){
-        MongoCollection<Document> decks = database.getCollection("decks");
+
+        MongoCollection<Document> cards = database.getCollection("cards");
         List<String> cardlist = new ArrayList<String>();
-        Bson cards = unwind("$cards");
-        Bson sortCards = sortByCount("$cards.title");
+        Bson match = match(Filters.exists("decks"));
+        Bson p1 = project(fields(excludeId(),include("title"),computed("cont", new BasicDBObject("$size", "$decks"))));
+        Bson sortCards = sort(descending("cont"));
         Bson limit = limit(x);
         List<Document> doclist = new ArrayList<>();
-        decks.aggregate(Arrays.asList(cards, sortCards, limit))
+        cards.aggregate(Arrays.asList(match,p1,sortCards,limit))
                 .forEach(doc -> doclist.add(doc));
         System.out.println(doclist);
         for(int i = 0; i < doclist.size(); i++){
-            cardlist.add(doclist.get(i).getString("_id"));
+            cardlist.add(doclist.get(i).getString("title"));
         }
         return cardlist;
     }
 
     public static List<String> findTopXECards(int x){
-        MongoCollection<Document> decks = database.getCollection("decks");
+        MongoCollection<Document> decks = database.getCollection("cards");
         List<String> cardlist = new ArrayList<String>();
-        Bson cards = unwind("$extra_deck");
-        Bson sortCards = sortByCount("$extra_deck.title");
+        Bson match1 = match(Filters.exists("decks"));
+        Bson filterFusion = Filters.all("types", "Fusion");
+        Bson filterLink = Filters.all("types", "Link");
+        Bson filterSynchro = Filters.all("types", "Synchro");
+        Bson filterXyz = Filters.all("types", "Xyz");
+        Bson filter = Filters.or(filterFusion, filterLink, filterSynchro, filterXyz);
+        Bson sortCards = sort(descending("cont"));
+        Bson match2 = match(filter);
+        Bson p1 = project(fields(excludeId(),include("title"),computed("cont", new BasicDBObject("$size", "$decks"))));
         Bson limit = limit(x);
         List<Document> doclist = new ArrayList<>();
-        decks.aggregate(Arrays.asList(cards, sortCards, limit))
+        decks.aggregate(Arrays.asList(match1, match2, p1, sortCards, limit))
                 .forEach(doc -> doclist.add(doc));
         System.out.println(doclist);
         for(int i = 0; i < doclist.size(); i++){
-            cardlist.add(doclist.get(i).getString("_id"));
+            cardlist.add(doclist.get(i).getString("title"));
         }
         return cardlist;
     }
@@ -751,7 +775,7 @@ public class MongoDBManager {
                 new Document("_id", new Document("title", "$title")
                         .append("creator", "$creator")).append("total_count", new Document("$sum", 1)));
         Bson mySort = sort(ascending("total_count"));
-        Bson myLimit = limit(1);
+        Bson myLimit = limit(5);
         List<Document> doclist = new ArrayList<>();
         decks.aggregate(Arrays.asList(u, myMatch, groupMultiple, mySort, myLimit))
                 .forEach(doc -> doclist.add(doc));
@@ -794,9 +818,18 @@ public class MongoDBManager {
         mongoClient.close();
     }
 
+    private static void updateUserForTest(){
 
-    public static void main(String[] args){
-        System.out.println(MongoDBManager.getDecks("organicwolf613"));
-
+        MongoClient myClient = MongoClients.create("mongodb://localhost:27017");
+        MongoDatabase database = myClient.getDatabase("examtest");
+        MongoCollection<Document> users = database.getCollection("users");
+        List<Document> people = users.find().into(new ArrayList<Document>());
+        for(int i = 0; i < 50; i++) {
+            Bson update = Updates.set("login.sha1", LoginManager.encrypt("12345"));
+            Bson filter = Filters.eq("login.username", ((Document)people.get(i).get("login")).getString("username"));
+            UpdateResult result = users.updateOne(filter, update);
+            System.out.println("Modified document count: " + result.getModifiedCount());
+        }
     }
+
 }

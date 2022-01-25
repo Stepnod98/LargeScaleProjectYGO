@@ -18,7 +18,7 @@ import javafx.scene.layout.HBox;
 
 public class AdminPanel {
 
-    private AdminLayout adminLayout;
+    private final AdminLayout adminLayout;
     public AdminPanel(AdminLayout adminLayout){
         this.adminLayout = adminLayout;
         setEvents();
@@ -75,27 +75,6 @@ public class AdminPanel {
             GUIManager.clearAdminBoxes();
         }
 
-    }
-
-    // TODO: 23/01/2022 da togliere 
-    public void updateCardTitle(String oldTitle, String newTitle){
-        if(newTitle.equals("")){
-            return;
-        }
-        else{
-            MongoDBManager.updateCardTitle(oldTitle, newTitle);
-        }
-    }
-
-    // TODO: 23/01/2022 da togliere 
-    public void updateDeckTitle(String oldTitle, String newTitle){
-        if(newTitle.equals("")){
-            return;
-        }
-        else{
-            MongoDBManager.updateDeckTitle(oldTitle,newTitle);
-            Neo4jManager.updateDeck(oldTitle,newTitle);
-        }
     }
 
     public void updateUsername(String oldUsername, String newUsername){
@@ -322,43 +301,28 @@ public class AdminPanel {
         String title = adminLayout.getCardToRemoveTitle();
 
         Image image = new Image(MongoDBManager.getImageUrl(new Card(title)), 300, 300, true, false);
-        //Image image = new Image("file:./../img/backCard.png", 300, 300, true, false);
-
         adminLayout.showCardFindResults(title, image);
 
-        HBox hBox = (HBox) adminLayout.getCardVbox().getChildren().get(adminLayout.getCardVbox().getChildren().size()-3);
+        HBox hBox = (HBox) adminLayout.getCardVbox().getChildren().get(adminLayout.getCardVbox().getChildren().size()-1);
 
         ((Button) hBox.getChildren().get(0)).setText("REMOVE");
         ((Button) hBox.getChildren().get(0)).setOnAction((ActionEvent ev) -> {
             removeCard(title);
             hBox.getChildren().get(0).setDisable(true);
         });
-        HBox hBox2 = (HBox) adminLayout.getCardVbox().getChildren().get(adminLayout.getCardVbox().getChildren().size()-2);
-        HBox hBox3 = (HBox) adminLayout.getCardVbox().getChildren().get(adminLayout.getCardVbox().getChildren().size()-1);
-        ((Button) hBox3.getChildren().get(0)).setText("UPDATE");
-        ((Button) hBox3.getChildren().get(0)).setOnAction((ActionEvent ev) -> {
-            updateCardTitle(title, ((TextField) hBox2.getChildren().get(0)).getText());
-        });
     }
 
     private void setDeckVbox(){
         String title = adminLayout.getDeckToRemove();
-        //String creator = "prova";
         String creator = MongoDBManager.getCreator(title);
         adminLayout.showDeckFindResults(title, creator);
 
-        HBox hBox1 = (HBox) adminLayout.getDeckVbox().getChildren().get(adminLayout.getDeckVbox().getChildren().size()-3);
+        HBox hBox1 = (HBox) adminLayout.getDeckVbox().getChildren().get(adminLayout.getDeckVbox().getChildren().size()-1);
 
         ((Button) hBox1.getChildren().get(0)).setText("REMOVE");
         ((Button) hBox1.getChildren().get(0)).setOnAction((ActionEvent ev) -> {
             removeDeck(title);
             hBox1.getChildren().get(0).setDisable(true);
-        });
-        HBox hBox2 = (HBox) adminLayout.getDeckVbox().getChildren().get(adminLayout.getDeckVbox().getChildren().size()-2);
-        HBox hBox3 = (HBox) adminLayout.getDeckVbox().getChildren().get(adminLayout.getDeckVbox().getChildren().size()-1);
-        ((Button) hBox3.getChildren().get(0)).setText("UPDATE");
-        ((Button) hBox3.getChildren().get(0)).setOnAction((ActionEvent ev) -> {
-            updateDeckTitle(title, ((TextField) hBox2.getChildren().get(0)).getText());
         });
     }
 }

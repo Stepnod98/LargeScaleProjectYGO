@@ -18,6 +18,7 @@ public class Card {
     private int atk;
     private int def;
     private List<String> types;
+    private List<String> archetypes;
 
     public Card(){this.title = "";};
 
@@ -58,7 +59,11 @@ public class Card {
             this.types = new ArrayList<>();
             types.addAll(documentList);
         }
-
+        if(d.get("archetypes") != null){
+            List<String> documentList = d.get("archetypes", List.class);
+            this.archetypes = new ArrayList<>();
+            archetypes.addAll(documentList);
+        }
     }
 
 
@@ -112,11 +117,17 @@ public class Card {
                         .append("def", this.defString)
                         .append("imageUrl", this.imageUrl);
             }
-
+            if(archetypes != null)
+                doc.append("archetypes", this.archetypes);
             return doc;
         }else{
-            return new Document("title", this.title)
+
+            Document doc = new Document("title", this.title)
                     .append("imageUrl", this.imageUrl);
+            if(archetypes != null)
+                doc.append("archetypes", this.archetypes);
+
+            return doc;
         }
     }
 

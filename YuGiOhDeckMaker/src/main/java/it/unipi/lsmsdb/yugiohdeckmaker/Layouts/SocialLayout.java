@@ -106,6 +106,7 @@ public class SocialLayout {
         viewD = new Label("View Recommended Decks:");
         viewD.setLayoutX(20);
         viewD.setLayoutY(120);
+        viewD.setStyle("-fx-font-size: 9.5pt");
         viewRecDeck = new Button("VIEW");
     	viewRecDeck.setLayoutY(120);
     	viewRecDeck.setLayoutX(180);
@@ -113,6 +114,7 @@ public class SocialLayout {
         viewU = new Label("View Recommended Users:");
         viewU.setLayoutX(260);
         viewU.setLayoutY(120);
+        viewU.setStyle("-fx-font-size: 9.5pt");
         viewRecUser = new Button("VIEW");
     	viewRecUser.setLayoutY(120);
     	viewRecUser.setLayoutX(420);
@@ -531,13 +533,15 @@ public class SocialLayout {
         viewFriends.setLayoutY(390);
         viewFriends.setPrefWidth(150);
         viewFriends.setTextAlignment(TextAlignment.CENTER);
+        viewFriends.setStyle("-fx-font-size: 9.5pt");
 
-        viewFollowers = new Button("View your followers");
+        viewFollowers = new Button("View followers");
 
         viewFollowers.setLayoutX(45);
         viewFollowers.setLayoutY(420);
         viewFollowers.setPrefWidth(150);
         viewFollowers.setTextAlignment(TextAlignment.CENTER);
+        viewFollowers.setStyle("-fx-font-size: 9.5pt");
 
         viewSharedDecks = new Button("View shared decks");
 
@@ -545,6 +549,7 @@ public class SocialLayout {
         viewSharedDecks.setLayoutY(450);
         viewSharedDecks.setPrefWidth(150);
         viewSharedDecks.setTextAlignment(TextAlignment.CENTER);
+        viewSharedDecks.setStyle("-fx-font-size: 9.5pt");
 
         viewLikedDecks = new Button("View liked decks");
 
@@ -552,6 +557,7 @@ public class SocialLayout {
         viewLikedDecks.setLayoutY(480);
         viewLikedDecks.setPrefWidth(150);
         viewLikedDecks.setTextAlignment(TextAlignment.CENTER);
+        viewLikedDecks.setStyle("-fx-font-size: 9.5pt");
 
         viewRecentDecks = new Button("View recent decks");
 
@@ -559,6 +565,7 @@ public class SocialLayout {
         viewRecentDecks.setLayoutY(510);
         viewRecentDecks.setPrefWidth(150);
         viewRecentDecks.setTextAlignment(TextAlignment.CENTER);
+        viewRecentDecks.setStyle("-fx-font-size: 9.5pt");
     }
 
     public void showUserFoundActions(){
@@ -568,6 +575,7 @@ public class SocialLayout {
         viewFollowers.setLayoutY(420);
         viewFollowers.setPrefWidth(150);
         viewFollowers.setTextAlignment(TextAlignment.CENTER);
+        viewFollowers.setStyle("-fx-font-size: 9.5pt");
 
         viewSharedDecks = new Button("View shared decks");
 
@@ -575,6 +583,7 @@ public class SocialLayout {
         viewSharedDecks.setLayoutY(450);
         viewSharedDecks.setPrefWidth(150);
         viewSharedDecks.setTextAlignment(TextAlignment.CENTER);
+        viewSharedDecks.setStyle("-fx-font-size: 9.5pt");
 
         followUserButton = new Button("Action");
 
@@ -582,6 +591,7 @@ public class SocialLayout {
         followUserButton.setLayoutY(480);
         followUserButton.setPrefWidth(150);
         followUserButton.setTextAlignment(TextAlignment.CENTER);
+        followUserButton.setStyle("-fx-font-size: 9.5pt");
     }
 
 

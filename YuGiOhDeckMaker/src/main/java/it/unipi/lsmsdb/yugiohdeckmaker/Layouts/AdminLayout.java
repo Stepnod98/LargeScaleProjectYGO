@@ -16,7 +16,6 @@ import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import java.util.List;
 
-
 public class AdminLayout {
     private Label adminLabel;
     private Label add;
@@ -165,7 +164,7 @@ public class AdminLayout {
         vbox = new VBox();
         logout = new Button("LOGOUT");
         logout.setLayoutX(640);
-        logout.setLayoutY(10);
+        logout.setLayoutY(560);
         logout.setMaxWidth(300);
 
         browseCardResults = new ListView<>();
@@ -301,24 +300,8 @@ public class AdminLayout {
         commandBox.setAlignment(Pos.CENTER);
         commandBox.setPadding(new Insets(20, 0,0, 0));
 
-        HBox changeBox = new HBox();
-        TextField tf = new TextField();
-        tf.setPromptText("Change Title");
-        tf.setPrefSize(100, 20);
-        changeBox.getChildren().addAll(tf);
-        changeBox.setAlignment(Pos.CENTER);
-        changeBox.setPadding(new Insets(10, 0,0, 0));
 
-        HBox updateBox = new HBox();
-        Button update = new Button("ACTION");
-
-        update.setPrefSize(100, 20);
-
-        updateBox.getChildren().addAll(update);
-        updateBox.setAlignment(Pos.CENTER);
-        updateBox.setPadding(new Insets(10, 0,0, 0));
-
-        deckVbox.getChildren().addAll(titleBox, creatorBox, commandBox, changeBox, updateBox);
+        deckVbox.getChildren().addAll(titleBox, creatorBox, commandBox);
 
 
         deckVbox.setLayoutY(60);
@@ -359,25 +342,7 @@ public class AdminLayout {
         commandBox.setAlignment(Pos.CENTER);
         commandBox.setPadding(new Insets(30, 0,0, 0));
 
-        HBox changeBox = new HBox();
-        TextField tf = new TextField();
-        tf.setPromptText("Change Title");
-        tf.setPrefSize(100, 20);
-        changeBox.getChildren().addAll(tf);
-        changeBox.setAlignment(Pos.CENTER);
-        changeBox.setPadding(new Insets(20, 0,0, 0));
-
-        HBox updateBox = new HBox();
-        Button update = new Button("ACTION");
-
-        update.setPrefSize(100, 20);
-
-        updateBox.getChildren().addAll(update);
-        updateBox.setAlignment(Pos.CENTER);
-        updateBox.setPadding(new Insets(20, 0,0, 0));
-
-
-        cardVbox.getChildren().addAll(titleBox,imageBox,commandBox, changeBox, updateBox);
+        cardVbox.getChildren().addAll(titleBox,imageBox,commandBox);
 
 
         cardVbox.setLayoutY(60);

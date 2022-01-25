@@ -17,6 +17,7 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 
 import java.util.ArrayList;
@@ -99,11 +100,12 @@ public class DeckBuilderLayout {
         topCards.setLayoutX(550);
         topCards.setLayoutY(170);
         topCards.setStyle("-fx-font-weight: bold; -fx-text-fill: white;");
-        topCardNumber = new TextField("5");
+        topCardNumber = new TextField();
         topCardNumber.setLayoutX(550);
         topCardNumber.setLayoutY(195);
         topCardNumber.setFocusTraversable(false);
         topCardNumber.setMaxWidth(50);
+        topCardNumber.setPromptText("Value");
         findTopCards = new Button("FIND");
         findTopCards.setLayoutY(195);
         findTopCards.setLayoutX(610);
@@ -112,11 +114,12 @@ public class DeckBuilderLayout {
         topECards.setLayoutX(550);
         topECards.setLayoutY(235);
         topECards.setStyle("-fx-font-weight: bold; -fx-text-fill: white;");
-        topECardNumber = new TextField("5");
+        topECardNumber = new TextField( );
         topECardNumber.setLayoutX(550);
         topECardNumber.setLayoutY(260);
         topECardNumber.setFocusTraversable(false);
         topECardNumber.setMaxWidth(50);
+        topECardNumber.setPromptText("Value");
         findTopECards = new Button("FIND");
         findTopECards.setLayoutY(260);
         findTopECards.setLayoutX(610);
@@ -348,8 +351,8 @@ public class DeckBuilderLayout {
         HBox titleBox = new HBox();
         Label titleLabel = new Label("Title: ");
         titleLabel.setStyle("-fx-font-weight: bold;");
-        Text titleText = new Text(title);
-
+        Label titleText = new Label(title);
+        titleText.setStyle("-fx-text-inner-color: black");
 
         titleBox.getChildren().addAll(titleLabel, titleText);
         titleBox.setStyle("-fx-font-size: 15");

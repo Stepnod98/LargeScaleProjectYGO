@@ -556,7 +556,7 @@ public class SocialManager {
                     hBox.getChildren().get(0).setDisable(true);
                 });
             }else{
-                ((Button)hBox.getChildren().get(0)).setText("Remove like");
+                ((Button)hBox.getChildren().get(0)).setText("Unlike");
                 ((Button)hBox.getChildren().get(0)).setOnAction((ActionEvent ev) -> {
                     unlike(deck);
                     hBox.getChildren().get(0).setDisable(true);

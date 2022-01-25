@@ -7,10 +7,17 @@ package it.unipi.lsmsdb.yugiohdeckmaker.Controller;
 
 import static java.lang.Integer.parseInt;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.Random;
 
+import com.mongodb.client.MongoClient;
+import com.mongodb.client.MongoClients;
+import com.mongodb.client.MongoCollection;
+import com.mongodb.client.MongoDatabase;
+import com.mongodb.client.model.Filters;
+import com.mongodb.client.model.Projections;
 import it.unipi.lsmsdb.yugiohdeckmaker.DBManagers.MongoDBManager;
 import it.unipi.lsmsdb.yugiohdeckmaker.Entities.Card;
 import it.unipi.lsmsdb.yugiohdeckmaker.Entities.Deck;
@@ -23,6 +30,8 @@ import javafx.scene.control.Button;
 import javafx.scene.control.TableView;
 import javafx.scene.image.Image;
 import javafx.scene.layout.HBox;
+import org.bson.Document;
+import org.bson.conversions.Bson;
 
 public class DeckBuilder {
     private Deck deck;
@@ -353,18 +362,38 @@ public class DeckBuilder {
         if(action.equals("ADD")){
             ((Button) hBox.getChildren().get(0)).setOnAction((ActionEvent ev) -> {
                 addCard(cardTitle);
+                clearSelection();
                 GUIManager.clearDeckBuilderBoxes();
             });
         }else{
             ((Button) hBox.getChildren().get(0)).setOnAction((ActionEvent ev) -> {
                 removeCard(cardTitle);
+                clearSelection();
                 GUIManager.clearDeckBuilderBoxes();
             });
         }
 
     }
 
-    private static boolean isNumeric(String str) {
+    private void clearSelection(){
+        if(deckBuilderLayout.getDeckCreationTable() != null) {
+            clearSelection(deckBuilderLayout.getDeckCreationTable());
+        }
+        if(deckBuilderLayout.getExtraDeckCreationTable() != null){
+            clearSelection(deckBuilderLayout.getExtraDeckCreationTable());
+        }
+        if(deckBuilderLayout.getCardFindResultTable() != null) {
+            clearSelection(deckBuilderLayout.getCardFindResultTable());
+        }
+    }
+
+    private void clearSelection(TableView tw){
+        if(tw.getSelectionModel().getSelectedItem() != null) {
+            tw.getSelectionModel().clearSelection();
+        }
+    }
+
+    private boolean isNumeric(String str) {
         try {
             Integer.parseInt(str);
             return true;
@@ -372,4 +401,5 @@ public class DeckBuilder {
             return false;
         }
     }
+
 }
