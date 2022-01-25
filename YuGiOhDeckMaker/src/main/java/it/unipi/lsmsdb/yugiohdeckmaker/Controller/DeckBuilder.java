@@ -349,9 +349,10 @@ public class DeckBuilder {
     }
 
     private void setCardVbox(String cardTitle, String action){
-
-        Image image = new Image(MongoDBManager.getImageUrl(new Card(cardTitle)), 250, 250, true, false);
-
+        Image image = new Image("file:./../img/backCard.png", 250, 250, true, false);
+        if(MongoDBManager.getImageUrl(new Card(cardTitle)) != null) {
+            image = new Image(MongoDBManager.getImageUrl(new Card(cardTitle)), 250, 250, true, false);
+        }
 
         deckBuilderLayout.showCardFindResults(cardTitle, image);
 
