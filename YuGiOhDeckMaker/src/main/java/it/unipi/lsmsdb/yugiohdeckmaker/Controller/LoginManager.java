@@ -26,6 +26,7 @@ public class LoginManager {
         String password = encrypt(loginLayout.getPassword());
 
         if(username.equals("admin") && password.equals(encrypt("admin"))){
+            GUIManager.setCurrentUser(new User("admin"));
             GUIManager.openAdminPanel();
         }else if(username.isEmpty() || password.isEmpty() || !MongoDBManager.checkUser(username,password)){
             loginLayout.printError("User\\pass not correct");
@@ -45,7 +46,7 @@ public class LoginManager {
     }
 
 
-    private static String encrypt(String pass){
+    public static String encrypt(String pass){
         java.security.MessageDigest d = null;
         try {
             d = java.security.MessageDigest.getInstance("SHA-1");
@@ -57,20 +58,5 @@ public class LoginManager {
         return new String(d.digest());
     }
 
-
-    //This method was used to test if the login system works
-    /*private static void updateUserForTest(){
-        MongoClient myClient = MongoClients.create("mongodb://localhost:27017");
-        MongoDatabase database = myClient.getDatabase("test");
-        MongoCollection<Document> collection = database.getCollection("login");
-        Bson update = Updates.set("login.sha1",encrypt("inferno"));
-        Bson filter = Filters.eq("login.username","crazymouse121");
-        UpdateResult result = collection.updateOne(filter,update);
-        System.out.println("Modified document count: " + result.getModifiedCount());
-    }
-
-    public static void main(String[] args){
-        //LoginManager.updateUserForTest();
-    }*/
 
 }

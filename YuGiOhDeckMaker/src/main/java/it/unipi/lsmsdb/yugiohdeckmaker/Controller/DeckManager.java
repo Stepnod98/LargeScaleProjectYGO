@@ -12,136 +12,186 @@ import it.unipi.lsmsdb.yugiohdeckmaker.DBManagers.MongoDBManager;
 import it.unipi.lsmsdb.yugiohdeckmaker.DBManagers.Neo4jManager;
 import it.unipi.lsmsdb.yugiohdeckmaker.Entities.Deck;
 import it.unipi.lsmsdb.yugiohdeckmaker.Layouts.DeckManagerLayout;
+import javafx.application.Platform;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
+import javafx.scene.control.Button;
+import javafx.scene.control.TableView;
+import javafx.scene.layout.HBox;
 
 public class DeckManager {
-    private static DeckManagerLayout deckManagerLayout;
+    private DeckManagerLayout deckManagerLayout;
     public DeckManager(DeckManagerLayout deckManagerLayout){
         this.deckManagerLayout = deckManagerLayout;
         
     }
-    public static void findDeck(){
+    public void findDeck(){
         String title = deckManagerLayout.getDeckToBrowse();
         if(!MongoDBManager.existsDeck(title))
             return;
+        GUIManager.clearDeckManagerBoxes();
+        GUIManager.clearDeckManagerLayout();
+        deckManagerLayout.showDeckFindResults(title,GUIManager.getCurrentUser());
+        setDeckVbox(title);
+        GUIManager.addNode(deckManagerLayout.getDeckVbox());
+    }
 
-        Deck d = MongoDBManager.findDeck(title);
-        int i;
-        List<String> result = new ArrayList<String>();
-        for(i = 0; i < d.getCards().size(); i++){
-            result.add(d.getCards().get(i).getTitle());
-        }
-        for(i = 0; i < d.getECards().size(); i++){
-            result.add(d.getECards().get(i).getTitle());
-        }
-        deckManagerLayout.showDeckResults(result);
-        GUIManager.openDeckManagerResults(deckManagerLayout);
+    public void findYourDecks(){
+        GUIManager.clearDeckManagerLayout();
+        GUIManager.clearDeckManagerBoxes();
+        deckManagerLayout.showDeckResults(MongoDBManager.getDecks(GUIManager.getCurrentUser()));
+        setDeckResultEvents();
+        GUIManager.addNode(deckManagerLayout.getDeckResultTable());
     }
     
-    public static void removeDeck(){
-        String title = deckManagerLayout.getDeckToRemove();
-        if(MongoDBManager.existsDeck(title)){
-            MongoDBManager.remove(title);
-            Neo4jManager.delete(new Deck(title));
-        }
-
-    }
-    
-    public static void findTopXCard(){
-        int x = parseInt(deckManagerLayout.getCardsRank());
-        List<String> topList = new ArrayList<>();
-        topList = MongoDBManager.findTopXCards(x);
-        //add elements to gui
-        deckManagerLayout.showCardResults(topList);
-        /*List<String> list = new ArrayList<>();
-        list.add("g1");
-        list.add("g2");
-        list.add("g3");
-        list.add("g4");
-        list.add("g5");
-        deckManagerLayout.showCardResults(list);*/
-        GUIManager.openDeckManagerResults(deckManagerLayout);
-    }
-    
-    public static void findTopXECard(){
-        int x = parseInt(deckManagerLayout.getECardsRank());
-        List<String> topList = new ArrayList<>();
-        topList = MongoDBManager.findTopXECards(x);
-        //add elements to gui
-        deckManagerLayout.showCardResults(topList);
-        //test:
-        /*List<String> list = new ArrayList<>();
-        list.add("s1");
-        list.add("s2");
-        list.add("s3");
-        list.add("s4");
-        list.add("s5");
-        list.add("s6");
-        list.add("s7");
-        deckManagerLayout.showCardResults(list);*/
-        GUIManager.openDeckManagerResults(deckManagerLayout);
-        
-    }
-    
-    public static void findMagicTrapDeck(){
+    public void findMagicTrapDeck(){
         List<String> topList = new ArrayList<>();
         topList = MongoDBManager.findMagicTrapDeck();
-        //add elements to gui
+        GUIManager.clearDeckManagerLayout();
+        GUIManager.clearDeckManagerBoxes();
         deckManagerLayout.showDeckResults(topList);
-        //test:
-        /*List<String> list = new ArrayList<>();
-        list.add("g1");
-        list.add("g2");
-        list.add("g3");
-        list.add("g4");
-        list.add("g5");
-        deckManagerLayout.showDeckResults(list);*/
-        GUIManager.openDeckManagerResults(deckManagerLayout);
+        setDeckResultEvents();
+        GUIManager.addNode(deckManagerLayout.getDeckResultTable());
         
     }
      
-    public static void findArchetypeDeck(){
-        List<String> topList = new ArrayList<>();
-        topList = MongoDBManager.findArchetypeDeck();
-        //add elements to gui
-        deckManagerLayout.showDeckResults(topList);
-        //test:
-        /*List<String> list = new ArrayList<>();
-        list.add("gg1");
-        list.add("g2");
-        list.add("g3");
-        list.add("g4");
-        list.add("g5");
-        deckManagerLayout.showDeckResults(list);*/
-        GUIManager.openDeckManagerResults(deckManagerLayout);
+    public void findArchetypeDeck(){
+        GUIManager.clearDeckManagerLayout();
+        GUIManager.clearDeckManagerBoxes();
+        deckManagerLayout.showDeckResults(MongoDBManager.findArchetypeDeck());
+        setDeckResultEvents();
+        GUIManager.addNode(deckManagerLayout.getDeckResultTable());
+    }
+
+    // TODO: 23/01/2022 usare is numeric!!
+    public void findAvgAtkDecks(){
+        if(isNumeric(deckManagerLayout.getAvgAtk())) {
+            List<String> topList = new ArrayList<>();
+            topList = MongoDBManager.findMostAvgAtk(Integer.parseInt(deckManagerLayout.getAvgAtk()));
+            GUIManager.clearDeckManagerLayout();
+            GUIManager.clearDeckManagerBoxes();
+            deckManagerLayout.showDeckResults(topList);
+            setDeckResultEvents();
+            GUIManager.addNode(deckManagerLayout.getDeckResultTable());
+        }
     }
     
-    public static void findAvgAtkDecks(){
-        List<String> topList = new ArrayList<>();
-        topList = MongoDBManager.findMostAvgAtk(Integer.parseInt(deckManagerLayout.getAvgAtk()));
-        //add elements to gui
-        deckManagerLayout.showDeckResults(topList);
-        //test:
-        /*List<String> list = new ArrayList<>();
-        list.add("gg1");
-        list.add("g2");
-        list.add("g3");
-        list.add("g4");
-        list.add("g5");
-        deckManagerLayout.showDeckResults(list);*/
-        GUIManager.openDeckManagerResults(deckManagerLayout);
-    }
-    
-    public static void setEvents(){
+    public void setEvents(){
+
+        
         deckManagerLayout.getFindDeck().setOnAction((ActionEvent ev)->{findDeck();});
-        deckManagerLayout.getRemoveDeck().setOnAction((ActionEvent ev)->{removeDeck();});
-        deckManagerLayout.getFindTopCards().setOnAction((ActionEvent ev)->{findTopXCard();});
-        deckManagerLayout.getFindTopECards().setOnAction((ActionEvent ev)->{findTopXECard();});
         deckManagerLayout.getFindMagicTrapDecks().setOnAction((ActionEvent ev)->{findMagicTrapDeck();});
         deckManagerLayout.getFindArchetypeDecks().setOnAction((ActionEvent ev)->{findArchetypeDeck();});
         deckManagerLayout.getMostAvgAtkDecks().setOnAction((ActionEvent ev)->{findAvgAtkDecks();});
+        deckManagerLayout.getShowYourDecksButton().setOnAction((ActionEvent ev)->{findYourDecks();});
         deckManagerLayout.getBack().setOnAction((ActionEvent ev)->{GUIManager.openAppManager();});
+
+        deckManagerLayout.getDeckToBrowseTf().textProperty().addListener(new ChangeListener<String>() {
+            @Override
+            public void changed(ObservableValue<? extends String> observable,
+                                String oldValue, String newValue) {
+
+                if(newValue.equals("")){
+                    deckManagerLayout.getBrowseDeckToFind().setVisible(false);
+                }else {
+
+                    deckManagerLayout.updateBrowseDeckToFind(MongoDBManager.findYourDecks(newValue));
+                }
+            }
+        });
+
+        deckManagerLayout.getDeckToBrowseTf().focusedProperty().addListener(new ChangeListener<Boolean>() {
+            @Override
+            public void changed(ObservableValue<? extends Boolean> arg0, Boolean oldPropertyValue, Boolean newPropertyValue)
+            {
+                if (!newPropertyValue){
+                    deckManagerLayout.getBrowseDeckToFind().setVisible(false);
+                }
+            }
+        });
+
+        deckManagerLayout.getBrowseDeckToFind().focusedProperty().addListener(new ChangeListener<Boolean>() {
+            @Override
+            public void changed(ObservableValue<? extends Boolean> arg0, Boolean oldPropertyValue, Boolean newPropertyValue)
+            {
+                if(newPropertyValue){
+                    deckManagerLayout.getBrowseDeckToFind().setVisible(true);
+                }else {
+                    deckManagerLayout.getBrowseDeckToFind().setVisible(false);
+                }
+            }
+        });
+
+        setBrowseEvents();
     }
-     
-    
+
+    private void setDeckResultEvents(){
+        deckManagerLayout.getDeckResultTable().getSelectionModel().selectedItemProperty().addListener(new ChangeListener<String>() {
+            @Override
+            public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
+                Platform.runLater(() -> showDeckTask());
+                System.out.println(newValue);
+            }
+        });
+    }
+
+    private void setDeckVbox(String title){
+        HBox hBox = (HBox) deckManagerLayout.getDeckVbox().getChildren().get(deckManagerLayout.getDeckVbox().getChildren().size()-1);
+
+        ((Button)hBox.getChildren().get(0)).setOnAction((ActionEvent ev) -> {
+            Deck d = MongoDBManager.findDeck(title);
+            GUIManager.openDeckBuilder(d);
+            hBox.getChildren().get(0).setDisable(true);
+        });
+
+        ((Button)hBox.getChildren().get(1)).setOnAction((ActionEvent ev) -> {
+            if(MongoDBManager.existsDeck(title)){
+                MongoDBManager.removeDeck(title);
+                Neo4jManager.delete(new Deck(title));
+                GUIManager.clearDeckManagerLayout();
+                GUIManager.clearDeckManagerBoxes();
+            }
+        });
+    }
+
+    private void setBrowseEvents(){
+        deckManagerLayout.getBrowseDeckToFind().getSelectionModel().selectedItemProperty().addListener(new ChangeListener<String>() {
+            @Override
+            public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
+                Platform.runLater(() -> browseCardToAddTask());
+            }
+        });
+    }
+
+    private void browseCardToAddTask(){
+        if(deckManagerLayout.getBrowseDeckToFind().getSelectionModel().getSelectedItem() != null) {
+            String selected = deckManagerLayout.getBrowseDeckToFind().getSelectionModel().getSelectedItem();
+            deckManagerLayout.getBrowseDeckToFind().getSelectionModel().clearSelection();
+            deckManagerLayout.getDeckToBrowseTf().setText(selected);
+            deckManagerLayout.getBrowseDeckToFind().setVisible(false);
+        }
+    }
+
+    private void showDeckTask(){
+        if(deckManagerLayout.getDeckResultTable().getSelectionModel().getSelectedItem() != null) {
+            String title = deckManagerLayout.getDeckResultTable().getSelectionModel().getSelectedItem();
+            GUIManager.clearDeckManagerBoxes();
+
+            deckManagerLayout.showDeckFindResults(title,GUIManager.getCurrentUser());
+            setDeckVbox(title);
+
+            GUIManager.addNode(deckManagerLayout.getDeckVbox());
+
+        }
+    }
+
+    private static boolean isNumeric(String str) {
+        try {
+            Integer.parseInt(str);
+            return true;
+        } catch(NumberFormatException | ClassCastException e){
+            return false;
+        }
+    }
 }

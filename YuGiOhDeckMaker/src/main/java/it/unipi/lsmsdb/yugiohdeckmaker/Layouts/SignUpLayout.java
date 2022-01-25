@@ -9,9 +9,9 @@ public class SignUpLayout {
     private Label user;
     private TextField username;
     private Label pwd;
-    private TextField password;
+    private PasswordField password;
     private Label confPwd;
-    private TextField confirmPassword;
+    private PasswordField confirmPassword;
     private Label fName;
     private TextField firstName;
     private Label lName;
@@ -69,7 +69,7 @@ public class SignUpLayout {
         pwd = new Label("Insert Password");
         pwd.setLayoutX(280);
         pwd.setLayoutY(120);
-        password = new TextField();
+        password = new PasswordField();
         password.setLayoutX(280);
         password.setLayoutY(160);
         password.setFocusTraversable(false);
@@ -77,7 +77,7 @@ public class SignUpLayout {
         confPwd = new Label("Confirm Password");
         confPwd.setLayoutX(280);
         confPwd.setLayoutY(200);
-        confirmPassword = new TextField();
+        confirmPassword = new PasswordField();
         confirmPassword.setLayoutX(280);
         confirmPassword.setLayoutY(240);
         confirmPassword.setFocusTraversable(false);

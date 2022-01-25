@@ -12,10 +12,7 @@ import javafx.scene.Group;
 import javafx.scene.Parent;
 import javafx.scene.layout.Pane;
 
-/**
- *
- * @author Stefano
- */
+
 public class DeckLayout {
     public static final int tileSize = 40;
     public static final int height = 10;

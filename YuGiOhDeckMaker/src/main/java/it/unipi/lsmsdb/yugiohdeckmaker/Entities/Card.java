@@ -11,9 +11,14 @@ import org.bson.Document;
 
 
 public class Card {
-    private int id;
     private String title;
     private String imageUrl;
+    private String atkString;
+    private String defString;
+    private int atk;
+    private int def;
+    private List<String> types;
+    private List<String> archetypes;
 
     public Card(){this.title = "";};
 
@@ -26,52 +31,41 @@ public class Card {
         this.imageUrl = imageUrl;
     }
 
+
     public Card(Document d){
         this.title = d.getString("title");
         this.imageUrl = d.getString("imageUrl");
+
+        if(d.get("types") != null){
+            try {
+                if(d.getInteger("atk") != null) {
+                    this.atk = d.getInteger("atk");
+                }
+            } catch (ClassCastException exc) {
+                if(d.getString("atk") != null){
+                    this.atkString = d.getString("atk");
+                }
+            }
+            try{
+                if(d.getInteger("def") != null) {
+                    this.def = d.getInteger("def");
+                }
+            } catch (ClassCastException exc) {
+                if(d.getString("def") != null){
+                    this.defString = d.getString("def");
+                }
+            }
+            List<String> documentList = d.get("types", List.class);
+            this.types = new ArrayList<>();
+            types.addAll(documentList);
+        }
+        if(d.get("archetypes") != null){
+            List<String> documentList = d.get("archetypes", List.class);
+            this.archetypes = new ArrayList<>();
+            archetypes.addAll(documentList);
+        }
     }
 
-
-    //This directly from mongo
-    /*public Card(Document d){
-        this.id = d.getInteger("id");
-        this.title = d.getString("title");
-        this.wikiUrl = d.getString("wikiUrl");
-        this.imgLocation = d.getString("image");
-        this.lore = d.getString("lore");
-        List<Document> archetypesRel = d.get("archetypesRelated",List.class);
-        for (Document document : archetypesRel) {
-            this.archetypesRelated.add(document.toString());
-        }
-        List<Document> archetypes = d.get("archetypes",List.class);
-        for (Document document : archetypes) {
-            this.archetypes.add(document.toString());
-        }
-        List<Document> actions = d.get("actions",List.class);
-        for (Document document : actions) {
-            this.actions.add(document.toString());
-        }
-        List<Document> effects = d.get("effectTypes",List.class);
-        for (Document document : effects) {
-            this.effectTypes.add(document.toString());
-        }
-        this.imageUrl = d.getString("imageUrl");
-        List<Document> tips = d.get("tips",List.class);
-        for (Document document : tips) {
-            this.tips.add(document.getString("value"));
-        }
-        List<Document> sets = d.get("sets",List.class);
-        for (Document document : sets) {
-            this.sets.add(new Set(document.getString("number"),document.getString("setName"),document.getString("rarity")));
-        }
-        List<Document> types = d.get("types",List.class);
-        for (Document document : types) {
-            this.types.add(document.toString());
-        }
-        this.level = d.getString("level");
-        this.atk = d.getInteger("atk");
-        this.def = d.getInteger("def");
-    }*/
 
     public String getTitle(){
         return title;
@@ -80,7 +74,61 @@ public class Card {
         return imageUrl;
     }
 
-    public int getId() {
-        return id;
+    public int getAtk() {
+        return atk;
     }
+
+    public int getDef() {
+        return def;
+    }
+
+    public List<String> getTypes() {
+        return types;
+    }
+
+    public Document toDocument(){
+
+        if(types != null) {
+
+            Document doc;
+
+            if(atkString == null && defString == null){
+                doc = new Document("title", this.title)
+                        .append("types", this.types)
+                        .append("atk", this.atk)
+                        .append("def", this.def)
+                        .append("imageUrl", this.imageUrl);
+            }else if (atkString != null && defString == null){
+                doc = new Document("title", this.title)
+                        .append("types", this.types)
+                        .append("atk", this.atkString)
+                        .append("def", this.def)
+                        .append("imageUrl", this.imageUrl);
+            } else if (atkString == null && defString != null){
+                doc = new Document("title", this.title)
+                        .append("types", this.types)
+                        .append("atk", this.atk)
+                        .append("def", this.defString)
+                        .append("imageUrl", this.imageUrl);
+            } else{
+                doc = new Document("title", this.title)
+                        .append("types", this.types)
+                        .append("atk", this.atkString)
+                        .append("def", this.defString)
+                        .append("imageUrl", this.imageUrl);
+            }
+            if(archetypes != null)
+                doc.append("archetypes", this.archetypes);
+            return doc;
+        }else{
+
+            Document doc = new Document("title", this.title)
+                    .append("imageUrl", this.imageUrl);
+            if(archetypes != null)
+                doc.append("archetypes", this.archetypes);
+
+            return doc;
+        }
+    }
+
 }

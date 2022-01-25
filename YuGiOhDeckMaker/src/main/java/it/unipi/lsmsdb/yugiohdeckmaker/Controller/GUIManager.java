@@ -17,6 +17,8 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
+import javafx.scene.paint.Color;
+import javafx.scene.paint.ImagePattern;
 import javafx.stage.Stage;
 
 public class GUIManager extends Application {
@@ -26,14 +28,14 @@ public class GUIManager extends Application {
     private static DeckManager deckManager;
     private static DeckManagerLayout deckMLayout;
     private static DeckBuilder deckBuilder;
-    private static DeckBuilderLayout deckBLayout;
+    private static DeckBuilderLayout deckBuilderLayout;
     private static DeckOpenerLayout deckOLayout;
     private static DeckOpener deckOpener;
     private static SocialLayout socialLayout;
     private static SocialManager socialManager;
     private static LoginLayout loginLayout;
     private static LoginManager loginManager;
-    private static DeckLayout deckLayout;
+    //private static DeckLayout deckLayout;
     private static AdminLayout adminLayout;
     private static AdminPanel adminPanel;
     private static SignUpLayout signUpLayout;
@@ -51,14 +53,8 @@ public class GUIManager extends Application {
         scene = new Scene(root, 800, 600);
         stage.setTitle("YGODeckMaker");
         stage.setScene(scene);
-       /* stage.setOnCloseRequest(
-            (WindowEvent ev)->{
-                GameDataManager.saveGame(); 
-                try {
-                   GameDataManager.sendLog(TopLayout.getUsername(), "GAME CLOSED");
-                } catch (IOException ie) {}
-                }
-            );*/
+        scene.getStylesheets().add("file:style/loginStyle.css");
+        scene.setFill(Color.DARKSLATEGRAY);
         loginManager = new LoginManager(loginLayout);
         stage.show();
     }
@@ -76,6 +72,9 @@ public class GUIManager extends Application {
         for (Node n: tmp) {
             root.getChildren().add(n);
         }
+        scene.setFill(new ImagePattern(new Image("file:img/backgroundapp.jpg")));
+        scene.getStylesheets().clear();
+        scene.getStylesheets().add("file:style/builderStyle.css");
         appLayoutManager = new AppLayoutManager(appLayout,currentUser);
     }
     public static void openSocialManager(User currentUser){
@@ -90,72 +89,34 @@ public class GUIManager extends Application {
     }
     public static void openDeckBuilder(){
         root.getChildren().clear();
-        deckBLayout = new DeckBuilderLayout();
-        deckLayout = new DeckLayout();
+        deckBuilderLayout = new DeckBuilderLayout();
+
         Node[] tmp;
-        tmp = deckBLayout.getNodes();
+        tmp = deckBuilderLayout.getNodes();
         for (Node n: tmp) {
             root.getChildren().add(n);
         }
-        p = (Pane)deckLayout.getGameParent();
-        p.setLayoutX(40);
-        p.setLayoutY(120);
-        root.getChildren().add(p);
-        deckBuilder = new DeckBuilder(deckBLayout, deckLayout);
+
+        scene.setFill(new ImagePattern(new Image("file:img/backgroundyugioh.png")));
+        deckBuilder = new DeckBuilder(deckBuilderLayout);
         deckBuilder.setEvents();
     }
 
     public static void openDeckBuilder(Deck d){
         root.getChildren().clear();
-        deckBLayout = new DeckBuilderLayout();
-        deckLayout = new DeckLayout(d);
+        deckBuilderLayout = new DeckBuilderLayout();
 
         Node[] tmp;
-        tmp = deckBLayout.getNodes();
+        tmp = deckBuilderLayout.getNodes();
         for (Node n: tmp) {
             root.getChildren().add(n);
         }
-        p = (Pane)deckLayout.getGameParent();
-        p.setLayoutX(40);
-        p.setLayoutY(120);
-        root.getChildren().add(p);
-        deckBuilder = new DeckBuilder(deckBLayout, deckLayout, d);
+
+        scene.setFill(new ImagePattern(new Image("file:img/backgroundyugioh.png")));
+        deckBuilder = new DeckBuilder(deckBuilderLayout, d);
         deckBuilder.setEvents();
     }
 
-    public static void openDeckBuilder(Deck d, DeckLayout deckLayout){
-        root.getChildren().clear();
-        deckBLayout = new DeckBuilderLayout();
-        GUIManager.deckLayout = deckLayout;
-        Node[] tmp;
-        tmp = deckBLayout.getNodes();
-        for (Node n: tmp) {
-            root.getChildren().add(n);
-        }
-        p = (Pane)deckLayout.getGameParent();
-        p.setLayoutX(40);
-        p.setLayoutY(120);
-        root.getChildren().add(p);
-        deckBuilder = new DeckBuilder(deckBLayout, deckLayout);
-        deckBuilder.setEvents();
-    }
-
-    public static void openDeckOpener(){
-        root.getChildren().clear();
-        deckOLayout = new DeckOpenerLayout();
-        deckLayout = new DeckLayout();
-        Node[] tmp;
-        tmp = deckOLayout.getNodes();
-        for (Node n: tmp) {
-            root.getChildren().add(n);
-        }
-        p = (Pane)deckLayout.getGameParent();
-        p.setLayoutX(40);
-        p.setLayoutY(120);
-        root.getChildren().add(p);
-        deckOpener = new DeckOpener(deckOLayout);
-        deckOpener.setEvents();
-    }
 
     public static void openDeckManager(){
         root.getChildren().clear();
@@ -167,21 +128,9 @@ public class GUIManager extends Application {
         }
         deckManager = new DeckManager(deckMLayout);
         deckManager.setEvents();
+        scene.setFill(new ImagePattern(new Image("file:img/backgroundyugioh.png")));
     }
 
-    public static void openDeckManagerResults(DeckManagerLayout dm){
-        root.getChildren().clear();
-        deckMLayout = new DeckManagerLayout();
-        Node[] tmp;
-        tmp = deckMLayout.getNodes();
-        for (Node n: tmp) {
-            root.getChildren().add(n);
-        }
-        root.getChildren().add(dm.getTableNodes());
-
-        deckManager = new DeckManager(deckMLayout);
-        deckManager.setEvents();
-    }
 
     public static void openLoginManager(){
         root.getChildren().clear();
@@ -191,6 +140,10 @@ public class GUIManager extends Application {
         for (Node n: tmp) {
             root.getChildren().add(n);
         }
+
+        scene.setFill(Color.DARKSLATEGRAY);
+        scene.getStylesheets().clear();
+        scene.getStylesheets().add("file:style/loginStyle.css");
         loginManager = new LoginManager(loginLayout);
     }
 
@@ -213,6 +166,9 @@ public class GUIManager extends Application {
         for (Node n: tmp) {
             root.getChildren().add(n);
         }
+        scene.getStylesheets().clear();
+        scene.setFill(new ImagePattern(new Image("file:img/backgroundapp.jpg")));
+        scene.getStylesheets().add("file:style/builderStyle.css");
         adminPanel = new AdminPanel(adminLayout);
         adminPanel.setEvents();
     }
@@ -240,9 +196,107 @@ public class GUIManager extends Application {
         stage.show();
     }
 
-    // TODO: 29/12/2021 Added this on this day
     public static void addNode(Node node){
         root.getChildren().add(node);
+    }
+
+    public static  void removeNode(Node node){
+        root.getChildren().remove(node);
+    }
+
+    public static void clearSocialLayout(){
+        if(socialLayout.getUserVbox() != null)
+            removeNode(socialLayout.getUserVbox());
+
+        if(socialLayout.getDeckVbox() != null)
+            removeNode(socialLayout.getDeckVbox());
+    }
+
+    public static void clearRecSocialLayout(){
+        if(socialLayout.getFindUserRecTable() != null)
+            removeNode(socialLayout.getFindUserRecTable());
+
+        if(socialLayout.getFindDeckRecTable() != null)
+            removeNode(socialLayout.getFindDeckRecTable());
+    }
+
+    public static void clearProfSocialLayout(){
+        if(socialLayout.getUserProfileVbox() != null)
+            removeNode(socialLayout.getUserProfileVbox());
+
+        clearProfTables();
+
+        if(socialLayout.getViewFriends() != null)
+            removeNode(socialLayout.getViewFriends());
+
+        if(socialLayout.getViewFollowers() != null)
+            removeNode(socialLayout.getViewFollowers());
+
+        if(socialLayout.getViewSharedDecks() != null)
+            removeNode(socialLayout.getViewSharedDecks());
+
+        if(socialLayout.getViewLikedDecks() != null)
+            removeNode(socialLayout.getViewLikedDecks());
+
+        if(socialLayout.getViewRecentDecks() != null)
+            removeNode(socialLayout.getViewRecentDecks());
+
+        if(socialLayout.getFollowUserButton() != null)
+            removeNode(socialLayout.getFollowUserButton());
+    }
+
+    public static void clearProfTables(){
+        if(socialLayout.getSharedDecksTable() != null)
+            removeNode(socialLayout.getSharedDecksTable());
+
+        if(socialLayout.getFriendsTable() != null)
+            removeNode(socialLayout.getFriendsTable());
+
+        if(socialLayout.getFollowersTable() != null)
+            removeNode(socialLayout.getFollowersTable());
+
+        if(socialLayout.getLikedDecksTable() != null)
+            removeNode(socialLayout.getLikedDecksTable());
+
+        if(socialLayout.getRecentDecksTable() != null)
+            removeNode(socialLayout.getRecentDecksTable());
+    }
+
+    public static void clearAdminBoxes(){
+        if(adminLayout.getUserVbox() != null){
+            removeNode(adminLayout.getUserVbox());
+        }
+
+        if(adminLayout.getCardVbox() != null){
+            removeNode(adminLayout.getCardVbox());
+        }
+        if(adminLayout.getDeckVbox() != null){
+            removeNode(adminLayout.getDeckVbox());
+        }
+    }
+
+    public static void clearDeckBuilderBoxes(){
+        if(deckBuilderLayout.getCardVbox() != null)
+            removeNode(deckBuilderLayout.getCardVbox());
+        if(deckBuilderLayout.getTips() != null){
+            removeNode(deckBuilderLayout.getTips());
+        }
+    }
+
+    public static void clearDeckManagerBoxes(){
+        if(deckMLayout.getDeckVbox() != null)
+            removeNode(deckMLayout.getDeckVbox());
+    }
+
+
+    public static void clearDeckBuilderCardResult(){
+        if(deckBuilderLayout.getCardFindResultTable() != null)
+            removeNode(deckBuilderLayout.getCardFindResultTable());
+    }
+
+    public static void clearDeckManagerLayout(){
+        if(deckMLayout.getDeckResultTable() != null)
+            removeNode(deckMLayout.getDeckResultTable());
     }
 
     public static String getCurrentUser() {

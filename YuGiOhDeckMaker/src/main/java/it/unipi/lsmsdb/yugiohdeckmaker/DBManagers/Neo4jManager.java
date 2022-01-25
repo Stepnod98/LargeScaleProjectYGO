@@ -36,17 +36,6 @@ public class Neo4jManager {
         driver = GraphDatabase.driver(uri, AuthTokens.basic(user,password));
     }
 
-    public static void addPerson( final String name, final String from, final int age )
-    {
-        try ( Session session = driver.session() )
-        {
-            session.writeTransaction((TransactionWork<Void>) tx -> {
-                tx.run( "MERGE (p:Person {name: $name, from: $from, age: $age})",
-                        parameters( "name", name, "from", from, "age", age ) );
-                return null;
-            });
-        }
-    }
 
     public static void add(final String name, final String label){
         try ( Session session = driver.session() )
@@ -59,29 +48,37 @@ public class Neo4jManager {
         }
     }
 
-    public static void addRelation(final String name1, final String name2, final String relation, String label){
-        try ( Session session = driver.session() )
-        {
-            session.writeTransaction((TransactionWork<Void>) tx -> {
-                tx.run( "MERGE (p:"+label+" {username: $name1})-[:"+relation+"]->(pp:"+label+" {username: $name2})",
-                        parameters(  "name1" ,name1, "name2", name2));
-                return null;
-            });
-        }
-    }
 
-    // TODO: 05/01/2022 ADD to mongodb when delete an user
     public static void delete(User user){
         String query = "MATCH(u:User {username: \""+user.username+"\"}) DETACH DELETE u";
         runQuery(query);
-        System.out.println(user.username + " deleted on the social!");
+        //System.out.println(user.username + " deleted on the social!");
     }
 
-    // TODO: 05/01/2022 ADD to mongodb when delete a deck
     public static void delete(Deck deck){
         String query = "MATCH(u:Deck {title: \""+deck.getTitle()+"\"}) DETACH DELETE u";
         runQuery(query);
-        System.out.println(deck.getTitle() + " deleted on the social!");
+        //System.out.println(deck.getTitle() + " deleted on the social!");
+    }
+
+    public static void updateUser(String oldUsername, String newUsername){
+        String query = "MATCH(u:User {username: \""+oldUsername+"\"})" +
+                " SET u.username = \""+newUsername+"\"";
+        System.out.println(query);
+        runQuery(query);
+    }
+
+    public static void updateUserDecks(String oldUsername, String newUsername){
+        String query = "MATCH(u:User {username: \""+oldUsername+"\"})-[:HAS_SHARED]->(d)" +
+            " SET d.creator = \""+newUsername+"\"";
+        System.out.println(query);
+        runQuery(query);
+    }
+
+    public static void updateDeck(String oldTitle, String newTitle){
+        String query = "MATCH(d:Deck {title: \""+oldTitle+"\"})" +
+                " SET d.title = \""+newTitle+"\"";
+        runQuery(query);
     }
 
     private static void runQuery(final String query){
@@ -100,10 +97,10 @@ public class Neo4jManager {
 
         MongoClient myClient = MongoClients.create("mongodb://localhost:27017");
         MongoDatabase database = myClient.getDatabase("test");
-        MongoCollection<Document> collection = database.getCollection("login");
+        MongoCollection<Document> collection = database.getCollection("users");
 
         Bson projectionFields = Projections.fields(Projections.excludeId(),Projections.include("login.username"));
-        List<Document> people = collection.find().projection(projectionFields).limit(50).into(new ArrayList<>());
+        List<Document> people = collection.find().projection(projectionFields).limit(500).into(new ArrayList<>());
 
         //Add into nodeDB
 
@@ -146,7 +143,7 @@ public class Neo4jManager {
     //This method is used tho share a deck given a user and its deck
     public static void shareDeck(User user,Deck deck) throws DeckPresentException, DeckNotExistsException {
 
-        if(!user.checkDeck(deck.getTitle())){
+        if(MongoDBManager.findYourDecks(deck.getTitle()).isEmpty()){
          throw new DeckNotExistsException();
         }
         if(checkSharedDeck(user,deck)){
@@ -154,7 +151,10 @@ public class Neo4jManager {
         }
 
         String query = "MATCH (u:User {username: \""+user.username+"\"})\n" +
-        "CREATE (u)-[:HAS_SHARED]->(d:Deck {title: \""+deck.getTitle()+"\", creator: \""+user.username+"\"}) ";
+        "CREATE (u)-[:HAS_SHARED]->(d:Deck " +
+                "{title: \""+deck.getTitle()+"\", " +
+                "creator: \""+user.username+"\", " +
+                "publicationDate: date.statement()}) ";
 
         runQuery(query);
 
@@ -267,7 +267,7 @@ public class Neo4jManager {
 
 
     //This method is used to check if the user that we want to add is already our friend
-    private static boolean checkSharedDeck(User user, Deck deck){
+    public static boolean checkSharedDeck(User user, Deck deck){
         Session session = driver.session();
         List<String> deckShared = new ArrayList<>();
         session.readTransaction((TransactionWork<List<String>>) tx ->{
@@ -417,6 +417,242 @@ public class Neo4jManager {
         });
 
         return recommendedDecks;
+    }
+
+    public static List<String> getRecentSharedDecks(User user){
+        Session session = driver.session();
+        List<String> recentDecks = new ArrayList<>();
+        session.readTransaction((TransactionWork<List<String>>) tx ->{
+            Result result = tx.run("""
+                    MATCH(d:Deck {publicationDate: date.statement()})
+                    <-[:HAS_SHARED]-()<-[:FOLLOWS]-(u:User {username: $username})
+                     RETURN d.title AS title""",parameters("username",user.username)  );
+            while(result.hasNext()){
+                Record r = result.next();
+                recentDecks.add(r.get("title").asString());
+            }
+            return null;
+        });
+
+        return recentDecks;
+    }
+
+
+
+    public static List<String> browseUsers(String str){
+        Session session = driver.session();
+        List<String> users = new ArrayList<>();
+        session.readTransaction((TransactionWork<List<String>>) tx ->{
+            Result result = tx.run(
+                      "MATCH(u:User) " +
+                            "WHERE u.username CONTAINS \""+str+"\" " +
+                            "RETURN u.username AS username " +
+                              "ORDER BY username LIMIT 10");
+            while(result.hasNext()){
+                Record r = result.next();
+                users.add(r.get("username").asString());
+            }
+            return null;
+        });
+
+        return users;
+    }
+
+    public static List<String> browseDecks(String str){
+        Session session = driver.session();
+        List<String> users = new ArrayList<>();
+        session.readTransaction((TransactionWork<List<String>>) tx ->{
+            Result result = tx.run(
+                    "MATCH(d:Deck) " +
+                            "WHERE d.title CONTAINS \""+str+"\" " +
+                            "RETURN d.title AS title LIMIT 5");
+            while(result.hasNext()){
+                Record r = result.next();
+                users.add(r.get("title").asString());
+            }
+            return null;
+        });
+
+        return users;
+    }
+
+    public static List<String> browseYourDecks(String username, String str){
+        Session session = driver.session();
+        List<String> users = new ArrayList<>();
+        session.readTransaction((TransactionWork<List<String>>) tx ->{
+            Result result = tx.run(
+                    "MATCH(d:Deck) " +
+                            "WHERE d.creator = \""+ username +"\" AND d.title CONTAINS \""+str+"\" " +
+                            "RETURN d.title AS title LIMIT 5");
+            while(result.hasNext()){
+                Record r = result.next();
+                users.add(r.get("title").asString());
+            }
+            return null;
+        });
+
+        return users;
+    }
+
+    public static List<String> getFollowers(String username){
+
+        Session session = driver.session();
+        List<String> followers = new ArrayList<>();
+        session.readTransaction((TransactionWork<List<String>>) tx ->{
+            Result result = tx.run(
+                    "Match(u:User)-[:FOLLOWS]->(u2:User {username: $username }) " +
+                            "RETURN u.username AS username"
+                    ,parameters("username",username)
+            );
+            while(result.hasNext()){
+                Record r = result.next();
+                followers.add( r.get("username").asString());
+            }
+            return null;
+        });
+
+        return followers;
+    }
+
+    public static int getCountFollowers(String username){
+
+        Session session = driver.session();
+        final Integer[] followers = {0};
+        session.readTransaction((TransactionWork<List<String>>) tx ->{
+            Result result = tx.run(
+                    "Match(u:User)-[:FOLLOWS]->(u2:User {username: $username }) " +
+                            "RETURN COUNT(*) AS followers"
+                    ,parameters("username",username)
+            );
+            while(result.hasNext()){
+                Record r = result.next();
+                followers[0] = r.get("followers").asInt();
+            }
+            return null;
+        });
+
+        return followers[0];
+    }
+
+
+    public static List<String> getSharedDecks(String username){
+
+        Session session = driver.session();
+        List<String> sharedDecks = new ArrayList<>();
+        session.readTransaction((TransactionWork<List<String>>) tx ->{
+            Result result = tx.run(
+                    "Match(u:User {username: $username })-[:HAS_SHARED]->(d:Deck) " +
+                            "RETURN d.title AS title"
+                    ,parameters("username",username)
+            );
+            while(result.hasNext()){
+                Record r = result.next();
+                sharedDecks.add(r.get("title").asString());
+            }
+            return null;
+        });
+
+        return sharedDecks;
+    }
+
+    public static int getCountSharedDecks(String username){
+
+        Session session = driver.session();
+        final Integer[] sharedDecks = {0};
+        session.readTransaction((TransactionWork<List<String>>) tx ->{
+            Result result = tx.run(
+                    "Match(u:User)-[:HAS_SHARED]->(d:Deck {creator: $username }) " +
+                            "RETURN COUNT(*) AS sharedDecks"
+                    ,parameters("username",username)
+            );
+            while(result.hasNext()){
+                Record r = result.next();
+                sharedDecks[0] = r.get("sharedDecks").asInt();
+            }
+            return null;
+        });
+
+        return sharedDecks[0];
+    }
+
+    public static List<String> getLikedDecks(String username){
+
+        Session session = driver.session();
+        List<String> likedDecks = new ArrayList<>();
+        session.readTransaction((TransactionWork<List<String>>) tx ->{
+            Result result = tx.run(
+                    "Match(u:User {username: $username })-[:LIKES]->(d:Deck) " +
+                            "RETURN d.title AS title"
+                    ,parameters("username",username)
+            );
+            while(result.hasNext()){
+                Record r = result.next();
+                likedDecks.add(r.get("title").asString());
+            }
+            return null;
+        });
+
+        return likedDecks;
+    }
+
+    public static int getTotalLikes(String username){
+
+        Session session = driver.session();
+        final Integer[] totalLikes = {0};
+        session.readTransaction((TransactionWork<List<String>>) tx ->{
+            Result result = tx.run(
+                    "Match(u:User)-[:LIKES]->(d:Deck {creator: $username}) " +
+                            "RETURN COUNT(*) AS totalLikes"
+                    ,parameters("username",username)
+            );
+            while(result.hasNext()){
+                Record r = result.next();
+                totalLikes[0] = r.get("totalLikes").asInt();
+            }
+            return null;
+        });
+
+        return totalLikes[0];
+    }
+
+    public static String getCreator(String title){
+        Session session = driver.session();
+        final String[] creator = new String[1];
+        session.readTransaction((TransactionWork<List<String>>) tx ->{
+            Result result = tx.run(
+                    "Match (d:Deck {title: $title}) " +
+                            "RETURN d.creator AS creator"
+                    ,parameters("title",title)
+            );
+            while(result.hasNext()){
+                Record r = result.next();
+                creator[0] = r.get("creator").asString();
+            }
+            return null;
+        });
+
+        return creator[0];
+
+    }
+
+    public static int getLikes(String title){
+
+        Session session = driver.session();
+        final Integer[] likes = {0};
+        session.readTransaction((TransactionWork<List<String>>) tx ->{
+            Result result = tx.run(
+                    "MATCH(d:Deck {title: $title})<-[:LIKES]-(u:User) " +
+                            "RETURN count(*) AS likes"
+                    ,parameters("title",title)
+            );
+            while(result.hasNext()){
+                Record r = result.next();
+                likes[0] = r.get("likes").asInt();
+            }
+            return null;
+        });
+
+        return likes[0];
     }
 
 }

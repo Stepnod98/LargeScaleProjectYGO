@@ -4,8 +4,6 @@
  * and open the template in the editor.
  */
 package it.unipi.lsmsdb.yugiohdeckmaker.Layouts;
-
-import javafx.event.ActionEvent;
 import javafx.scene.Node;
 import javafx.scene.control.*;
 
@@ -16,46 +14,46 @@ public class LoginLayout {
     private TextField password;
     private Button login;
     private Button signUp;
-    private Label log;
     private TextField logText;
 
     public LoginLayout(){
         user = new Label("Insert Username");
-        user.setLayoutX(280);
+        user.setLayoutX(330);
         user.setLayoutY(40);
         username = new TextField();
-        username.setLayoutX(280);
+        username.setLayoutX(310);
         username.setLayoutY(80);
         username.setFocusTraversable(false);
         username.setMaxWidth(200);
+
         pwd = new Label("Insert Password");
-        pwd.setLayoutX(280);
+        pwd.setLayoutX(330);
         pwd.setLayoutY(120);
-        password = new TextField();
-        password.setLayoutX(280);
+
+        password = new PasswordField();
+        password.setLayoutX(310);
         password.setLayoutY(160);
         password.setFocusTraversable(false);
         password.setMaxWidth(200);
+
         login = new Button("LOGIN");
-    	login.setLayoutY(250);
-    	login.setLayoutX(280);
-    	login.setMaxWidth(300);
-        signUp = new Button("SIGN UP");
-    	signUp.setLayoutY(250);
-    	signUp.setLayoutX(380);
-    	signUp.setMaxWidth(300);
+        login.setLayoutY(250);
+        login.setLayoutX(300);
+        login.setMinWidth(80);
+        signUp = new Button("SIGN");
+        signUp.setLayoutY(250);
+        signUp.setLayoutX(400);
+        signUp.setMinWidth(80);
+
         logText = new TextField();
-        logText.setLayoutX(280);
+        logText.setLayoutX(310);
         logText.setLayoutY(310);
-        logText.setMaxWidth(300);
+        logText.setMaxWidth(200);
         logText.setEditable(false);
-        log = new Label("Log:");
-        log.setLayoutX(280);
-        log.setLayoutY(290);
     }
     
      public Node[] getNodes() {
-    	Node[] returnNode = {user, username, pwd, password, login, signUp, log, logText};
+    	Node[] returnNode = {user, username, pwd, password, login, signUp, logText};
     	return returnNode;
     }
      
