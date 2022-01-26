@@ -372,13 +372,21 @@ public class MongoDBManager {
         for(int i = 0; i < typeList.size(); i++){
             typeList.set(i, typeList.get(i).trim());
         }
+        List<String> archetypeList = new ArrayList(Arrays.asList(archetype.split(",")));
+        for(int i = 0; i < archetypeList.size(); i++){
+            archetypeList.set(i, archetypeList.get(i).trim());
+        }
+        List<String> effectTypeList = new ArrayList(Arrays.asList(effectType.split(",")));
+        for(int i = 0; i < effectTypeList.size(); i++){
+            effectTypeList.set(i, effectTypeList.get(i).trim());
+        }
         Document card = new Document("title", title)
                 .append("imgUrl", imgurl).append("atk", atk)
                 .append("def", def).append("level", level)
                 .append("lore", desc).append("types",typeList)
-                .append("archetypes", archetype)
+                .append("archetypes", archetypeList)
                 .append("attribute", attribute)
-                .append("effectTypes", effectType);
+                .append("effectTypes", effectTypeList);
         cards.insertOne(card);
     }
 
@@ -402,12 +410,12 @@ public class MongoDBManager {
     public static void removeCard(String inTitle){
         MongoCollection<Document> cards = database.getCollection("cards");
         Bson filter = eq("title", inTitle);
-        Bson u = unwind("decks");
+        Bson u = unwind("$decks");
         Bson myMatch = match(filter);
         List<Document> doclist = new ArrayList<>();
         cards.aggregate(Arrays.asList(myMatch, u)).forEach(doc -> doclist.add(doc));
         for(int i = 0; i < doclist.size(); i++){
-            String current = ((Document)doclist.get(i).get("decks")).getString("title");
+            String current = ((Document)doclist.get(i)).getString("decks");
             removeCardFromDeck(current, inTitle);
         }
         cards.deleteOne(filter);
