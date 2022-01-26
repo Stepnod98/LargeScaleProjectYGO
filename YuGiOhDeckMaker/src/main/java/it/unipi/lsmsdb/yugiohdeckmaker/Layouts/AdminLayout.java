@@ -35,6 +35,7 @@ public class AdminLayout {
     private TextField cardToRemoveTitle;
     private TextField deckToRemove;
     private TextField userToRemove;
+    private TextField logText;
     protected Button removeCard;
     protected Button addCard;
     protected Button removeUser;
@@ -187,6 +188,12 @@ public class AdminLayout {
         browseDeckResults.setMaxWidth(userToRemove.getPrefWidth());
         browseDeckResults.setMaxHeight(120);
         browseDeckResults.setVisible(false);
+
+        logText = new TextField();
+        logText.setLayoutX(40);
+        logText.setLayoutY(460);
+        logText.setMinWidth(240);
+        logText.setEditable(false);
     }
 
     public void updateBrowseCardResults(List<String> result){
@@ -361,7 +368,7 @@ public class AdminLayout {
         Node[] returnNode = { adminLabel, add, cardToAddTitle, cardToAddImage, cardToAddAtk, cardToAddDef, cardToAddLevel,
                 cardToAddDesc, cardToAddType, cardToAddArchetype, cardToAddAttribute, cardToAddEffectTypes,
                 remove, cardToRemoveTitle, removeCard, addCard, removeD, deckToRemove, removeDeck, removeU, userToRemove,
-                removeUser, vbox, logout, browseCardResults, browseUserResults, browseDeckResults};
+                removeUser, vbox, logout, browseCardResults, browseUserResults, browseDeckResults, logText};
         return returnNode;
     }
 
@@ -462,5 +469,28 @@ public class AdminLayout {
 
     public VBox getDeckVbox(){
         return deckVbox;
+    }
+
+    public void clearAddCard(){
+        cardToAddTitle.setText("");
+        cardToAddImage.setText("");
+        cardToAddAttribute.setText("");
+        cardToAddType.setText("");
+        cardToAddArchetype.setText("");
+        cardToAddLevel.setText("");
+        cardToAddAtk.setText("");
+        cardToAddDef.setText("");
+        cardToAddEffectTypes.setText("");
+        cardToAddDesc.setText("");
+    }
+
+    public void printError(String err){
+        logText.setText(err);
+        logText.setStyle("-fx-text-inner-color: red;");
+    }
+
+    public void printLog(String log){
+        logText.setText(log);
+        logText.setStyle("-fx-text-inner-color: green;");
     }
 }

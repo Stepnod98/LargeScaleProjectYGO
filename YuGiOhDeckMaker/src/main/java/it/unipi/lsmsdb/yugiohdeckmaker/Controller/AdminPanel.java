@@ -37,6 +37,8 @@ public class AdminPanel {
         String attribute = adminLayout.getAttribute();
         String effectType = adminLayout.getEffectType();
         MongoDBManager.insertCard(title, imgurl, atk, def, level, desc, type, archetype, attribute, effectType);
+        adminLayout.clearAddCard();
+        adminLayout.printLog("Card added!");
     }
 
     public void removeCard(String title){
@@ -47,6 +49,7 @@ public class AdminPanel {
         else{
             MongoDBManager.removeCard(title);
             GUIManager.clearAdminBoxes();
+            adminLayout.printLog("Card removed!");
         }
 
     }
@@ -60,6 +63,7 @@ public class AdminPanel {
             MongoDBManager.removeDeck(title);
             Neo4jManager.delete(new Deck(title));
             GUIManager.clearAdminBoxes();
+            adminLayout.printLog("Deck removed!");
         }
 
     }
@@ -73,6 +77,7 @@ public class AdminPanel {
             MongoDBManager.removeUser(username);
             Neo4jManager.delete(new User(username));
             GUIManager.clearAdminBoxes();
+            adminLayout.printLog("Username removed!");
         }
 
     }
@@ -86,6 +91,7 @@ public class AdminPanel {
             Neo4jManager.updateUserDecks(oldUsername, newUsername);
             Neo4jManager.updateUser(oldUsername, newUsername);
             GUIManager.clearAdminBoxes();
+            adminLayout.printLog("Username updated!");
         }
     }
 
@@ -300,7 +306,11 @@ public class AdminPanel {
     private void setCardVbox(){
         String title = adminLayout.getCardToRemoveTitle();
 
-        Image image = new Image(MongoDBManager.getImageUrl(new Card(title)), 300, 300, true, false);
+        Image image = new Image("file:./../img/backCard.png", 300, 300, true, false);
+        if(MongoDBManager.getImageUrl(new Card(title)) != null) {
+            image = new Image(MongoDBManager.getImageUrl(new Card(title)), 300, 300, true, false);
+        }
+
         adminLayout.showCardFindResults(title, image);
 
         HBox hBox = (HBox) adminLayout.getCardVbox().getChildren().get(adminLayout.getCardVbox().getChildren().size()-1);
