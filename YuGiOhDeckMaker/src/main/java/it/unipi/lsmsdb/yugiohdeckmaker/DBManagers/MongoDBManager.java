@@ -34,7 +34,7 @@ public class MongoDBManager {
     private static MongoDatabase database;
 
     static{
-        mongoClient = MongoClients.create("mongodb://localhost:27018");
+        mongoClient = MongoClients.create("mongodb://localhost:27018,localhost:27019,localhost:27020");
         database = mongoClient.getDatabase("examtest");
     }
 
